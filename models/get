@@ -1,0 +1,10 @@
+get
+1 faturamento
+1.1 movimentacoes
+
+get
+2 pagamento de mensalidade
+	mandar competencia 2018/07
+
+post
+3 cadastro de cliente
