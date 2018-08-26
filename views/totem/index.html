@@ -1,0 +1,104 @@
+<div class="alert"><div class="alert-message"></div></div>
+<img src="/images/logo-bra.png" class="logo-bra">
+<img src="/images/logo-cliente.png" class="logo-cliente">
+
+<form>
+	<!-- HOME -->
+	<div class="active step-1">
+		<h1>INSIRA SEU TICKET COM O CÓDIGO<br /> DE BARRAS VOLTADO PARA CIMA</h1>
+		<div class="container-chevron right">
+			<div class="chevron"></div>
+			<div class="chevron"></div>
+			<div class="chevron"></div>
+		</div>
+	</div>	
+
+	<div class="step-2">
+		<div style="position: absolute; width: 100%; top: 125px;">
+			<div style="float: left; margin-left: 18%;">
+				<div style="clear: both;"></div>
+				<div class="text">
+					<div style="float: left; text-align: right; padding-right: 8px;">
+						Ticket número:<br />
+						Tempo de permanência:<br />
+						Limite para saída:<br />
+					</div>
+					<div style="float: left; text-align: left;">
+						<input type="text" name="codigos" class="no-input" readonly="true" value="" style="width: 185px;"><br />	
+						<input type="text" name="permanencia" class="no-input" readonly="true" value="" style="width: 185px;"><br />	
+						<input type="text" name="limite_saida" class="no-input" readonly="true" value="" style="width: 226px;"><br />	
+					</div>
+				</div>
+			</div>
+			<div class="total">
+				TOTAL<br />R$ <input type="text" name="pagamento[total]" class="no-input" readonly="true" value="" style="width: 200px; color: inherit;">
+			</div>
+		</div>
+
+		<h2>ESCOLHA A FORMA DE PAGAMENTO</h2>
+
+		<div class="button-area">
+			<!--<label class="btn btn-lg btn-info"><input type="radio" name="forma_pagamento" value="Cartão de Crédito" onClick="goToStep(3);">CARTÃO DE<br />CRÉDITO</label>-->
+			<label class="btn btn-lg btn-primary"><input type="radio" name="forma_pagamento" value="Cartão de Débito" onClick="goToStep(3);">CARTÃO DE<br />DÉBITO</label>
+			<a href="#" class="btn btn-lg btn-danger"  onClick="goToStep(1); hideAlert();" style="line-height: 90px;">CANCELAR</a>
+		</div>
+	</div>
+
+	<div class="step-3">
+		<h2>NOTA FISCAL</h2>
+		<img src="/images/totem/nota_icone.png" class="img-icone img-responsive">
+		<h3>DESEJA INSERIR CPF OU CNPJ EM SUA NOTA FISCAL?</h3>
+		<div class="button-area">
+			<label class="btn btn-lg btn-info"><input type="radio" name="tipo_cliente" value="Pessoa Física" onClick="goToStep(4);">CPF</label>
+			<label class="btn btn-lg btn-primary"><input type="radio" name="tipo_cliente" value="Pessoa Jurídica" onClick="goToStep(4);">CNPJ</label>
+			<a href="#" class="btn btn-lg btn-primary" onClick="goToStep(5);">CONTINUAR</al>
+				<a href="#" class="btn btn-lg btn-warning" onClick="goToStep(2);">VOLTAR</a>
+				<a href="#" class="btn btn-lg btn-danger"  onClick="goToStep(1); hideAlert();">CANCELAR</a>
+			</div>
+		</div>
+		
+		<!-- NUMPAD -->
+		<div class="step-4">
+			<input type="text" name="cpf_cnpj" placeholder="" readonly>
+
+			<input class="btn btn-lg btn-primary" type="button" value="7" onClick="addNumber(this.value);">
+			<input class="btn btn-lg btn-primary" type="button" value="8" onClick="addNumber(this.value);">
+			<input class="btn btn-lg btn-primary" type="button" value="9" onClick="addNumber(this.value);"><br />
+			<input class="btn btn-lg btn-primary" type="button" value="4" onClick="addNumber(this.value);">
+			<input class="btn btn-lg btn-primary" type="button" value="5" onClick="addNumber(this.value);">
+			<input class="btn btn-lg btn-primary" type="button" value="6" onClick="addNumber(this.value);"><br />
+			<input class="btn btn-lg btn-primary" type="button" value="1" onClick="addNumber(this.value);">
+			<input class="btn btn-lg btn-primary" type="button" value="2" onClick="addNumber(this.value);">
+			<input class="btn btn-lg btn-primary" type="button" value="3" onClick="addNumber(this.value);"><br />
+			<input class="btn btn-lg btn-primary" type="button" value="0" onClick="addNumber(this.value);">
+			
+			<a href="#" class="btn btn-lg btn-info" onClick="deleteLastNumber();"> CORRIGIR</a>
+			<a href="#" class="btn btn-lg btn-warning" onClick="goToStep(3);">VOLTAR</a>
+			<a href="#" class="btn btn-lg btn-danger" onClick="goToStep(1); hideAlert();">CANCELAR</a>
+		</div>
+
+		<!-- PAYMENT -->
+		<div class="step-5">
+			<h1 class="transaction-status"></h1>
+			
+			<div class="container-chevron left">
+				<div class="chevron"></div>
+				<div class="chevron"></div>
+				<div class="chevron"></div>
+			</div>
+
+			<div class="button-area">
+				<label class="btn btn-lg btn-primary" style="opacity: 0;"></label>
+				<label class="btn btn-lg btn-primary" style="opacity: 0;"></label>
+				<a href="#" class="btn btn-lg btn-danger btn-cancelar-transacao" onClick="goToStep(1); hideAlert(); cancelTransaction();" style="line-height: 90px; display: none;">CANCELAR</a>
+			</div>
+
+		</div>
+
+		<input type="hidden" name="numero_transacao" value="">
+		<input type="hidden" name="id" value="">
+		<input type="hidden" name="pagamento[tabela][_id]" value="">
+
+</form>
+
+<div class="rodape">www.braparking.com.br</div>

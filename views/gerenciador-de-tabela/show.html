@@ -1,0 +1,199 @@
+<div id="tabs">
+	<form action="/{{route}}" method="{{ternary isEdit 'put' 'post'}}" class="form-gerenciador-de-tabelas form-horizontal well">
+
+		<fieldset>
+
+			<ul>
+				<li>
+					<a href="#dados">Dados gerais</a>
+				</li>
+				<li>
+					<a href="#configs">Configuração de tabelas</a>
+				</li>
+			</ul>
+
+			<div id="dados" style="display: inline-block;">
+				<div class="control-group">
+					<label class="control-label">*Nome do gerenciador</label>
+					<div class="controls">
+						<input type="text" name="nome" maxlength="30" class="uppercase" value="{{result.nome}}" required>
+					</div>
+				</div>
+
+				<div class="control-group clearfix">
+					<label class="control-label">*Validar a partir da:</label>
+					<div class="controls">
+						{{#checked result.validar-por}}
+						<label>
+							<input type="radio" name="validar-por" value="Entrada" required>Entrada</label>
+						</br>
+						<label>
+							<input type="radio" name="validar-por" value="Saída" required>Saída</label>
+						{{/checked}}
+					</div>
+				</div>
+
+
+				<div class="control-group">
+					<label class="control-label">*Gerenciador Padrão</label>
+					<div class="controls">
+						{{#checked result.padrao}}
+						<label>
+							<input type="radio" name="padrao" value="true" required> Sim</label>&nbsp;
+						<label>
+							<input type="radio" name="padrao" value="false" required> Não</label>
+						{{/checked}}
+					</div>
+				</div>
+
+				<div class="control-group">
+					<label class="control-label">*Gerenciador Ativo</label>
+					<div class="controls">
+						{{#checked result.ativo}}
+						<label>
+							<input type="radio" name="ativo" value="true" required> Sim</label>&nbsp;
+						<label>
+							<input type="radio" name="ativo" value="false" required> Não</label>
+						{{/checked}}
+					</div>
+				</div>
+			</div>
+
+			<div id="configs" style="display: inline-block;">
+				<a href="#" class="btn btn-success btn-adicionar-configs">
+					<i class="fa fa-plus"></i> Adicionar Configuração</a>
+
+					<div class="configs container">
+						{{#result.configs}}
+						<div class="configs item">
+							<div class="div30Right">
+
+								{{#checkedMultiple dias}}
+			
+								<label>
+									<input type="checkbox" name="configs[{{@index}}][dias]" value="Segunda-Feira"> Segunda</label>
+			
+								<label>
+									<input type="checkbox" name="configs[{{@index}}][dias]" value="Terça-Feira"> Terça</label>
+			
+								<label>
+									<input type="checkbox" name="configs[{{@index}}][dias]" value="Quarta-Feira"> Quarta</label>
+			
+								<label>
+									<input type="checkbox" name="configs[{{@index}}][dias]" value="Quinta-Feira"> Quinta</label>
+									
+								<label>
+									<input type="checkbox" name="configs[{{@index}}][dias]" value="Sexta-Feira"> Sexta</label>
+								
+								</br>
+										
+								<label>
+									<input type="checkbox" name="configs[{{@index}}][dias]" value="Sábado"> Sábado</label>
+			
+								<label>
+									<input type="checkbox" name="configs[{{@index}}][dias]" value="Domingo"> Domingo</label>
+			
+								<label>
+									<input type="checkbox" name="configs[{{@index}}][dias]" value="Feriado"> Feriado</label>
+								{{/checkedMultiple}}
+								
+							</div>
+			
+							<div class="div70Left">
+								
+								<label >Horário Inicial</label>
+									<input type="text" name="configs[{{@index}}][hora_inicio]" value="{{hora_inicio}}" class="mascara-cobranca-hora" >h 
+								
+			
+								<label >Horário Final</label>
+									<input type="text" name="configs[{{@index}}][hora_fim]" value="{{hora_fim}}" class="mascara-cobranca-hora" >h 
+							
+								<label >Tabela de Preco</label>
+								{{#selected _tabela}}
+									<select name="configs[{{@index}}][_tabela]" >
+										<option value="">Selecione</option>
+										{{#each ../../tabelas}}
+											<option value="{{_id}}" class="uppercase">{{nome}}</option>
+										{{/each}}
+									</select>
+								{{/selected}}
+
+								<label >Zerar Permanência:</label>
+								{{#checked zerar_permanencia}}
+									<input name="configs[{{@index}}][zerar_permanencia]" type="checkbox" value="true">
+								{{/checked}}
+								
+								
+							</div>
+							<a href="#" class="btn btn-danger btn-excluir-item" title="Excluir Configuração"><i class="fa fa-trash-o no-padding"></i> </a>
+						</div>
+						{{/result.configs}}
+					</div>
+
+			</div>
+
+			{{>form-footer}}
+
+		</fieldset>
+
+		<input type="hidden" name="id" value="{{result.id}}">
+		</td>
+	</form>
+	
+</div>
+
+<div class="configs item clone">
+	<div class="div30Right">
+
+		<label>
+			<input type="checkbox" name="configs[{index}][dias]" value="Segunda-Feira"> Segunda</label>
+
+		<label>
+			<input type="checkbox" name="configs[{index}][dias]" value="Terça-Feira"> Terça</label>
+
+		<label>
+			<input type="checkbox" name="configs[{index}][dias]" value="Quarta-Feira"> Quarta</label>
+
+		<label>
+			<input type="checkbox" name="configs[{index}][dias]" value="Quinta-Feira"> Quinta</label>
+			
+		<label>
+			<input type="checkbox" name="configs[{index}][dias]" value="Sexta-Feira"> Sexta</label>
+		</br>
+				
+		<label>
+			<input type="checkbox" name="configs[{index}][dias]" value="Sábado"> Sábado</label>
+
+		<label>
+			<input type="checkbox" name="configs[{index}][dias]" value="Domingo"> Domingo</label>
+
+		<label>
+			<input type="checkbox" name="configs[{index}][dias]" value="Feriado"> Feriado</label>
+		
+	</div>
+
+	<div class="div70Left">
+		
+		<label >Horário Inicial</label>
+			<input type="text" name="configs[{index}][hora_inicio]" value="{{hora_inicio}}" class="mascara-cobranca-hora" >h 
+		
+
+		<label >Horário Final</label>
+			<input type="text" name="configs[{index}][hora_fim]" value="{{hora_fim}}" class="mascara-cobranca-hora" >h 
+	
+		<label >Tabela de Preco</label>
+			<select name="configs[{index}][_tabela]" >
+				<option value="">Selecione</option>
+				{{#each tabelas}}
+					<option value="{{_id}}" class="uppercase">{{nome}}</option>
+				{{/each}}
+			</select>
+		
+		<label >Zerar Permanência:</label>
+		{{#checked zerar_permanencia}}
+			<input name="configs[{{@index}}][zerar_permanencia]" type="checkbox" value="true">
+		{{/checked}}
+		
+	</div>
+	<a href="#" class="btn btn-danger btn-excluir-item" title="Excluir Configuração"><i class="fa fa-trash-o no-padding"></i> </a>
+</div>

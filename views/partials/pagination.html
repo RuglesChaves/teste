@@ -1,0 +1,24 @@
+{{#if pagination}}
+    {{#if pagination.total}}
+    <div class="row">
+        <div class="col-sm-6 pull-left">
+            <div class="dataTables_info" role="status" aria-live="polite">
+                {{pagination.frase}}
+            </div>
+        </div>
+        <div class="col-sm-6 pull-right">
+            <div class="dataTables_paginate">
+                <ul class="pagination">
+                    {{#pagination.pages}}
+                        {{#if active}}
+                            <li class="active"><a href="javascript: void(0);">{{number}}</a></li>
+                        {{else}}
+                            <li><a href="{{url}}" class="spa">{{number}}</a></li>
+                        {{/if}}
+                    {{/pagination.pages}}
+                </ul>
+            </div>
+        </div>
+    </div>
+    {{/if}}
+{{/if}}

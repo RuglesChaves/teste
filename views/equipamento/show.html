@@ -1,0 +1,52 @@
+<form action="/{{route}}" method="{{ternary isEdit 'put' 'post'}}" class="form-horizontal well equipamento">
+ 	<fieldset>
+ 		<div class="control-group">
+            <label class="control-label">*Tipo</label>
+            <div class="controls">
+                {{#checked result.tipo}}
+                     <label><input type="radio" name="tipo" value="Entrada" required> Entrada</label>&nbsp;
+                     <label><input type="radio" name="tipo" value="Saída" required> Saída</label>&nbsp;
+                     <label><input type="radio" name="tipo" value="Pagamento" required> Pagamento</label>&nbsp;
+                {{/checked}}
+            </div><!-- .controls -->
+        </div><!-- .control-group -->
+		
+		<div class="control-group {{#compare result.tipo '!==' 'Entrada'}}display-none{{/compare}}">  		
+            <label class="control-label">*Número</label>
+            <div class="controls">
+				<select name="numero">
+					<option value="">Selecione</option>
+					{{#selected result.numero}}
+						<option value="1">1</option>
+						<option value="2">2</option>
+						<option value="3">3</option>
+						<option value="4">4</option>
+						<option value="5">5</option>
+						<option value="6">6</option>
+						<option value="7">7</option>
+						<option value="8">8</option>
+						<option value="9">9</option>
+					{{/selected}}
+				</select>
+            </div><!-- .controls -->
+        </div><!-- .control-group -->
+
+        <div class="control-group">
+            <label class="control-label">*Nome</label>
+            <div class="controls"><input type="text" name="nome" maxlength="16" class="uppercase" value="{{result.nome}}" required></div><!-- .controls -->
+        </div><!-- .control-group -->
+
+        <div class="control-group">
+            <label class="control-label">*Endereço IP</label>
+            <div class="controls"><input type="text" name="ip" value="{{result.ip}}" class="mascara-ip" required></div><!-- .controls -->
+        </div><!-- .control-group -->
+
+        {{>form-footer}}
+
+    </fieldset>
+
+    <input type="hidden" name="fabricante" value="Henry">
+    <input type="hidden" name="protocolo" value="8x">
+
+    <input type="hidden" name="id" value="{{result.id}}"></td>
+</form>

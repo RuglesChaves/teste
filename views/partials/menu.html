@@ -1,0 +1,271 @@
+	<nav class='navbar navbar-default navbar-static-top' role='navigation'>
+	<div class='navbar-header sidebar'>
+	    <button type='button' class='navbar-toggle' data-toggle='collapse' data-target='.navbar-collapse'>
+	        <span class='sr-only'>Alternar navegação</span>
+	        <span class='icon-bar'></span>
+	        <span class='icon-bar'></span>
+	        <span class='icon-bar'></span>
+	    </button>
+	    <a class='navbar-brand spa' href='/inicio'>
+	    	<img src="/images/logo-bra.png"> <!--configuracao.empresa.logo-->
+	    </a>
+	</div>
+
+	<div class='navbar-default sidebar' role='navigation'>
+	    <div class='sidebar-nav navbar-collapse' aria-expanded="true">
+	        <ul class='nav in' id='side-menu'>
+
+	            {{#activeMenu route menu}}
+
+	            	<li><a href="/inicio" data-menu-item="inicio"><i class="fa fa-dashboard fa-lg"></i>INÍCIO</a></li>
+
+					{{#hasPermission permission 'caixa' 'new'}}
+						{{#contains terminal.tipo 'Caixa'}}
+							{{#if caixa}}
+	 							<li><a href="/caixa/{{caixa._id}}" data-menu-item="caixa"><i class="fa fa-credit-card fa-lg"></i>CAIXA</a></li>
+							{{else}}
+								<li><a href="#" data-menu-item="caixa" class="abrir-caixa"><i class="fa fa-credit-card fa-lg"></i>CAIXA</a></li>
+							{{/if}}
+						{{/contains}}
+					{{/hasPermission}}
+            	
+					{{#hasPermission permission 'patio' 'read'}}
+ 						<li><a href="/patio" data-menu-item="patio" class="spa" data-toggle="collapse" data-target=".navbar-collapse.in"><i class="fa fa-file-text-o fa-lg"></i>PÁTIO</a></li>
+					{{/hasPermission}}
+
+					{{#hasPermission permission 'niveis-de-bloqueio' 'read'}}
+						<li><a href='/niveis-de-bloqueio' data-menu-item="niveis-de-bloqueio" class="spa" data-toggle="collapse" data-target=".navbar-collapse.in"><i class="fa fa-car fa-lg"></i> NIVEL DE BLOQUEIO</a></li>
+					{{/hasPermission}}
+					
+					{{#hasPermission permission 'convenio' 'read'}}
+ 						<li><a href="/convenio/atendimento" data-menu-item="convenio" class="spa" data-toggle="collapse" data-target=".navbar-collapse.in"><i class="fa fa-check-square-o fa-lg" aria-hidden="true"></i>CONVÊNIO</a></li>
+					{{/hasPermission}}
+
+					{{#ifAnyOne (hasPermission permission 'tabela-de-preco' 'read') 
+								(hasPermission permission 'cliente' 'read')
+								(hasPermission permission 'equipamento' 'read')
+								(hasPermission permission 'terminal' 'read')
+								(hasPermission permission 'marca' 'read')
+								(hasPermission permission 'cor' 'read')
+								(hasPermission permission 'faq' 'read')
+								(hasPermission permission 'video' 'read')
+								(hasPermission permission 'tipo-veiculo' 'read') }}
+				            	<li data-menu="Cadastros">
+				            		<a href="#"><i class="fa fa-pencil-square-o fa-lg"></i>CADASTROS <span class="fa arrow"></span></a>
+				        			<ul class="nav nav-second-level collapse">
+										{{#hasPermission permission 'cliente' 'read'}}
+											<li><a href='/cliente' data-menu-item="cliente" class="spa" data-toggle="collapse" data-target=".navbar-collapse.in"> Clientes</a></li>
+										{{/hasPermission}}
+										   
+										{{#hasPermission permission 'convenio' 'edit'}}
+										   <li><a href='/convenio' data-menu-item="convenio" class="spa" data-toggle="collapse" data-target=".navbar-collapse.in"> Convênio</a></li>
+										{{/hasPermission}}
+										   
+										{{#hasPermission permission 'cor' 'read'}}	 
+										   <li><a href='/cor' data-menu-item="cor" class="spa" data-toggle="collapse" data-target=".navbar-collapse.in"> Cores de Veículos</a></li>
+										   {{/hasPermission}}
+										   
+										{{#hasPermission permission 'equipamento' 'read'}}	 
+										   <li><a href='/equipamento' data-menu-item="equipamento" class="spa" data-toggle="collapse" data-target=".navbar-collapse.in"> Equipamentos</a></li>
+										{{/hasPermission}}
+
+										{{#hasPermission permission 'feriado' 'read'}}	 
+											<li><a href='/feriado' data-menu-item="feriado" class="spa" data-toggle="collapse" data-target=".navbar-collapse.in"> Feriados</a></li>
+										{{/hasPermission}}
+
+										{{#hasPermission permission 'gerenciador-de-tabela' 'read'}}
+												<li><a href='/gerenciador-de-tabela' data-menu-item="gerenciador-de-tabela" class="spa" data-toggle="collapse" data-target=".navbar-collapse.in"> Gerenciador de Tabelas</a></li>
+										{{/hasPermission}}
+										
+										{{#hasPermission permission 'marca' 'read'}}	 
+											<li><a href='/marca' data-menu-item="marca" class="spa" data-toggle="collapse" data-target=".navbar-collapse.in"> Marcas & Modelos</a></li>
+										{{/hasPermission}}
+										
+										{{#hasPermission permission 'faq' 'read'}}
+											 <li><a href='/faq' data-menu-item="faq" class="spa" data-toggle="collapse" data-target=".navbar-collapse.in"> Perguntas Frequentes</a></li>
+									 	{{/hasPermission}}
+
+										{{#hasPermission permission 'tabela-de-preco' 'read'}}
+			 	           			    	<li><a href='/tabela-de-preco' data-menu-item="tabela-de-preco" class="spa" data-toggle="collapse" data-target=".navbar-collapse.in"> Tabela de Preços</a></li>
+										{{/hasPermission}}
+
+				           			    {{#hasPermission permission 'terminal' 'read'}}	 
+				           			    	<li><a href='/terminal' data-menu-item="terminal" class="spa" data-toggle="collapse" data-target=".navbar-collapse.in"> Terminais</a></li>
+				           			    {{/hasPermission}}
+
+				           			    {{#hasPermission permission 'tipo-veiculo' 'read'}}	 
+				           			    	<li><a href='/tipo-veiculo' data-menu-item="tipo-veiculo" class="spa" data-toggle="collapse" data-target=".navbar-collapse.in"> Tipos de Veículos</a></li>
+										{{/hasPermission}}
+
+										{{#hasPermission permission 'video' 'read'}}
+			 	           			    	<li><a href='/video' data-menu-item="video" class="spa" data-toggle="collapse" data-target=".navbar-collapse.in"> Tutoriais em Vídeo</a></li>
+										{{/hasPermission}}
+				        			</ul>
+				            	</li>
+					{{/ifAnyOne}}
+
+					{{#ifAnyOne (hasPermission permission 'nota-fiscal' 'read')  
+								(hasPermission permission 'relatorio-financeiro' 'read') 
+								(hasPermission permission 'relatorio-pagamento' 'read')
+								(hasPermission permission 'relatorio-patio' 'read')
+								(hasPermission permission 'relatorio-acesso' 'read')
+								(hasPermission permission 'relatorio-faturamento' 'read')
+								(hasPermission permission 'relatorio-mensalista' 'read')
+								(hasPermission permission 'relatorio-baixa-patio' 'read') }}
+				            	<li data-menu="Relatórios">
+				            		<a href="#"><i class="fa fa-file-text-o fa-lg"></i>RELATÓRIOS <span class="fa arrow"></span></a>
+				        			<ul class="nav nav-second-level collapse">
+										{{#hasPermission permission 'nota-fiscal' 'read'}}
+			    		            		<!-- <li><a href='/nota-fiscal' data-menu-item="nota-fiscal" class="spa" data-toggle="collapse" data-target=".navbar-collapse.in"> Nota Fiscal</a></li> -->
+										{{/hasPermission}}
+
+										{{#hasPermission permission 'relatorio-acesso' 'read'}}
+											<li><a href='/relatorio-acesso' data-menu-item="relatorio-acesso" class="spa" data-toggle="collapse" data-target=".navbar-collapse.in"> Acessos</a></li>
+										{{/hasPermission}}
+
+										{{#hasPermission permission 'relatorio-financeiro' 'read'}}
+			    		            		<li><a href='/relatorio-financeiro' data-menu-item="relatorio-financeiro" class="spa" data-toggle="collapse" data-target=".navbar-collapse.in"> Caixa</a></li>
+										{{/hasPermission}}
+
+										{{#hasPermission permission 'relatorio-convenio' 'read'}}
+											<li><a href='/relatorio-convenio' data-menu-item="relatorio-convenio" class="spa" data-toggle="collapse" data-target=".navbar-collapse.in"> Convênio</a></li>
+										{{/hasPermission}}
+
+										{{#hasPermission permission 'relatorio-isencao' 'read'}}
+											<li><a href='/relatorio-isencao' data-menu-item="relatorio-isencao" class="spa" data-toggle="collapse" data-target=".navbar-collapse.in"> Isenção</a></li>
+										{{/hasPermission}}
+
+										{{#hasPermission permission 'relatorio-mensalista' 'read'}}
+											<li><a href='/relatorio-mensalista' data-menu-item="relatorio-mensalista" class="spa" data-toggle="collapse" data-target=".navbar-collapse.in"> Mensalistas</a></li>
+										{{/hasPermission}}
+										
+										{{#hasPermission permission 'relatorio-patio' 'read'}}
+											<li><a href='/relatorio-patio' data-menu-item="relatorio-patio" class="spa" data-toggle="collapse" data-target=".navbar-collapse.in"> Movimento de Pátio</a></li>
+										{{/hasPermission}}
+
+										{{#hasPermission permission 'relatorio-pagamento' 'read'}}
+											<li><a href='/relatorio-pagamento' data-menu-item="relatorio-pagamento" class="spa" data-toggle="collapse" data-target=".navbar-collapse.in"> Pagamento</a></li>
+										{{/hasPermission}}
+
+										{{#hasPermission permission 'relatorio-pagamento-em-massa' 'read'}}
+											<li><a href='/relatorio-pagamento-em-massa' data-menu-item="relatorio-pagamento-em-massa" class="spa" data-toggle="collapse" data-target=".navbar-collapse.in"> Pagamento em Massa</a></li>
+										{{/hasPermission}}
+
+										{{#hasPermission permission 'relatorio-permanencia' 'read'}}
+											<li><a href="/relatorio-permanencia" data-menu-item="relatorio-permanencia" class="spa" data-toggle="collapse" data-target=".navbar-collapse.in"> Permanência</a></li>
+										{{/hasPermission}}
+
+										{{#hasPermission permission 'relatorio-baixa-patio' 'read'}}
+											<li><a href="/relatorio-baixa-patio" data-menu-item="relatorio-baixa-patio" class="spa" data-toggle="collapse" data-target=".navbar-collapse.in"> Relátorio de Veículos Retirados do Pátio</a></li>
+										{{/hasPermission}}
+
+										{{#hasPermission permission 'relatorio-faturamento' 'read'}}
+											<!-- <li><a href='/relatorio-faturamento' data-menu-item="relatorio-faturamento" class="spa" data-toggle="collapse" data-target=".navbar-collapse.in"> Faturamento</a></li> -->
+										{{/hasPermission}}
+
+										{{#hasPermission permission 'nota-fiscal' 'read'}}
+											<li><a href="/nota-fiscal" data-menu-item="nota-fiscal" class="spa" data-toggle="collapse" data-target=".navbar-collapse.in"> Nota Fiscal</a></li>
+										{{/hasPermission}}
+									</ul>
+								</li>
+					{{/ifAnyOne}}
+
+					{{#ifAnyOne (hasPermission permission 'usuario' 'read')  
+								(hasPermission permission 'nivel-de-acesso' 'read') 
+								(hasPermission permission 'database' 'read')
+								(hasPermission permission 'configuracao' 'read') }}
+								<li data-menu="Configuração">
+				            		<a href="#"><i class="fa fa-wrench fa-lg"></i>CONFIGURAÇÕES <span class="fa arrow"></span></a>
+				        			<ul class="nav nav-second-level collapse">
+										{{#hasPermission permission 'database' 'read'}}
+											<li><a href="/database" data-menu-item="database" class="spa" data-toggle="collapse" data-target=".navbar-collapse.in"> Banco de Dados</a></li>
+										{{/hasPermission}}
+										
+										{{#hasPermission permission 'nivel-de-acesso' 'read'}}
+												<li><a href='/nivel-de-acesso' data-menu-item="nivel-de-acesso" class="spa" data-toggle="collapse" data-target=".navbar-collapse.in"> Níveis de Acesso</a></li>
+										{{/hasPermission}}	
+									
+										{{#hasPermission permission 'usuario' 'read'}}
+			 	    		            	<li><a href='/usuario' data-menu-item="usuario" class="spa" data-toggle="collapse" data-target=".navbar-collapse.in"> Usuários</a></li>
+										{{/hasPermission}}
+						                
+										{{#hasPermission permission 'configuracao' 'read'}}
+					 	                	<li><a href="/configuracao" data-menu-item="configuracao" class="spa" data-toggle="collapse" data-target=".navbar-collapse.in"> Sistema</a></li>
+						                {{/hasPermission}}	
+				            		</ul>
+				            	</li>
+				    {{/ifAnyOne}} 
+
+				    {{#ifAnyOne (hasPermission permission 'log-usuario' 'read') }}
+		            	<li data-menu="Logs">
+		            		<a href="#"><i class="fa fa-info-circle fa-lg"></i>LOGS<span class="fa arrow"></span></a>
+		        			<ul class="nav nav-second-level collapse">
+		        				{{#hasPermission permission 'log-usuario' 'read'}}
+	 	           			    	<li><a href='/log-usuario' data-menu-item="log-usuario" class="spa" data-toggle="collapse" data-target=".navbar-collapse.in"> Usuários</a></li>
+								{{/hasPermission}}
+		        			</ul>
+		            	</li>
+					{{/ifAnyOne}}
+
+
+				    {{#ifAnyOne (hasPermission permission 'faq' 'read') 
+								(hasPermission permission 'video' 'read') 
+				    }}
+		            	<li data-menu="Suporte">
+		            		<a href="#"><i class="fa fa-info-circle fa-lg"></i>AJUDA & SUPORTE <span class="fa arrow"></span></a>
+		        			<ul class="nav nav-second-level collapse">
+		        				{{#hasPermission permission 'faq' 'read'}}
+	 	           			    	<li><a href='/perguntas-frequentes' data-menu-item="perguntas-frequentes" class="spa" data-toggle="collapse" data-target=".navbar-collapse.in"> Perguntas Frequentes</a></li>
+								{{/hasPermission}}
+								{{#hasPermission permission 'video' 'read'}}
+	 	           			    	<li><a href='/video' data-menu-item="video" class="spa" data-toggle="collapse" data-target=".navbar-collapse.in"> Tutoriais em Vídeo</a></li>
+								{{/hasPermission}}
+		        			</ul>
+		            	</li>
+					{{/ifAnyOne}}
+
+					<li><a href="#" class="logout"><i class="fa fa-sign-out fa-lg"></i>SAIR</a></li>
+
+	            {{/activeMenu}}
+	        </ul>
+	    </div>
+        <!-- /.sidebar-collapse -->
+    <!-- /.navbar-static-side -->
+    </div>
+</nav>
+
+<!-- posicoes absolutas -->
+<div class="container-time">
+	<span class="server-time" rel="tooltip-bottom" title="Hora do servidor"></span>&nbsp;
+	<span class="server-status online" rel="tooltip-bottom" title="Status do servidor"></span>
+</div>
+
+<div class="navbar-top-links navbar-right no-print">
+	<ul>	
+		<li><a href="javascript:self.print();" class="btn btn-default no-tooltip" title="Imprimir" rel="tooltip-bottom"><i class="fa fa-lg fa-print no-padding"></i></a></li>
+		<li class="dropdown">
+            <a data-toggle="dropdown" class="btn btn-default dropdown-toggle no-tooltip" href="#" aria-expanded="false" title="Opções" rel="tooltip-bottom"><i class="fa fa-cog fa-lg"></i> <b class="caret"></b></a>
+            <ul class="dropdown-menu">
+            	{{#hasPermission permission 'perfil' 'edit'}}
+                	<li><a href="/perfil/{{session.login._id}}" class="spa"><i class="fa fa-user"></i> Perfil</a></li>
+                {{/hasPermission}}
+				<li><a href="#" class="refresh"><i class="fa fa-refresh"></i> Atualizar Tela</a></li>
+				<li><a href="#" class="full-screen"><i class="fa fa-arrows-alt"></i> Tela Cheia</a></li>
+                <li><a href="#" class="logout"><i class="fa fa-sign-out"></i>Sair</a></li>
+            </ul>
+        </li>		
+	</ul>
+</div>	
+
+
+<div class="version">
+	<small>
+		<!-- Client {{ip}}<br />
+		App 010.000.000.037 v{{version}}<br />
+		Database 010.000.000.037 v3.65<br/> -->
+		This license expires on {{expiration_date}}<br />
+		Logged in as {{session.login.nome}}<br />
+		Your IP {{ip}}<br />
+		Environment {{getEnv}}
+	</small>
+</div>

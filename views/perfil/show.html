@@ -1,0 +1,54 @@
+<form action="/{{route}}" method="{{ternary isEdit 'put' 'post'}}" class="form-horizontal well">
+    <fieldset>
+        <legend>Dados gerais</legend>
+
+        <div class="control-group">
+            <label class="control-label">*Nome</label>
+            <div class="controls"><input type="text" name="nome" value="{{result.nome}}" class="uppercase" required></div><!-- .controls -->
+        </div><!-- .control-group -->
+		
+		<div class="control-group">
+            <label class="control-label">*Nível de acesso</label>
+            <div class="controls">xxx
+            </div><!-- .controls -->
+        </div><!-- .control-group -->
+
+        <div class="control-group">
+            <label class="control-label">*Login</label>
+            <div class="controls"><input type="text" name="login" value="{{result.login}}" required></div><!-- .controls -->
+        </div><!-- .control-group -->
+
+        <div class="control-group">
+            <label class="control-label">*Senha</label>
+            <div class="controls">
+            	<input type="password" id="password" name="senha" value="{{result.senha}}" required onpaste="return false" style="float: left; margin-right: 5px;">
+            </div><!-- .controls -->
+        </div><!-- .control-group -->
+
+		<div class="control-group">
+            <label class="control-label">*Confirmacão Senha</label>
+            <div class="controls"><input type="password" id="confirm_password" name="confirmacao_senha" value="{{result.senha}}" onpaste="return false" required></div><!-- .controls -->
+        </div><!-- .control-group -->
+
+		<script>
+			var password = document.getElementById("password")
+		  , confirm_password = document.getElementById("confirm_password");
+
+			function validatePassword(){
+			  if(password.value != confirm_password.value) {
+			    confirm_password.setCustomValidity("A confirmação de senha deve ser igual a senha");
+			  } else {
+			    confirm_password.setCustomValidity('');
+		 	  }
+			}
+
+			password.onchange = validatePassword;
+			confirm_password.onkeyup = validatePassword;
+		</script>
+
+          {{>form-footer}}
+
+    </fieldset>
+
+    <input type="hidden" name="id" value="{{result.id}}"></td>
+</form>

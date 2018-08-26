@@ -1,0 +1,95 @@
+{{>doctype}}
+{{>head}}
+<body class="{{getEnv}} ui-blocked">
+    <div class="ui-block senna-loading"><div class="senna-loading-bar"></div></div>
+
+    <div id="wrapper" class="monitor-opened">
+        <div class="senna-loading-bar"></div>
+
+		{{>menu}}   
+
+        <div id="page-wrapper" class="">
+            <div class="row container-wrapper xbg bg-no-repeat">
+
+                <div class="container-notification"></div>
+                
+            	{{>breadCrumb}}
+
+           		<div class="col-lg-12 main-content" id="partial">
+
+                    <div class="only-on-print" style="line-height: 20px; margin: 0; padding: 0;">
+                        <div class="pull-left"><img src="{{exibeLogo configuracao.empresa.logo}}" height="70"></div>
+                        <div class="pull-left" style="text-align: left; padding-left: 25px;">
+                            <span style="font-size: 18px; font-weight: bold;">{{configuracao.empresa.razao_social}}</span><br />
+                            {{configuracao.empresa.endereco}} N.{{configuracao.empresa.numero}}
+                            {{configuracao.empresa.bairro}} {{configuracao.empresa.cidade}} {{configuracao.empresa.estado}}<br />
+                            CNPJ {{configuracao.empresa.cnpj}} TEL. {{configuracao.empresa.telefone1}} {{#if configuracao.empresa.telefone2}} TEL. {{configuracao.empresa.telefone2}}{{/if}}
+                        </div>
+                    </div>
+
+                    <div class="row"><div class="col-lg-12 bg-white"><h1 class="page-header">{{title}}</h1></div></div> 
+
+                    <div class="row">
+                        <div class="col-lg-12">
+                            {{>alert}}
+                            {{{body}}}
+                        </div>
+                    </div> 
+
+                    <div class="only-on-print" style="margin: 10px 0;">
+                        <div style="text-align: center;">Impresso por <span>{{lowercase login.nome}}{{#if terminal.nome}}/{{terminal.nome}}{{/if}}</span> em {{dataHoje}}<br/>{{customer}} <span class="lowercase">{{site}}</span></div>
+                    </div>
+
+            	</div> 
+            </div> 
+
+            {{>last-activity}}
+
+            <a href="#" class="back-to-top" rel="tooltip"><i class="fa fa-chevron-up no-padding"></i></a>
+
+        </div> <!-- #page-wrapper -->
+    </div> <!-- .wrapper -->
+
+    {{#hasPermission permission 'caixa' 'new'}}
+        {{#unless caixa}}
+            <div class="display-none">
+                <div class="abrir-caixa">
+
+                    <form action="/caixa" method="post" class="abrir-caixa form-horizontal disable-default-submit" autocomplete="false">
+                        
+                        <div class="alert"></div>
+            
+                        <div class="control-group">
+                            <label class="control-label">Operador</label>
+                            <div class="controls">{{session.login.nome}}</div>
+                        </div>
+
+                        <div class="control-group">
+                            <label class="control-label">Saldo Inicial R$</label>
+                            <div class="controls"><input type="text" name="valor_inicio" value="" autocomplete="off" autocorrect="off" autocapitalize="off"></div>
+                        </div>
+
+                        <div class="control-group">
+                            <label class="control-label">*Senha</label>
+                            <div class="controls">
+                                <input type="password" name="senha" value="" autocomplete="off" autocorrect="off" autocapitalize="off" onpaste="return false" required>
+                            </div>
+                        </div>
+
+                        <div class="form-footer">
+                            <button class="btn btn-success" type="submit"><i class="fa fa-credit-card"></i>Abrir</button>
+                        </div>
+                        <div class="clearfix"></div>
+
+                    </form>
+
+                </div>
+            </div>
+        {{/unless}}
+    {{/hasPermission}}
+    
+
+	{{>footer}}
+    
+</body>
+</html>

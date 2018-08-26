@@ -1,0 +1,17 @@
+<style>
+	#wrapper {
+		background-color: #f5f5f5;
+	}
+	.alert-message { text-transform: uppercase; font-weight: bold; font-size: 20px; }
+	.alert-danger { background-color: #c9302c; }
+	.alert-success { background-color: #449d44; }
+</style>
+<form action="/{{route}}?sentido={{sentido}}" method="put" class="form-horizontal well">
+ 	<fieldset>
+	 	<center>Busque por Código de Barras, Placa do Veículo ou Cartão Proximidade</center><!-- , CPF ou CNPJ     max leng. 18 -->
+		<input type="text" name="code" placeholder="&#xf02a;&#xf02a;&#xf02a;&#xf02a;" value="" maxlength="12" minlength="7" class="caixa-search input-barras input-barras-margin-top" autocomplete="off" autocorrect="off" autocapitalize="off" autofocus>
+		<!-- <label for="trigger-camera" class="btn btn-default btn-trigger-camera" title=""><i class="fa fa-camera fa-3"></i></label> -->
+		<br /><br />
+		<center><button class="btn btn-success" type="submit"><i class="fa fa-check fa-1"></i>Autorizar <span class="hotkeys" style="display: inline; visibility: visible;">({{hotkeys.sendForm}})</span></button></center>
+    </fieldset>
+</form>

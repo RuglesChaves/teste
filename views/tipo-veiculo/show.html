@@ -1,0 +1,16 @@
+<form action="/{{route}}" method="{{ternary isEdit 'put' 'post'}}" class="form-horizontal well equipamento">
+	
+ 	<fieldset>
+        <legend>Dados gerais</legend>
+
+        <div class="control-group">
+            <label class="control-label">*Nome</label>
+            <div class="controls"><input type="text" name="nome" maxlength="16" class="uppercase" value="{{result.nome}}" required></div><!-- .controls -->
+        </div><!-- .control-group -->
+
+        {{>form-footer}}
+
+    </fieldset>
+
+    <input type="hidden" name="id" value="{{result.id}}"></td>
+</form>

@@ -1,0 +1,43 @@
+<form action="/{{route}}" method="{{ternary isEdit 'put' 'post'}}" class="form-horizontal well equipamento">
+
+	<fieldset>
+
+		<div class="control-group">
+			<label class="control-label">*Nome do Feriado</label>
+			<div class="controls">
+				<input type="text" name="nome" maxlength="30" class="uppercase" value="{{result.nome}}" required>
+			</div>
+		</div>
+
+		<div class="control-group clearfix">
+			<label class="control-label">Data:</label>
+			<div class="controls">
+				<input name="data-feriado" type="text" class="mascara-data" value="{{somenteData result.data-feriado}}" required>
+			</div>
+		</div>
+
+		<div class="control-group clearfix">
+			<label class="control-label">Repetir todos os anos:</label>
+			<div class="controls">
+				{{#checked result.repetir-todo-ano}}
+					<input name="repetir-todo-ano" type="checkbox" value="true">
+				{{/checked}}
+			</div>
+		</div>
+
+		{{>form-footer}}
+
+	</fieldset>
+
+	<input type="hidden" name="id" value="{{result.id}}">
+	</td>
+</form>
+
+
+
+<div class="modelo item clone">
+	<input type="text" name="modelos" value="" required>&nbsp;
+	<a href="#" class="btn btn-danger btn-excluir-item">
+		<i class="fa fa-trash-o no-padding"></i>
+	</a>
+</div>

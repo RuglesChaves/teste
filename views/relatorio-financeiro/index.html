@@ -1,0 +1,176 @@
+<form class="form-filtro form-horizontal well no-print spa disable-default-submit" action="/{{route}}" method="get" role="form" >
+    <fieldset>
+       <legend>Filtre sua consulta</legend>
+
+       <div class="control-group">
+            <label class="control-label">Operador</label>
+            <div class="controls">
+				<select name="usuario" class="uppercase">
+					<option value="">TODOS</option>
+					{{#usuario}}
+						{{#selected ../query.usuario}}
+							<option value="{{id}}">{{nome}}</option>		
+						{{/selected}}
+					{{/usuario}}
+				</select>
+            </div>
+       </div>
+
+       <div class="control-group">
+           <label class="control-label">Tipo de Cliente</label>
+           <div class="controls">
+               <select name="tipo" class="uppercase">
+                   <option value="">TODOS</option>
+                   {{#selected query.tipo}}
+                        <option value="Permanência">Permanência</option>
+                        <option value="Mensalidade">Mensalidade</option>
+                        <option value="Diária">Diária</option>
+                        <option value="Pré-Pago">Pré-Pago</option>
+                   {{/selected}}
+               </select>
+           </div><!-- .controls -->
+       </div><!-- .control-group -->
+       
+       <div class="control-group">
+            <label class="control-label">*Período</label>
+            <div class="controls">
+                <div class="input-prepend input-append inline">
+                    <span class="add-on">De</span>
+                    <input name="data_inicio" type="text" class="mascara-data" value="{{query.data_inicio}}" required>
+                </div>
+                <div class="input-prepend input-append inline">
+                    <span class="add-on">até</span>
+                    <input name="data_fim" type="text" class="mascara-data" value="{{query.data_fim}}" required>
+                </div>
+            </div> <!-- .controls -->
+       </div>
+
+       <div class="control-group">
+            <div class="controls">
+            	<button class="btn btn-danger" type="submit"><i class="fa fa-search"></i>Filtrar</button>
+            </div>
+        </div>
+    </fieldset>
+
+    <input type="hidden" name="p" value="1">
+</form>
+ 
+<div class="btn-group">
+	<a class="btn btn-warning print" href="{{printUrl}}" style="margin-right: 10px;"><i class="fa fa-print"></i>Imprimir</a>
+    <!-- <a class="btn btn-default print-popup-pdf" href="{{printUrl}}"><i class="fa fa-download"></i>Baixar</a> -->
+</div>
+
+<h4>Caixas</h4>
+<div class="panel panel-default">
+    <div class="table-responsive">
+        <table class="table table-striped table-bordered table-hover">
+            <thead>
+                <tr>
+                    <th class="no-print options">Opções</th>
+                	<th>Operador</th>
+                	<th>Data de Abertura</th>
+                	<th>Data de Fechamento</th>
+                	<th width="130">Faturamento R$</th>
+                </tr>
+            </thead>
+            <tbody>
+                {{#relatorioCaixa}}
+                    <tr>
+                        <td align="center" class="no-print options">
+                            {{#finalizado}}
+                                <a href="/caixa/print/{{_id}}" class="btn btn-warning print" title="Imprimir Fechamento de Caixa" ><i class="fa fa-print"></i></a>
+                                <!-- <a href="/caixa/print/{{_id}}" class="btn btn-default print-popup-pdf" title="Baixar Fechamento de Caixa" ><i class="fa fa-download"></i></a> -->
+                            {{/finalizado}}
+                        </td>
+                        <td class="uppercase">{{usuario}}</td>
+	                    <td>{{ddmmYYYY data_inicio}}</td>
+	                    <td>{{ddmmYYYY data_fim}}</td>
+	                    <td>{{float2moeda faturamento}}</td>
+                    </tr>
+                {{/relatorioCaixa}}
+				<tr class="empty">
+			 		<td colspan="5">Nenhum registro encontrado.</td>
+				</tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<h4>Composição de Faturamento</h4>
+<div class="panel panel-default">
+    <div class="table-responsive">
+        <table class="table table-striped table-bordered table-hover">
+            <thead>
+                <tr>
+                    <th width="50%">Forma de Pagamento</th>
+                    <th width="25%">Quantidade</th>
+                    <th width="25%">Total R$</th>
+                </tr>
+            </thead>
+            <tbody>
+            	{{#each forma_pagamento}}
+	            	<tr>
+	            		<td class="uppercase">{{@key}}</td>
+	            		<td>{{quantidade}}</td>
+                        <td>{{float2moeda total}}</td>
+	            	</tr>
+            	{{/each}}
+            	<tr class="empty">
+			 		<td align="center" colspan="3">Nenhum registro encontrado.</td>
+				</tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<div class="panel panel-default">
+    <div class="table-responsive">
+        <table class="table table-striped table-bordered table-hover">
+            <thead>
+                <tr>
+                    <th width="50%">Tipo de Cliente</th>
+                    <th width="25%">Quantidade</th>
+                    <th width="25%">Total R$</th>
+                </tr>
+            </thead>
+            <tbody>
+                {{#each tipo_cliente}}
+                    <tr>
+                        <td class="uppercase">{{@key}}</td>
+                        <td>{{quantidade}}</td>
+                        <td>{{float2moeda total}}</td>
+                    </tr>
+                {{/each}}
+                <tr class="empty">
+                    <td align="center" colspan="3">Nenhum registro encontrado.</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<div class="panel panel-default">
+    <div class="table-responsive">
+        <table class="table table-striped table-bordered table-hover">
+            <thead>
+                <tr>
+                    <th width="50%">Tabela de Preço</th>
+                    <th width="25%">Quantidade</th>
+                    <th width="25%">Total R$</th>
+                </tr>
+            </thead>
+            <tbody>
+                {{#each tabela_de_preco}}
+                    <tr>
+                        <td class="uppercase">{{nome}}</td>
+                        <td>{{quantidade}}</td>
+                        <td>{{float2moeda total}}</td>
+                    </tr>
+                {{/each}}
+                <tr class="empty">
+                    <td align="center" colspan="3">Nenhum registro encontrado.</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>

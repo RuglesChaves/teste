@@ -1,0 +1,852 @@
+<audio id="audio">
+	<source src="/audio/beep.mp3" type="audio/mpeg">
+</audio>
+
+<div class="caixa">
+
+	<div class="topo-caixa">
+		<div style="position: absolute; right: 15px;">
+			<!-- <a href="#" class="btn btn-default no-tooltip" rel="tooltip-left" style="margin-left: 5px;" title="Perda de Ticket"><i class="fa fa-ban fa-ticket"></i></a> -->
+			<a href="#" class="btn btn-danger fechar-caixa">
+				<i class="fa fa-close fa-lg"></i> Fechamento de Caixa</a>
+			<a href="/inicio" class="btn btn-default" style="margin-left: 5px;">
+				<i class="fa fa-reply"></i> Voltar para Início</a>
+		</div>
+		<div style="position: absolute; left: 15px;">
+			<table width="30%">
+				<tr>
+					<td width="50%">
+							{{#hasPermission permission 'ticket' 'new'}} {{#contains terminal.tipo 'Entrada'}}
+							<a href="/ticket/cadastrar/?iframe=1&findCard=1" class="btn btn-success btn-block btn-cadastrar colorbox-iframe" >
+								<i class="fa fa-plus"></i> Cadastrar Ticket (F2)</a>
+							{{/contains}} {{/hasPermission}} 
+					</td>
+					<td width="50%">
+							{{#hasPermission permission 'ticket' 'lost'}}
+							<a href="/ticket/perdido/cadastrar/?iframe=1&findCard=1" class="btn btn-success btn-block btn-cadastrar colorbox-iframe" style="margin-left: 10px;">
+								<i class="fa fa-plus"></i> Cadastrar Ticket Perdido</a>
+							{{/hasPermission}}
+					</td>
+				</tr>
+
+				<tr>
+					<td width="50%">
+							{{#hasPermission permission 'patio' 'entry'}} {{#contains terminal.tipo 'Entrada'}}
+							<a href="/liberacao/?sentido=Entrada&iframe=1" class="btn btn-primary btn-block colorbox-iframe" data-height="250" title="Autorizar Entrada" style="margin-top: 3px">
+								<i class="fa fa-long-arrow-right"></i> Autorizar Entrada (F3)</a>
+							{{/contains}} {{/hasPermission}} 			
+					</td>
+					<td width="50%">
+							{{#hasPermission permission 'patio' 'exit'}} {{#contains terminal.tipo 'Saída'}}
+							<a href="/liberacao/?sentido=Saída&iframe=1" class="btn btn-warning btn-block colorbox-iframe" data-height="250" style="margin-left: 10px; margin-top: 3px"
+							 title="Autorizar Saída">
+								<i class="fa fa-long-arrow-left"></i> Autorizar Saída (F4)</a>
+							{{/contains}} {{/hasPermission}}
+					</td>
+				</tr>
+				<tr>
+					<td width="50%">
+							{{#hasPermission permission 'pagamento' 'bulk-payment'}}
+							<a class="btn btn-info btn-block pagamento-em-massa" data-height="250" 
+							 title="Pagamento em Massa" style="margin-top: 3px">
+								<i class="fa fa-briefcase"></i> Pagamento em Massa</a>
+							{{/hasPermission}}
+					</td>
+				</tr>
+			</table>
+			
+		</div>
+
+		<center>
+			<img src="/images/logo-bra.png" style="width: 25%;">
+		</center>
+	</div>
+
+	<div id="horista">
+		<form>
+			<input type="text" name="cartao" placeholder="&#xf02a;&#xf02a;&#xf02a;&#xf02a;" value="" maxlength="12" class="caixa-search input-barras">
+
+			<!-- <label for="trigger-camera" class="btn btn-default btn-trigger-camera" title=""><i class="fa fa-camera fa-3"></i></label> -->
+
+			<!-- <input id="trigger-camera" type="file" accept="image/*" capture="camera" style="display: none;" /> -->
+		</form>
+
+		<div class="alert-container">{{>alert}}</div>
+		<div class="container-resultado">
+
+			<form action="/caixa/comprarDiaria/{{caixa.id}}" class="form-comprar-diaria form-horizontal disable-default-submit" style="background-color: transparent;">
+				<div class="col-md-5 center-block diaria display-none" style="margin: 0 auto">
+					<fieldset>
+						<div class="text-center">
+
+							<div class="tipo-veiculo clearfix">
+								<label>Tipo de veículo</label>
+								<div>
+									<span></span>
+								</div>
+							</div>
+
+							<div class="data-validade-inicio clearfix">
+								<label>Válido apartir de</label>
+								<div>
+									<span>
+										<input type="text" name="data_validade_inicio" value="" class="calendario-somente-pra-frente cursor-pointer" readonly="true"
+										 size="10">
+									</span>
+								</div>
+							</div>
+
+							<div class="vender-hora clearfix">
+								<label>Quantidade de dias</label>
+								<div>
+									<input type="number" name="quantidade_dia" value="" min="" max="99" maxlength="2" step="01" class="zero-padding">
+								</div>
+							</div>
+
+							<div class="limite-saida clearfix">
+								<label>Limite para saída</label>
+								<div>
+									<input type="text" name="data_validade_fim" class="no-input" readonly="true">
+								</div>
+							</div>
+
+							<div class="tabela clearfix">
+								<label>Tabela utilizada</label>
+								<div>
+									<select name="pagamento[tabela][_id]" class="select-tabela-diaria uppercase" style="margin-bottom: 0px;">
+										{{#priceTables}} {{#compare tipo '===' 'Diária'}}
+										<option value="{{id}}">{{nome}}</option>
+										{{/compare}} {{/priceTables}}
+									</select>
+								</div>
+							</div>
+
+							<div class="total clearfix">
+								<label>Total</label>
+								<div>R$
+									<input type="text" name="pagamento[total]" value="0,00" class="no-input" readonly="true" style="width: 50%;">
+								</div>
+							</div>
+
+							<div class="pagamento clearfix">
+								<label>Forma de pagamento</label>
+								<div>
+									<div>
+										<label>
+											<input type="radio" name="pagamento[forma_pagamento]" class="payment-method" value="Dinheiro" checked="checked">
+											<!--(F1)-->Dinheiro
+											<div class="troco-container inline">
+												R$
+												<input type="text" name="pagamento[valor_recebido]" class="mascara-dinheiro valor_recebido" value="" placeholder="0,00" autocomplete="off"
+												 autocorrect="off" autocapitalize="off">
+											</div>
+										</label>
+									</div>
+									<div>
+										<label>
+											<input type="radio" name="pagamento[forma_pagamento]" class="payment-method" value="Cartão de Crédito">
+											<!--(F2)-->Cartão de Crédito</label>
+									</div>
+									<div>
+										<label>
+											<input type="radio" name="pagamento[forma_pagamento]" class="payment-method" value="Cartão de Débito">
+											<!--(F3)-->Cartão de Débito</label>
+									</div>
+								</div>
+							</div>
+
+							<div class="troco clearfix">
+								<label>Troco</label>
+								<div>
+									<span>R$ 0,00</span>
+								</div>
+							</div>
+
+							<div class="clearfix situacao">
+								<label>*Situação do veículo</label>
+								<div>
+									<div>
+										<label>
+											<input type="radio" name="situacao" value="Dentro do Pátio"> Dentro do Pátio</label>
+									</div>
+									<div>
+										<label>
+											<input type="radio" name="situacao" value="Fora do Pátio"> Fora do Pátio</label>
+									</div>
+								</div>
+							</div>
+
+							{{>nota-fiscal}}
+
+							<div class="salvar">
+								<label>
+									<button type="submit" class="btn btn-success confirmar-compra-diaria">
+										<i class="fa fa-check fa-1"></i> CONFIRMAR PAGAMENTO</button>
+								</label>
+								<div>
+									{{#hasPermission permission 'caixa' 'reprint'}}
+									<a href="" class="btn btn-warning print">
+										<i class="fa fa-print fa-1"></i> IMPRIMIR COMPROVANTE</a>
+									{{/hasPermission}}
+								</div>
+							</div>
+
+						</div>
+						<!--fim .text-center-->
+
+					</fieldset>
+
+					<input type="hidden" name="code" value="">
+					<input type="hidden" name="pagamento[tabela][nome]" value="">
+				</div>
+			</form>
+
+			<form action="/caixa/buyCredit/{{caixa.id}}" class="form-buy-credit form-horizontal disable-default-submit" style="background-color: transparent;">
+				<div class="col-md-5 center-block pre-pago display-none" style="margin: 0 auto">
+					<fieldset>
+						<div class="text-center">
+
+							<div class="tipo-cadastro clearfix">
+								<label>Tipo de cadastro</label>
+								<div>
+									<span></span>
+								</div>
+							</div>
+
+							<div class="nome clearfix">
+								<label>Nome do cliente</label>
+								<div>
+									<span></span>
+									<a href="" class="btn btn-warning colorbox-iframe" title="" data-original-title="Visualizar" target="_blank">
+										<i class="fa fa-search no-padding"></i>
+									</a>
+								</div>
+							</div>
+
+							<div class="saldo-pre-pago clearfix">
+								<label>Crédito atual</label>
+								<div>R$
+									<span></span>
+								</div>
+							</div>
+
+							<br />
+
+
+							<div class="adicionar-saldo total clearfix">
+								<label>Adicionar crédito</label>
+								<div>
+									<span>R$
+										<input type="text" name="pagamento[valor]" class="mascara-dinheiro" value="">
+									</span>
+								</div>
+							</div>
+
+
+							<div class="pagamento clearfix">
+								<label>Forma de pagamento</label>
+								<div>
+									<div>
+										<label>
+											<input type="radio" name="pagamento[forma_pagamento]" class="payment-method" value="Dinheiro" checked="checked">
+											<!--(F1)-->Dinheiro
+											<div class="troco-container inline">
+												R$
+												<input type="text" name="pagamento[valor_recebido]" class="mascara-dinheiro valor_recebido" value="" placeholder="0,00" autocomplete="off"
+												 autocorrect="off" autocapitalize="off">
+											</div>
+										</label>
+									</div>
+									<div>
+										<label>
+											<input type="radio" name="pagamento[forma_pagamento]" class="payment-method" value="Cartão de Crédito">
+											<!--(F2)-->Cartão de Crédito</label>
+									</div>
+									<div>
+										<label>
+											<input type="radio" name="pagamento[forma_pagamento]" class="payment-method" value="Cartão de Débito">
+											<!--(F3)-->Cartão de Débito</label>
+									</div>
+								</div>
+							</div>
+
+							<div class="troco clearfix">
+								<label>Troco</label>
+								<div>
+									<span>R$ 0,00</span>
+								</div>
+							</div>
+
+							{{>nota-fiscal}}
+
+							<div class="salvar">
+								<button type="submit" class="btn btn-success confirmar-pagamento">
+									<i class="fa fa-check fa-1"></i> ADICIONAR (F4)</button>
+							</div>
+
+
+
+
+
+						</div>
+					</fieldset>
+					<input type="hidden" name="code" value="">
+				</div>
+			</form>
+
+			<form action="/caixa/pagarMensalidade/{{caixa.id}}" class="form-mensalista form-horizontal disable-default-submit" style="background-color: transparent;">
+				<div class="col-md-5 center-block mensalista display-none" style="margin: 0 auto">
+					<fieldset>
+						<div class="text-center">
+
+							<div class="tipo-cadastro clearfix">
+								<label>Tipo de cadastro</label>
+								<div>
+									<span></span>
+								</div>
+							</div>
+
+							<div class="nome clearfix">
+								<label>Nome do cliente</label>
+								<div>
+									<span></span>
+									<a href="" class="btn btn-warning colorbox-iframe" title="" data-original-title="Visualizar" target="_blank">
+										<i class="fa fa-search no-padding"></i>
+									</a>
+								</div>
+							</div>
+							<br />
+
+							<div class="mensalidades clearfix">
+								<label>Pagar mensalidade</label>
+								<div style="max-height: 160px; overflow-y: scroll; border: 1px solid #ddd; border-radius: 3px; padding: 0px 6px;">
+									<table class="table">
+										<tbody class="container-mensalidade"></tbody>
+									</table>
+								</div>
+							</div>
+
+							<!-- <div style="max-height: 200px; overflow-x: scroll;">
+								<table class="table table-striped table-bordered table-hover">
+									<thead>
+										<tr>
+											<th style="text-align: center;">Vencimento</th>
+											<th style="text-align: center;">Situação</th>
+											<th style="text-align: center;">Valor R$</th>
+											<th style="text-align: left;"></th>
+										</tr>
+									</thead>
+									<tbody class="container-mensalidade"></tbody>
+								</table>
+							</div> -->
+
+							<div class="pagamento clearfix">
+								<label>Forma de pagamento</label>
+								<div>
+									<div>
+										<label>
+											<input type="radio" name="pagamento[forma_pagamento]" class="payment-method" value="Dinheiro" checked="checked">
+											<!--(F1)-->Dinheiro
+											<div class="troco-container inline">
+												R$
+												<input type="text" name="pagamento[valor_recebido]" class="mascara-dinheiro valor_recebido" value="" placeholder="0,00" autocomplete="off"
+												 autocorrect="off" autocapitalize="off">
+											</div>
+										</label>
+									</div>
+									<div>
+										<label>
+											<input type="radio" name="pagamento[forma_pagamento]" class="payment-method" value="Cartão de Crédito">
+											<!--(F2)-->Cartão de Crédito</label>
+									</div>
+									<div>
+										<label>
+											<input type="radio" name="pagamento[forma_pagamento]" class="payment-method" value="Cartão de Débito">
+											<!--(F3)-->Cartão de Débito</label>
+									</div>
+								</div>
+							</div>
+
+							<div class="troco clearfix">
+								<label>Troco</label>
+								<div>
+									<span>R$ 0,00</span>
+								</div>
+							</div>
+
+							<div class="total clearfix">
+								<label>Total</label>
+								<div>R$
+									<input type="text" name="pagamento[total]" value="0,00" class="no-input" readonly="true" style="width: 50%;">
+								</div>
+							</div>
+
+							{{>nota-fiscal}}
+
+							<div class="salvar">
+								<label >
+									<button type="submit" class="btn btn-success confirmar-pagamento">
+										<i class="fa fa-check fa-1"></i> CONFIRMAR PAGAMENTO (F4)</button>
+								</label>
+								<div>
+									<a class="btn btn-info confirmar-isencao">
+										<i class="fa fa-handshake-o"></i> ISENTAR PAGAMENTO</a>
+								</div>
+							</div>
+
+
+						</div>
+					</fieldset>
+
+					<input type="hidden" name="code" value="">
+
+				</div>
+			</form>
+
+
+
+			<div class="display-none">
+					<form  action="/caixa/pagamento-em-massa/{{caixa.id}}" class="form-pagamento-em-massa">
+						<br>
+						<div style="margin: 0 auto">
+	
+							<div class="alignRigth">
+								<label>*Tabela de Preço</label>
+							</div>
+	
+							<div class="alignLeft">
+								<select name="tabela" required="required">
+									<option value="">Selecione</option>
+									{{#each priceTables}}
+										{{#compare tipo '===' 'Permanência'}}
+											<option value="{{_id}}" class="uppercase">{{nome}}</option>
+										{{/compare}}
+									{{/each}}
+								</select>
+							</div>
+	
+							<div class="alignRigth">
+								<label>*Quantidade de Tickets(Máx. 300)</label>
+							</div>
+	
+							<div class="alignLeft">
+								<input type="number" name="quantidade-cartao" value="0" min="0" max="300" placeholder="0" step="01" pattern="[0-9]+" required="required" class="number">
+							</div>
+	
+							<div class="alignRigth">
+									<label>*Preço unitário</label>
+							</div>
+		
+							<div class="alignLeft">
+								<input type="number" name="preco-unitario" value="0" min="0" placeholder="0,00" step="0.01" required="required" class="number">
+							</div>
+	
+							<div class="alignRigth">
+								<label >Total Arrecadado</label>
+							</div>
+	
+							<div>
+								<label class="alignLeft">
+										R$ <span class="total-arrecadado">0,00</span>
+								</label>
+							</div>
+	
+							<div class="alignRigth">
+								<label>Forma de pagamento</label>
+							</div>
+	
+							<div class="alignLeft">
+								<div>
+									<div>
+										<label>
+											<input type="radio" name="forma_pagamento" value="Dinheiro" checked="checked">
+											Dinheiro</label>
+									</div>
+									<div>
+										<label>
+											<input type="radio" name="forma_pagamento" value="Cartão de Crédito">
+											Cartão de Crédito</label>
+									</div>
+									<div>
+										<label>
+											<input type="radio" name="forma_pagamento" value="Cartão de Débito">
+											Cartão de Débito</label>
+									</div>
+								</div>
+							</div>
+	
+							<div class="buttonCenter" >
+								<button type="submit" class="btn btn-success btn-pgto-massa" style="margin-top: 5px;">CONFIRMAR</button>
+							</div>
+							<br>
+						</div>
+	
+	
+					</form>
+				</div>
+
+			<div class="pgto-concluido" style="margin: 0 auto">
+				<fieldset>
+					<div class="alignRigth">
+						<b>Horário do Pagamento: </b>
+					</div>
+
+					<div class="alignLeft cadastro">
+						<div></div>
+					</div>
+
+					<div class="alignRigth">
+						<b>Pagamentos Emitidos: </b>
+					</div>
+
+					<div class="alignLeft quantidade">
+						<div></div>
+					</div>
+
+					<div class="text-center">
+						<div class="salvar">
+							<label style="visibility: hidden;"></label>
+							{{#hasPermission permission 'caixa' 'reprint-bulk-payment'}}
+								<div>
+									<a href="" class="btn btn-warning print print-bulk-payment">
+										<i class="fa fa-print fa-1"></i> IMPRIMIR COMPROVANTE</a>
+								</div>
+							{{/hasPermission}}
+						</div>
+					</div>
+				</fieldset>
+			</div>
+				
+			<div class="display-none">
+				<form  action="/isencao/isentarMensalidade/{{caixa.id}}" class="form-isencao">
+					<div class="mensalista display-none" style="margin: 0 auto">
+						<div class="alignRigth">
+							<label>*Usuário</label>
+						</div>
+						<div class="alignLeft">
+							<select name="usuario" required="required">
+								<option value="">Selecione</option>
+								{{#each usuarios}}
+								<option value="{{_id}}">{{nome}}</option>
+								{{/each}}
+							</select>
+						</div>
+
+						<div class="alignRigth">
+							<label>*Senha</label>
+						</div>
+
+						<div class="alignLeft">
+							<input type="password" value="" name="senha" required="required">
+						</div>
+
+						<div class="alignRigth">
+							<label>*Bloquear Acesso</label>
+						</div>
+
+						<div class="alignLeft">
+							<label ><input type="radio" value="true" name="bloqueio" required="required"> Sim</label> 
+							<label > <input type="radio" value="false" name="bloqueio" required="required"> Não </label>
+						</div>
+
+						<div class="alignRigth">
+							<label>Observação</label>
+						</div>
+
+						<div class="alignLeft">
+							<textarea type="textarea" value="" name="observacao" rows="6" cols="20"></textarea>
+						</div>
+						<div class="buttonCenter">
+							<button type="submit" class="btn btn-success btn-pgto-isentar">CONFIRMAR</button>
+						</div>
+
+					</div>
+				</form>
+			</div>
+
+			<form action="/caixa/confirmPayment/{{caixa.id}}" class="form-checkout form-horizontal disable-default-submit" style="background-color: transparent;">
+				<div class="col-md-5 center-block bloqueado" style="margin: 0 auto">
+					<fieldset>
+						<!-- <legend>Ticket Não Liberado</legend> -->
+	
+						<div class="text-center">
+	
+							<div class="tipo-veiculo clearfix">
+								<label>Tipo de veículo</label>
+								<div>
+									<span></span>
+								</div>
+							</div>
+	
+							<div class="data-inicio clearfix">
+								<label>Horário da entrada</label>
+								<div>
+									<span></span>
+								</div>
+							</div>
+	
+							<div class="limite-saida clearfix">
+								<label>Limite para saída</label>
+								<div>
+									<input type="text" name="limite_saida" class="no-input" readonly="true">
+								</div>
+							</div>
+	
+							<div class="permanencia clearfix">
+								<label>Permanência</label>
+								<div>
+									<input type="text" name="permanencia" class="no-input" readonly="true">
+	
+									<!-- 		+ <span class="vender-hora-debug" onchange="this.style.width = ((this.value.length + 1) * 8) + 'px';">00:00</span>
+												= <span class="permanencia-debug" onchange="this.style.width = ((this.value.length + 1) * 8) + 'px';">00:00</span>
+										 -->
+								</div>
+							</div>
+	
+							<div class="vender-hora clearfix">
+								<label>Vender horas</label>
+								<div>
+									<input type="number" name="hora" value="00" min="00" placeholder="00" max="99" maxlength="2" step="01" class="zero-padding">:
+									<input type="number" name="minuto" value="00" min="00" placeholder="00" max="59" maxlength="2" step="10" class="zero-padding">
+								</div>
+							</div>
+	
+							{{#compare gerenciadores.length '>' 0}}
+								<div class="gerenciador clearfix">
+									<label>Gerenciador de tabela</label>
+									<div>
+										<select name="pagamento[gerenciador-de-tabela][_id]" class="select-gerenciador uppercase" style="margin-bottom: 0px;">
+											<option value=""></option>
+											{{#gerenciadores}}
+											<option value="{{_id}}">{{nome}}</option>
+											{{/gerenciadores}}
+										</select>
+									</div>
+								</div>
+							{{/compare}}
+	
+							<div class="tabela clearfix">
+								<label>Tabela utilizada</label>
+								<div>
+									<select name="pagamento[tabela][_id]" class="select-tabela uppercase" style="margin-bottom: 0px;">
+										{{#priceTables}} {{#compare tipo '===' 'Permanência'}}
+										<option value="{{id}}">{{nome}}</option>
+										{{/compare}} {{/priceTables}}
+									</select>
+								</div>
+							</div>
+	
+							<div class="total clearfix">
+								<label>Total</label>
+								<div>R$
+									<input type="text" name="pagamento[total]" value="0,00" class="no-input" readonly="true" style="width: 50%;">
+								</div>
+							</div>
+	
+	
+							<div class="pagamento clearfix">
+								<label>Forma de pagamento</label>
+								<div>
+									<div>
+										<label>
+											<input type="radio" name="pagamento[forma_pagamento]" class="payment-method" value="Dinheiro" checked="checked">
+											<!--(F1)-->Dinheiro
+											<div class="troco-container inline">
+												R$
+												<input type="text" name="pagamento[valor_recebido]" class="mascara-dinheiro valor_recebido" value="" placeholder="0,00" autocomplete="off"
+												 autocorrect="off" autocapitalize="off">
+											</div>
+										</label>
+									</div>
+									<div>
+										<label>
+											<input type="radio" name="pagamento[forma_pagamento]" class="payment-method" value="Cartão de Crédito">
+											<!--(F2)-->Cartão de Crédito</label>
+									</div>
+									<div>
+										<label>
+											<input type="radio" name="pagamento[forma_pagamento]" class="payment-method" value="Cartão de Débito">
+											<!--(F3)-->Cartão de Débito</label>
+									</div>
+								</div>
+							</div>
+	
+							<div class="troco clearfix">
+								<label>Troco</label>
+								<div>
+									<span>R$ 0,00</span>
+								</div>
+							</div>
+	
+							{{>nota-fiscal}}
+	
+	
+							<div class="salvar">
+								<label style="cursor: default;">
+									<button type="submit" class="btn btn-success confirmar-pagamento display-none">
+										<i class="fa fa-check fa-1"></i> VALIDAR TICKET (F4)</button>
+								</label>
+								{{#hasPermission permission 'ticket' 'reprint'}}
+								<div>
+									<a href="" class="btn btn-warning print">
+										<i class="fa fa-print fa-1"></i> REIMPRIMIR TICKET</a>
+								</div>
+								{{/hasPermission}}
+							</div>
+	
+						</div>
+						<!--fim .text-center-->
+	
+					</fieldset>
+				</div>
+				<!--fim .bloqueado-->
+	
+				
+				<div class="col-lg-6 center-block liberado" style="margin: 0 auto">
+					<fieldset>
+						<!-- <legend>Ticket Liberado</legend> -->
+	
+						<div class="text-center">
+	
+							<div class="veiculo clearfix">
+								<div></div>
+							</div>
+	
+							<div class="data-inicio clearfix">
+								<label>Horário da entrada</label>
+								<div></div>
+							</div>
+	
+							<!-- <div class="hora-pagamento clearfix"> 194161818384311
+											<label>Horário do pagamento</label> 
+											<div></div>
+										</div> -->
+	
+							<div class="limite-saida clearfix">
+								<label>Limite para saída</label>
+								<div></div>
+							</div>
+	
+							<div class="data-fim clearfix">
+								<label>Horário de saída</label>
+								<div></div>
+							</div>
+	
+							<div class="permanencia clearfix">
+								<label>Permanência</label>
+								<div></div>
+							</div>
+	
+							<div class="total clearfix">
+								<label></label>
+								<div></div>
+							</div>
+	
+							<div class="pagamento clearfix"></div>
+	
+						
+	
+							<div class="salvar">
+								<label style="visibility: hidden;"></label>
+								{{#hasPermission permission 'caixa' 'reprint'}}
+								<div>
+									<a href="" class="btn btn-warning print">
+										<i class="fa fa-print fa-1"></i> IMPRIMIR COMPROVANTE</a>
+								</div>
+								{{/hasPermission}}
+							</div>
+	
+	
+						</div>
+						<!--fim .text-center-->
+					</fieldset>
+				</div>
+				<!--fim .liberado-->
+	
+				<input type="hidden" name="code" value="">
+				<input type="hidden" name="pagamento[tabela][nome]" class="tabela_nome" value="">
+			</form>
+
+		</div>
+		<!--fim .container-resultado-->
+	</div>
+	<!-- fim #horista -->
+</div>
+<!-- fim caixa -->
+
+
+
+<div class="display-none">
+	<div class="fechar-caixa">
+		<form action="/caixa/checkout/{{caixa._id}}" method="post" class="form-fechar-caixa form-horizontal disable-default-submit"
+		 autocomplete="off">
+
+			<div class="alert"></div>
+
+			<div class="control-group">
+				<label class="control-label">Operador</label>
+				<div class="controls">{{session.login.nome}}</div>
+			</div>
+
+			<div class="control-group">
+				<label class="control-label">*Saldo final</label>
+				<div class="controls">R$
+					<input type="text" name="valor_fim" class="mascara-dinheiro" value="" autocomplete="off" autocorrect="off" autocapitalize="off"
+					 required>
+				</div>
+			</div>
+
+			<div class="control-group">
+				<label class="control-label">*Senha</label>
+				<div class="controls">
+					<input type="password" name="senha" value="" autocomplete="off" autocorrect="off" onpaste="return false" autocapitalize="off"
+					 required>
+				</div>
+			</div>
+
+			<div class="form-footer">
+				<button class="btn btn-danger" type="submit">
+					<i class="fa fa-close"></i>Fechar</button>
+			</div>
+			<div class="clearfix"></div>
+		</form>
+	</div>
+</div>
+
+<!-- <div class="display-none">
+	<form id="notaFiscal" class="disable-default-submit">
+		<center>
+			<br />CPF:
+			<input type="text" name="cpf" value="" class="mascara-cpf">
+			<br />
+			E-mail: <input type="email" name="email" value=""><br /><br />
+			<button class="btn btn-success" type="submit">
+				<i class="fa fa-share"></i> Emitir</button>
+			<br />
+			<br />
+			<input type="hidden" name="_pagamento" value="">
+		</center>
+	</form>
+</div> -->
+
+<div class="caixa-footer">
+	<div class="table-responsive">
+		<table class="table">
+			<tr>
+				<td>Operador {{session.login.nome}}</td>
+				<td>Início {{ddmmYYYY caixa.data_inicio}}</td>
+				<td>Relógio
+					<span class="server-time"></span>
+				</td>
+				<td>{{log permission.caixa}} {{#hasPermission permission 'caixa' 'show amount'}} Saldo R$
+					<span class="saldo">{{caixa.saldo}}</span>
+					{{/hasPermission}}
+				</td>
+				<td></td>
+				<td>Status
+					<span class="server-status online" rel="tooltip" title="Online" style="position: relative; top: inherit; right: inherit;"></span>
+				</td>
+			</tr>
+		</table>
+	</div>
+</div>

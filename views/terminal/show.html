@@ -1,0 +1,90 @@
+<form action="/{{route}}" method="{{ternary isEdit 'put' 'post'}}" class="form-horizontal well terminal">
+	
+ 	<fieldset>
+        <legend>Dados do Terminal</legend>
+
+        <div class="control-group">
+            <label class="control-label">*Tipo</label>
+        <div class="controls">
+            	{{#checkedMultiple result.tipo}}
+	                <label><input type="checkbox" name="tipo[]" value="Entrada"> Entrada <small>(Permite a este terminal cadastrar ticket e autorizar entrada de veículos)</small></label><br />
+	                <label><input type="checkbox" name="tipo[]" value="Saída"> Saída <small>(Permite a este terminal limpar o pátio e autorizar saída de veículos)</small></label><br />
+                    <label><input type="checkbox" name="tipo[]" value="Caixa"> Caixa <small>(Permite a este terminal utilizar o caixa)</label></small>
+				{{/checkedMultiple}}
+            </div><!-- .controls -->
+        </div><!-- .control-group -->
+   
+    	<div class="control-group">
+
+            <label class="control-label">*Número</label>
+            <div class="controls">
+    			<select name="numero" required>
+    				<option value="">Selecione</option>
+    				{{#selected result.numero}}
+    					<option value="1">1</option>
+    					<option value="2">2</option>
+    					<option value="3">3</option>
+    					<option value="4">4</option>
+    					<option value="5">5</option>
+    					<option value="6">6</option>
+    					<option value="7">7</option>
+    					<option value="8">8</option>
+    					<option value="9">9</option>
+    				{{/selected}}
+    			</select>
+            </div><!-- .controls -->
+            
+        </div><!-- .control-group -->
+
+    	<div class="control-group">
+            <label class="control-label">*Nome</label>
+            <div class="controls"><input type="text" name="nome" maxlength="16" class="uppercase" value="{{result.nome}}" required></div><!-- .controls -->
+        </div><!-- .control-group -->
+
+        <div class="control-group">
+            <label class="control-label">*IP <!--e/ou MAC--></label>
+            <div class="controls">
+            	<input type="text" name="ip" value="{{result.ip}}" class="mascara-ip" required>
+    			<!-- <input type="text" name="mac" value="{{result.mac}}" class="mascara-mac"> -->
+            </div><!-- .controls -->
+        </div><!-- .control-group -->
+
+
+        <br />
+        <legend>Equipamento utilizado para abertura de cancela</legend>
+        <div class="control-group">
+            <label class="control-label">Na entrada de veículo</label>
+            <div class="controls">
+                <select name="entrada[_equipamento]">
+                    <option value="">Nenhum</option>
+                    {{#selected result.entrada._equipamento}}                    
+                        {{#entrada}}
+                            <option value="{{id}}">{{nome}}</option>
+                        {{/entrada}}
+                    {{/selected}}
+                </select>
+            </div>
+        </div>
+
+        <div class="control-group">
+            <label class="control-label">Na saída de veículo</label>
+            <div class="controls">
+                <select name="saida[_equipamento]">
+                    <option value="">Nenhum</option>
+                    {{#selected result.saida._equipamento}}                    
+                        {{#saida}}
+                            <option value="{{id}}">{{nome}}</option>
+                        {{/saida}}
+                    {{/selected}}
+                </select>
+            </div>
+        </div>
+
+       
+
+        {{>form-footer}}
+
+    </fieldset>
+
+    <input type="hidden" name="id" value="{{result.id}}"></td>
+</form>

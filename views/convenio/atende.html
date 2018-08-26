@@ -1,0 +1,121 @@
+<form name="formCon" action="/convenio/atendimento/gerar-convenio" method="post" class="form-horizontal well equipamento">
+  <fieldset>
+  
+    <div class="control-group">
+      <label class="control-label">*Código</label>
+      <div class="controls">
+        <input  type="text" name="codigo" class="mascara-codigo-barras" autocomplete="off" value="" required minlength="12" maxlength="12">
+      </div>
+    </div>
+
+    <br/>
+    
+    <div class="control-group">
+        <label class="control-label">
+          Utilizar
+        </label>
+        
+        <div class="controls">
+          {{#compare have_type_tabela '===' true}}
+            <label>
+              <input type="radio" name="convenios" checked="checked" value="tabelas"> Tabela de Preço
+            </label>
+          {{/compare}}
+          <br>
+          {{#compare have_type_gerenciador '===' true}}
+            <label>
+              <input type="radio" name="convenios" value="gerenciadores" > Gerenciador de Tabela
+            </label>
+          {{/compare}}
+        </div>
+    </div>
+
+    <br/>
+    
+    <div class="control-group convenio" id="tabelas">
+      {{#convenios}}
+        {{#compare _tabelapreco '!==' null}}
+            <label class="control-label uppercase">
+              <input type="radio" name="convenio" value="{{_id}}" required style="position: absolute; top: -1000px;"> *{{nome}} 
+            </label>
+            <div class="controls">
+              {{#_tabelapreco}}
+                {{#compare ativo true}}
+                  <label class="uppercase"><input type="radio" name="opcao" value="{{_id}}" required> {{nome}} ({{tipo}})</label><br />
+                {{/compare}}
+              {{/_tabelapreco}}
+            </div>
+            <br/>
+        {{/compare}}
+      {{/convenios}}
+    </div>
+
+    <div class="control-group convenio" id="gerenciadores" style="display: none;">
+      {{#convenios}}
+        {{#compare _gerenciador '!==' null}}
+            <label class="control-label uppercase">
+              <input type="radio" name="convenio" value="{{_id}}" required style="position: absolute; top: -1000px;"> *{{nome}} 
+            </label>
+            <div class="controls">
+              {{#_gerenciador}}
+                {{#compare ativo true}}
+                  <label class="uppercase"><input type="radio" name="opcao" value="{{_id}}" required> {{nome}} ({{validar-por}})</label><br />
+                {{/compare}}
+              {{/_gerenciador}}
+            </div>
+            <br/>
+        {{/compare}}
+      {{/convenios}}
+    </div>
+
+    <br/>
+
+    <div class="control-group">
+      <label class="control-label">
+        <button type="submit" class="btn btn-success btn-convenio"><i class="fa fa-plus"></i> Salvar <span class="hotkeys">({{hotkeys.sendForm}})</span></button>
+      </label>
+    </div>
+  </fieldset>
+
+  </div>
+</form>
+
+<script>
+  $(document).ready(function() {
+
+    if($('[name="convenios"]').val() === "gerenciadores"){
+      $('[name="convenios"]').attr("checked", "checked");
+      $("#tabelas").hide();
+      $('#gerenciadores').removeAttr("style");
+
+    }
+
+    $('[name="opcao"]').click(function () {
+      $(this).parents(".convenio").eq(0).find("input:eq(0)").trigger("click");
+    });
+
+    $("input[name$='convenios']").click(function() {
+        var test = $(this).val();
+
+      $('[name="opcao"]').removeAttr("checked");
+
+        if(test === 'gerenciadores'){
+          $("#tabelas").hide();
+          $("#gerenciadores").show();
+          
+        }else{
+          $("#gerenciadores").hide();
+          $("#tabelas").show();
+        }
+    });
+
+    $('[name="formCon"]').submit(function(e) {
+      var self = $(this);
+      setTimeout(function(){  
+          $('.mascara-codigo-barras').val("");
+          $('.mascara-codigo-barras').focus();
+          $('[name="opcao"]').removeAttr('checked');
+      }, 500);
+    });
+});
+</script>

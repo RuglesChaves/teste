@@ -1,0 +1,218 @@
+<form class="form-filtro form-horizontal well no-print spa disable-default-submit" action="/{{route}}" method="get" role="form">
+    <fieldset>
+        <legend>Filtre sua consulta</legend>
+
+        <div class="control-group dia-de-vencimento">
+            <label class="control-label">Código</label>
+            <div class="controls">
+                 <input type="text" name="codigos" value="{{query.codigos}}" size="10" maxlength="12" class="input-medio">
+            </div>
+        </div>
+      
+        <div class="control-group">
+            <div class="controls">
+                <button class="btn btn-danger" type="submit"><i class="fa fa-search"></i>Filtrar</button>
+            </div>
+        </div>
+    </fieldset>
+</form>
+
+<div class="btn-group">
+{{#hasPermission permission 'ticket' 'new'}}
+    {{#contains terminal.tipo 'Entrada'}}
+        <a href="/ticket/cadastrar/?iframe=1" class="btn btn-success btn-cadastrar colorbox-iframe reload-after-close" style="margin-right: 10px;"><i class="fa fa-plus"></i> Cadastrar Ticket (F2)</a>
+    {{/contains}}
+{{/hasPermission}}
+
+{{#hasPermission permission 'ticket' 'lost'}}
+    <a href="/ticket/perdido/cadastrar/?iframe=1" class="btn btn-success btn-cadastrar colorbox-iframe reload-after-close" style="margin-right: 10px;"><i class="fa fa-plus"></i> Ticket Perdido</a>
+{{/hasPermission}}
+
+{{#hasPermission permission 'patio' 'entry'}}
+    {{#contains terminal.tipo 'Entrada'}}
+        <a href="/liberacao/?sentido=Entrada&iframe=1" class="btn btn-primary colorbox-iframe reload-after-close" data-height="250" style="margin-right: 10px;" title="Autorizar Entrada"><i class="fa fa-long-arrow-right"></i> Autorizar Entrada (F3)</a>
+    {{/contains}}
+{{/hasPermission}}
+
+{{#hasPermission permission 'patio' 'exit'}}
+    {{#contains terminal.tipo 'Saída'}}
+        <a href="/liberacao/?sentido=Saída&iframe=1" class="btn btn-warning colorbox-iframe reload-after-close" data-height="250" style="margin-right: 10px;" title="Autorizar Saída"><i class="fa fa-long-arrow-left"></i> Autorizar Saída (F4)</a>
+    {{/contains}}
+{{/hasPermission}}
+
+{{#hasPermission permission 'patio' 'exit'}}
+    {{#contains terminal.tipo 'Saída'}}
+        <a href="#" class="btn btn-default confirmar-saida-todos""><i class="fa fa-ban"></i> Limpar Pátio</a>
+        <div class="display-none">
+            <div class="confirmar-saida-todos">
+                <form action="/patio/exitAll/" method="put" class="form-horizontal confirmar-saida-todos disable-default-submit" autocomplete="off">
+                    <div class="control-group">
+                        <p class="red" align="center"><i class="fa fa-info-circle" aria-hidden="true"></i> Está operação removera todos os tickets do pátio</p>
+                        
+                        <div class="control-group">
+                            <label class="control-label" style="min-width: 73px;">Operador</label>
+                            <div class="controls">{{session.login.nome}}</div>
+                        </div>
+
+                        <div class="control-group">
+                            <label class="control-label" style="min-width: 73px;">*Motivo</label>
+                            <div class="controls" style="width: 70%;"><textarea name="observacao" style="height: 100px; width: 100%;" required></textarea></div>
+                        </div>
+
+                        <div class="control-group">
+                            <label class="control-label" style="min-width: 73px;">*Senha</label>
+                            <div class="controls">
+                                <input type="password" name="senha" value="" autocomplete="off" autocorrect="off" autocapitalize="off" onpaste="return false" required>
+                            </div>
+                        </div>
+
+                        <div class="form-footer">
+                            <button class="btn btn-danger" type="submit"><i class="fa fa-ban"></i>Confirmar</button>  
+                        </div>
+                        <div class="clearfix"></div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    {{/contains}}
+{{/hasPermission}}
+
+</div>
+
+{{>pagination}}
+
+<div class="panel panel-default">
+    <div class="table-responsive">
+        <table class="table table-striped table-bordered table-hover">
+            <thead>
+                <tr>
+                    <th class="no-print options">Opções</th>
+                    <th width="130">Cliente / Código</th>
+                	<th>Veículo</th>
+                    <th>Cobrança por</th>
+                    <!-- <th>Código</th> -->
+                    <!-- <th>Horário de entrada</th> -->
+                    <th>Permanência</th>
+                    <!-- <th width="77px">Liberado</th> -->
+                </tr>
+            </thead>
+            <tbody>
+                {{#result}}
+                    <tr data-id="{{id}}">
+                        <td align="center" class="no-print options" style="width: 114px;">
+                            {{#compare tipo 'Permanência'}}
+                                {{#hasPermission ../../permission 'ticket' 'reprint'}}
+                                    <a href="/ticket/print/{{_id}}" class="btn btn-warning print" title="Imprimir Ticket"><i class="fa fa-print"></i></a>
+                                {{/hasPermission}}
+                            {{/compare}}
+
+                            {{#compare tipo 'Diária'}}
+                                {{#hasPermission ../../permission 'ticket' 'reprint'}}
+                                    <a href="/caixa/printPagamentoDiaria/{{_diaria}}" class="btn btn-warning print" title="Imprimir Comprovante de Pagamento"><i class="fa fa-print"></i></a>
+                                {{/hasPermission}}
+                            {{/compare}}
+
+                            {{#hasPermission ../permission ../route 'edit'}}
+                                <!-- <a href="/{{../../route}}/{{id}}" class="btn btn-info spa" title="Alterar"><i class="fa fa-edit"></i></a> -->
+                            {{/hasPermission}}
+                                
+                            {{#hasPermission ../permission ../route 'exit'}}
+                                {{#contains ../../terminal.tipo 'Saída'}}
+                                    <a href="/patio/exit/{{_id}}" class="btn btn-default confirmar-saida spa" title="Limpar do Pátio"><i class="fa fa-ban"></i></a>
+                                {{/contains}}
+                            {{/hasPermission}}
+
+                            {{#hasPermission ../permission ../route 'delete'}}
+                                <a href="#" class="btn btn-danger excluir-ticket" title="Excluir"><i class="fa fa-trash-o"></i></a>
+                            {{/hasPermission}}
+
+                            <div class="display-none">
+                                <div class="excluir-ticket">
+                                    <form action="/ticket/{{id}}" data-id="{{id}}" method="delete" class="form-horizontal form-excluir-ticket disable-default-submit" autocomplete="off">
+                                        <div class="control-group">
+                                            
+                                            <p class="red" align="center"><i class="fa fa-info-circle" aria-hidden="true"></i> Está operação excluirá permanentemente este ticket</p>
+                                            <div class="control-group">
+                                                <label class="control-label" style="min-width: 73px;">Operador</label>
+                                                <div class="controls">{{../session.login.nome}}</div>
+                                            </div>
+
+                                             <div class="control-group">
+                                                <label class="control-label" style="min-width: 73px;">*Motivo</label>
+                                                <div class="controls" style="width: 70%;"><textarea name="observacao" style="height: 100px; width: 100%;" required></textarea></div>
+                                            </div>
+
+                                            <div class="control-group">
+                                                <label class="control-label" style="min-width: 73px;">*Senha</label>
+                                                <div class="controls">
+                                                    <input type="password" name="senha" value="" autocomplete="off" autocorrect="off" autocapitalize="off" onpaste="return false" required>
+                                                </div>
+                                            </div>
+
+                                            <div class="form-footer">
+                                                <button class="btn btn-danger" type="submit"><i class="fa fa-ban"></i>Confirmar</button>  
+                                            </div>
+                                            <div class="clearfix"></div>
+
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                            
+                            <div class="display-none">
+                                <div class="confirmar-saida">
+                                    <form action="/patio/exit/{{id}}" data-id="{{id}}" method="put" class="form-horizontal form-confirmar-saida disable-default-submit" autocomplete="off">
+                                        <div class="control-group">
+
+                                            <p class="red" align="center"><i class="fa fa-info-circle" aria-hidden="true"></i> Está operação removerá este ticket do pátio</p>
+                                            <div class="control-group">
+                                                <label class="control-label" style="min-width: 73px;">Operador</label>
+                                                <div class="controls">{{../session.login.nome}}</div>
+                                            </div>
+
+                                            <div class="control-group">
+                                                <label class="control-label" style="min-width: 73px;">*Motivo</label>
+                                                <div class="controls" style="width: 70%;"><textarea name="observacao" style="height: 100px; width: 100%;" required></textarea></div>
+                                            </div>
+
+                                            <div class="control-group">
+                                                <label class="control-label" style="min-width: 73px;">*Senha</label>
+                                                <div class="controls">
+                                                    <input type="password" name="senha" value="" autocomplete="off" autocorrect="off" autocapitalize="off" onpaste="return false" required>
+                                                </div>
+                                            </div>
+
+                                            <div class="form-footer">
+                                                <button class="btn btn-danger" type="submit"><i class="fa fa-ban"></i>Confirmar</button>  
+                                            </div>
+                                            <div class="clearfix"></div>
+
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+
+
+                        </td>
+                        <td>{{nome}} {{codigos}}</td>
+						<td>{{tipo_veiculo}} {{carro.marca}} {{carro.modelo}} {{carro.cor}} {{#if carro.placa}}PLACA {{carro.placa}}{{/if}}</td>
+                        <td>{{tipo}}</td>
+                        <!-- <td>{{codigos}}</td> -->
+                        <!-- <td>{{formataData data_inicio}}</td> -->
+                        <td>{{formataHora permanencia}}</td>
+                  <!--   	{{#liberado}}
+							<td class="green" align="center">Sim</td>
+						{{else}}
+							<td class="red" align="center">Não</td>
+                    	{{/liberado}} -->
+                    </tr>
+                {{/result}}
+				<tr class="empty">
+			 		<td colspan="5">Nenhum registro encontrado.</td>
+				</tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+{{>pagination}}

@@ -1,0 +1,110 @@
+<form action="/{{route}}" method="{{ternary isEdit 'put' 'post'}}" class="form-horizontal well new-ticket disable-default-submit {{#if reload}}reload{{/if}} {{#if findCard}}findCard{{/if}}">
+	
+	<fieldset>
+
+		<div class="control-group">
+			<label class="control-label">*Cobrança por</label>
+			<div class="controls">
+				<label><input type="radio" name="tipo" value="Permanência" checked="checked"> PERMANÊNCIA</label>&nbsp;
+				{{#unless perdido}}
+				<label><input type="radio" name="tipo" value="Diária"> DIÁRIA</label>&nbsp;
+				{{/unless}}
+			</div>
+		</div> 
+
+		<div class="control-group">
+			<label class="control-label">*Tipo de Veículo</label>
+			<div class="controls">
+				{{#each tipoVeiculo}}
+				{{#if @first}}
+				<label><input type="radio" name="tipo_veiculo" value="{{nome}}" required checked="checked"> {{nome}}</label>&nbsp;
+				{{else}}
+				<label><input type="radio" name="tipo_veiculo" value="{{nome}}" required> {{nome}}</label>&nbsp;
+				{{/if}}
+				{{/each}}
+			</div>
+		</div>
+		
+		{{#if perdido}}
+		<div class="control-group">
+			<label class="control-label">*Horário Entrada</label>
+			<div class="controls">
+				<input type="text" name="data" class="mascara-data" value="{{somenteData result.data_inicio}}" size="10" required>
+				<input type="text" name="hora" class="mascara-hora" value="{{somenteHora result.data_inicio}}" size="5" required>
+			</div>
+		</div>
+
+		<div class="control-group">
+			<label class="control-label">*Observação</label>
+			<div class="controls">
+				<textarea name="observacao" required placeholder="Descreva o ocorrido" style="width: 287px;">{{result.observacao}}</textarea>
+			</div>
+		</div>
+
+		<input type="hidden" name="perdido" value="true">
+		{{/if}}
+
+		<div class="control-group">
+			<label class="control-label">Placa</label>
+			<div class="controls"><input type="text" name="carro[placa]" value="{{result.carro.placa}}" class="mascara-placa"></div>
+		</div>
+
+		<div class="container-marca-modelo">
+
+			<div class="control-group">
+				<label class="control-label">Marca</label>
+				<div class="controls">
+
+					<input type="text" name="carro[marca]" value="{{result.carro.marca}}" list="marcas" class="findModelo uppercase" autocomplete="off" placeholder="" />
+					<datalist id="marcas">
+						{{#each marca}}
+						<option value="{{nome}}">{{nome}}</option>
+						{{/each}}
+					</datalist>
+
+				</div>
+			</div>
+
+			<div class="control-group">
+				<label class="control-label">Modelo</label>
+				<div class="controls">
+
+					<input type="text" name="carro[modelo]" value="{{result.carro.modelo}}" list="modelos" class="uppercase" autocomplete="off" placeholder="" />
+					<datalist id="modelos">
+						{{#each modelo}}
+						<option value="{{nome}}">{{nome}}</option>
+						{{/each}}
+					</datalist>
+
+				</div>
+			</div>
+
+		</div>
+
+		<div class="control-group">
+			<label class="control-label">Cor</label>
+			<div class="controls">
+
+				<input type="text" name="carro[cor]" value="{{result.carro.cor}}" list="cores" class="uppercase" autocomplete="off" placeholder="" />
+				<datalist id="cores">
+					{{#each cor}}
+					<option value="{{nome}}">{{nome}}</option>
+					{{/each}}
+				</datalist>
+
+			</div>
+		</div>
+
+		<div class="control-group" title="Deixe este campo em branco para que o sistema gere o código do ticket.">
+			<label class="control-label">Código de Barras</label>
+			<div class="controls">
+				<input type="number" name="codigos" value="" class="mascara-codigo-barras" length="12" size="12">
+			</div>
+		</div>
+		
+		{{>form-footer}}
+
+	</fieldset>
+
+	<input type="hidden" name="id" value="{{result.id}}">
+</form>

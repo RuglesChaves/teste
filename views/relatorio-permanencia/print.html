@@ -1,0 +1,105 @@
+	<center class="uppercase"><b>{{title}}</b></center>
+	<center class="uppercase filtro">
+		Período: De {{query.data_inicio}} até {{query.data_fim}}
+		
+		<br />Operador: 
+		{{#query.usuario}}
+			{{../operador}}
+		{{else}}
+			TODOS
+		{{/query.usuario}}
+
+		<br />Tipo de Cliente: 
+		{{#query.tipo}}
+			{{.}}
+		{{else}}
+			TODOS
+		{{/query.tipo}}
+	</center>
+	<br />
+	<center><b>PAGAMENTOS</b></center>
+	<br />	
+	<table width="100%" cellpadding="0" cellspacing="0">
+	    <thead>
+	        <tr>
+	        	<td width="25%" align="left"><b>DESCRIÇÃO</b></td>
+	        	<td width="25%" align="left"><b>DATA</b></td>
+	        	<td width="25%" align="left"><b>F. DE PGTO.</b>&nbsp;</td>
+	        	<td width="25%" align="left"><b>TOTAL R$</b></td>
+	        </tr>
+	    </thead>
+	    <tbody>
+	        {{#relatorioPagamento}}
+		            <tr>
+		                <td width="25%" align="left">{{uppercase nome}}</td>
+		                <td width="25%" align="left">{{somenteData data_pagamento}}</td>
+		                <td width="25%" align="left">
+		                	{{#compare forma_pagamento 'Cartão de Crédito'}}
+		                	 	CRÉDITO
+		                	{{/compare}}
+		                	{{#compare forma_pagamento 'Cartão de Débito'}}
+		                	 	DÉBITO
+		                	{{/compare}}
+		                	{{#compare forma_pagamento 'Dinheiro'}}
+		                	 	DINHEIRO
+		                	{{/compare}}	
+		                </td>
+		                <td width="25%" align="left"> 
+		                	{{#valor}}
+                                {{.}}
+                            {{else}}
+                                0,00
+                            {{/valor}}
+		                </td>
+		            </tr>
+	        {{/relatorioPagamento}}
+	        <tr class="empty uppercase">
+		 		<td colspan="4">Nenhum registro encontrado</td>
+			</tr>
+	    </tbody>
+	</table>
+	<br />
+	<center><b>COMPOSIÇÃO DE FATURAMENTO</b></center>
+	<br />
+	<table width="100%" cellpadding="0" cellspacing="0">
+        <tr>
+            <td width="50%"><b>FORMA DE PAGAMENTO&nbsp;</b></td>
+            <td width="25%"><b>QTD.</b></td>
+            <td width="25%"><b>TOTAL R$</b></td>
+        </tr>
+    	{{#each forma_pagamento}}
+        	<tr>
+        		<td width="50%" class="uppercase">{{@key}}</td>
+        		<td width="25%">{{quantidade}}</td>
+                <td width="25%">{{float2moeda total}}</td>
+        	</tr>
+    	{{/each}}
+    </table>
+	<table width="100%" cellpadding="0" cellspacing="0">
+        <tr>
+            <td width="50%"><b>TIPO DE CLIENTE&nbsp;</b></td>
+            <td width="25%"><b>QTD.</b></td>
+            <td width="25%"><b>TOTAL R$</b></td>
+        </tr>
+    	{{#each tipo_cliente}}
+        	<tr>
+        		<td width="50%" class="uppercase">{{@key}}</td>
+        		<td width="25%">{{quantidade}}</td>
+                <td width="25%">{{float2moeda total}}</td>
+        	</tr>
+    	{{/each}}
+    </table>
+	<table width="100%" cellpadding="0" cellspacing="0">
+        <tr>
+            <td width="50%"><b>TABELA DE PREÇO&nbsp;</b></td>
+            <td width="25%"><b>QTD.</b></td>
+            <td width="25%"><b>TOTAL R$</b></td>
+        </tr>
+    	{{#each tabela_de_preco}}
+        	<tr>
+        		<td width="50%" class="uppercase">{{nome}}</td>
+        		<td width="25%">{{quantidade}}</td>
+                <td width="25%">{{float2moeda total}}</td>
+        	</tr>
+    	{{/each}}
+    </table>

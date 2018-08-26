@@ -1,0 +1,56 @@
+<center><b>COMPROVANTE DE PAGAMENTO DE TICKET</b></center>
+<br />
+HORÁRIO DE ENTRADA: {{formataData result.data_inicio}}<br />
+<b>LIMITE PARA SAÍDA: {{formataData result.limite_saida}}</b><br />
+TEMPO DE PERMANÊNCIA: {{formataHora result.permanencia}}<br />
+<br />
+{{#result.pagamento}}
+	HORÁRIO DE PAGAMENTO: {{formataData data_pagamento}}<br />
+	{{tabela.nome}}: R$ {{valor}}<br />
+	RECEBIDO ({{uppercase forma_pagamento}}): R$ {{valor_recebido}}<br />
+	{{#compare troco '!==' '0,00'}}
+		TROCO: R$ {{troco}}<br />
+	{{/compare}}
+	{{#operador}}
+		OPERADOR: {{.}}<br /><br />
+	{{/operador}}
+	
+	{{#tef.transacao}}
+		NÚMERO DA TRANSAÇÃO: {{../tef.transacao}}<br />
+		CÓDIGO DE AUTORIZAÇÃO: {{../tef.autorizacao}}<br />
+		CONTROLE: {{../tef.codigo_controle}}<br />
+		{{../tef.nome_cartao}}: {{../tef.numero_cartao}}<br /><br />
+	{{/tef.transacao}}
+	
+
+	{{#if nota_fiscal.rps}}
+		{{#nota_fiscal}}
+			NÚMERO DO RPS: {{rps}}<br />
+			PIS: R$ {{total_pis}}<br />
+			ISS: R$ {{total_iss}}<br />
+			COFINS: R$ {{total_cofins}}<br />
+			TOTAL DE IMPOSTO: R$ {{total_impostos}}<br />
+		{{/nota_fiscal}}
+	{{/if}}
+	<br />
+{{/result.pagamento}}
+
+{{#result.imprimir_barras}}
+	<center>
+		<!-- <small>{{result._id}}</small> -->
+		<div class="barcode">{{result.codigos}}</div>
+		{{result.codigos}}
+	</center>
+{{/result.imprimir_barras}}
+
+<style>
+	.barcode { overflow: hidden !important; }
+	.barcode object { width: 190px; }
+</style>
+
+<script>
+    $(function() {
+        // $('.barcode').barcode({code:'I25'});
+        $('.barcode').barcode({code: '{{result.codigos}}', crc: false}, 'int25', { barWidth: 2, barHeight: 70, output: 'bmp'});
+    });
+</script>

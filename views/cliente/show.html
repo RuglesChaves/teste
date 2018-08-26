@@ -1,0 +1,544 @@
+<!-- CORRIGIR ../ DOS MIDDLEWARES -->
+<div id="tabs">
+
+	<form action="/{{route}}" method="{{ternary isEdit 'put' 'post'}}" class="cliente form-horizontal well">
+	    <fieldset>
+			<ul>
+				<li><a href="#dados">Dados gerais</a></li>
+				<li><a href="#endereco">Endereços ({{count result.endereco}})</a></li>
+				<li><a href="#veiculo">Veículos ({{count result.carro}})</a></li>
+				<li><a href="#cartao">Cartões ({{count result.codigos}})</a></li>
+				<li><a href="#financeiro">Financeiro ({{count result.mensalidade.historico pagamentos}})</a></li>
+				<li><a href="#historico">Histórico ({{count cartao}})</a></li>
+			</ul>
+
+			<div id="dados" style="display: inline-block;">
+
+			  	<div class="control-group">
+		            <label class="control-label">*Tipo de Cadastro</label>
+		            <div class="controls">
+		            	{{#checked result.categoria}} 
+							<label><input type="radio" name="categoria" value="Pessoa Física" required> Pessoa Física</label>&nbsp;
+							<label><input type="radio" name="categoria" value="Pessoa Jurídica" required> Pessoa Jurídica</label>
+						{{/checked}}
+		            </div>
+		        </div>	
+
+	        	<div class="dados display-none">
+			        <div class="control-group">
+			            <label class="control-label"></label>
+			            <div class="controls"><input type="text" name="nome" value="{{result.nome}}" data-pf-label="*Nome" data-pj-label="*Nome Fantasia" data-pf-required="true" data-pj-required="true" data-pf-visible="true" data-pj-visible="true" class="uppercase" ></div>
+			        </div>
+
+			        <div class="control-group">
+			            <label class="control-label"></label>
+			            <div class="controls"><input type="text" name="razao_social" value="{{result.razao_social}}" data-pf-label="" data-pj-label="*Razão Social" data-pf-required="" data-pj-required="true" data-pf-visible="" data-pj-visible="true" class="uppercase" ></div>
+			        </div>
+		        	
+			        <div class="control-group">
+			            <label class="control-label"></label>
+			            <div class="controls"><input type="text" name="rg_inscricao" value="{{result.rg_inscricao}}" data-pf-label="RG" data-pj-label="Inscrição Estadual" data-pf-required="false" data-pj-required="false" data-pf-visible="true" data-pj-visible="true" class="" ></div>
+			        </div>
+		        	
+			        <div class="control-group">
+			            <label class="control-label"></label>
+			            <div class="controls"><input type="text" name="cpf_cnpj" value="{{result.cpf_cnpj}}" data-pf-label="*CPF" data-pj-label="*CNPJ" data-pf-required="true" data-pj-required="true" data-pf-visible="true" data-pj-visible="true" class="" ></div>
+			        </div>
+		        	
+			        <div class="control-group">
+			            <label class="control-label"></label>
+			            <div class="controls"><input type="text" name="data_nascimento" value="{{result.data_nascimento}}" data-pf-label="Data de Nascimento" data-pj-label="" data-pf-required="false" data-pj-required="false" data-pf-visible="true" data-pj-visible="false" class="mascara-data-nascimento" ></div>
+					</div>
+		  
+			        <div class="control-group">
+			            <label class="control-label"></label>
+			            <div class="controls">
+			            	<input type="text" name="telefone[]" value="{{result.telefone.[0]}}" data-pf-label="Telefone" data-pj-label="Telefone" data-pf-required="false" data-pj-required="false" data-pf-visible="true" data-pj-visible="true" class="mascara-telefone" >
+			            	<input type="text" name="telefone[]" value="{{result.telefone.[1]}}" data-pf-label="Telefone" data-pj-label="Telefone" data-pf-required="false" data-pj-required="false" data-pf-visible="true" data-pj-visible="true" class="mascara-telefone" >
+			            </div>
+			        </div>			        
+		        </div>
+
+				<hr />
+				
+		        <div class="control-group">
+		            <label class="control-label">*Tipo de Cliente</label>
+		            <div class="controls">
+		            	{{#checked result.tipo}} 
+							<label><input type="radio" name="tipo" value="Pré-Pago" required> Pré-Pago</label>&nbsp;
+							<label><input type="radio" name="tipo" value="Mensalista" required> Mensalista</label>&nbsp;
+							<label><input type="radio" name="tipo" value="Credenciado" required> Credenciado</label>
+						{{/checked}}
+		            </div>
+				</div>
+						     
+		        <div class="control-group gerenciador-ou-tabela {{#compare result.tipo '!==' 'Pré-Pago'}}display-none{{/compare}}">
+		            <label class="control-label">Utilizar</label>
+		            <div class="controls">
+		            	{{#checked result.gerenciador-ou-tabela}} 
+							<label><input type="radio" name="gerenciador-ou-tabela" value="Tabela" checked> Tabela</label>&nbsp;
+							<label><input type="radio" name="gerenciador-ou-tabela" value="Gerenciador"> Gerenciador</label>&nbsp;
+						{{/checked}}
+		            </div>
+				</div>	
+				
+				<div class="control-group tabela-de-preco {{#compare result.tipo '===' 'Credenciado'}}display-none{{/compare}}">
+				    <label class="control-label">Tabela de Preço</label>
+				    <div class="controls">
+				    	<select name="tabela[_id]" class="select-tabela tabela-selecionada uppercase">
+				    		<option value="">Tabela padrão</option>
+							{{#priceTables}}
+								{{#selected ../result.tabela._id}} 
+									<option value="{{_id}}">{{nome}}</option>
+								{{/selected}}
+							{{/priceTables}}
+						</select>
+				    </div>
+				</div>
+
+				<div class="control-group gerenciador-de-tabela {{#compare result.tipo '!==' 'Pré-Pago'}}display-none{{/compare}}">
+				    <label class="control-label">Gerenciador</label>
+				    <div class="controls">
+				    	<select name="gerenciador[_id]" class="gerenciador-selecionado uppercase">
+				    		<option value="">Gerenciador padrão</option>
+							{{#managerTable}}
+								{{#selected ../result.gerenciador._id}} 
+									<option value="{{_id}}">{{nome}}</option>
+								{{/selected}}
+							{{/managerTable}}
+						</select>
+				    </div>
+				</div>
+
+				<div class="control-group saldo {{#compare result.tipo '!==' 'Pré-Pago'}}display-none{{/compare}}">
+		            <label class="control-label">*Crédito</label>
+		            <div class="controls">R$ {{result.saldo}}</div>
+		        </div>
+
+				<div class="control-group dia-de-vencimento {{#compare result.tipo '!==' 'Mensalista'}}display-none{{/compare}}">
+		            <label class="control-label">*Dia de Vencimento</label>
+		            <div class="controls">
+		            	 <input type="number" name="mensalidade[dia_vencimento]" value="{{result.mensalidade.dia_vencimento}}" size="2" maxlength="2" min="1" max="31">
+		            </div>
+		        </div>
+
+				<div class="control-group quantidade_vagas "> <!-- {{#compare result.tipo '===' 'Pré-Pago'}}display-none{{/compare}} -->
+		            <label class="control-label">*Qtd. de Vagas</label>
+		            <div class="controls">
+		            	<input type="number" name="quantidade_vagas" min="1" value="{{#if result.quantidade_vagas}}{{../result.quantidade_vagas}}{{else}}1{{/if}}">
+		            </div>
+				</div>
+				<br />
+	
+				<div class="control-group consistencia_de_vagas {{#compare result.tipo '!==' 'Credenciado'}}display-none{{/compare}}">
+		            <label class="control-label">*Consistência de vagas</label>
+		            <div class="controls">
+		            	{{#checked result.consistencia_entrada_saida}} 
+							<label><input type="radio" name="consistencia_entrada_saida" value="true" > Sim</label>&nbsp;
+							<label><input type="radio" name="consistencia_entrada_saida" value="false" > Não</label>&nbsp;
+						{{/checked}}
+		            </div>
+				</div>
+
+				<br><div class="control-group niveis-de-bloqueio">
+					<div class="control-group">
+							<label class="control-label"> Acesso</label>
+					</div>	
+					
+					<div class="control-group">
+							
+						{{#checked result.nivel}}
+							<label><input type="radio" name="nivel" value="LIVRE" > LIVRE</label>&nbsp;
+							{{#bloqueio}}
+			 					<label><input type="radio" name="nivel" value="{{nome}}" > {{nome}}</label>&nbsp;
+							{{/bloqueio}}
+						{{/checked}}
+							
+						
+					</div>
+				</div><br>
+									
+		        <div class="control-group">
+		            <label class="control-label">*Ativo</label>
+		            <div class="controls">                
+		            	{{#checked result.ativo}}
+							<label><input type="radio" name="ativo" value="true" required> Sim</label>&nbsp;
+							<label><input type="radio" name="ativo" value="false" required> Não</label>
+						{{/checked}}
+					</div>
+				</div>
+				<!--Alteração campo OBS RUGLES-->
+				<div class="control-group obs "> 
+					<label class="control-label">Observação</label>
+					<div class="controls">
+							<textarea rows="5" cols="40" name="obs"" value="{{result.obs}}{{../result.obs}}">{{result.obs}}{{../result.obs}}</textarea>
+						
+					</div>
+				 </div>
+				<br />
+				<!-- fim ALTERAÇÂO RUGLES -->
+			</div> <!-- fim #dados -->
+
+			<div id="endereco" style="display: inline-block;">
+                <a href="#" class="btn btn-success btn-adicionar-endereco"><i class="fa fa-plus"></i> Adicionar Endereço ({{hotkeys.addCode}})</a>
+
+
+				<div class="endereco container">
+										
+					{{#result.endereco}}
+
+					<div class="endereco item">
+					    <div class="control-group">
+					        <label class="control-label">*Nome do Endereço</label>
+					        <div class="controls">
+					        	<input type="text" name="endereco[{{@index}}][nome]" value="{{nome}}" class="" required="required" placeholder="Ex. Comercial">
+								&nbsp;<a href="#" class="btn btn-danger btn-excluir-item" title="Excluir Endereço"><i class="fa fa-trash-o no-padding"></i> </a>
+					    	</div>
+					    </div>
+
+					    <div class="control-group">
+					        <label class="control-label">*CEP</label>
+					        <div class="controls"><input type="text" name="endereco[{{@index}}][cep]" value="{{cep}}" class="mascara-cep" required="required" maxlength="9"></div>
+					    </div>
+
+					    <div class="control-group">
+					        <label class="control-label">Número</label>
+					        <div class="controls"><input type="text" name="endereco[{{@index}}][numero]" value="{{numero}}" class=""></div>
+					    </div>
+
+					    <div class="control-group">
+					        <label class="control-label">*Endereço</label>
+					        <div class="controls"><input type="text" name="endereco[{{@index}}][endereco]" value="{{endereco}}" class="uppercase" required="required"></div>
+					    </div>
+
+					    <div class="control-group">
+					        <label class="control-label">Complemento</label>
+					        <div class="controls"><input type="text" name="endereco[{{@index}}][complemento]" value="{{complemento}}" class="uppercase" ></div>
+					    </div>
+
+					    <div class="control-group">
+					        <label class="control-label">Bairro</label>
+					        <div class="controls"><input type="text" name="endereco[{{@index}}][bairro]" value="{{bairro}}" class="uppercase" ></div>
+					    </div>
+
+					    <div class="estado-cidade">
+						    <div class="control-group">
+						        <label class="control-label">Estado</label>
+						        <div class="controls">
+							        <select name="endereco[{{@index}}][estado]" class="estado uppercase">
+										<option value="">Selecione</option>
+										{{#selected estado}}
+											{{#../../estados}}
+													<option value="{{nome}}">{{nome}}</option>
+											{{/../../estados}}
+										{{/selected}}
+									</select>
+						        </div>
+						    </div>	
+
+							<div class="control-group">
+						        <label class="control-label">Cidade</label>
+						        <div class="controls">
+						        	<select name="endereco[{{@index}}][cidade]" class="cidade uppercase">
+										{{#cidades estado cidade}}{{/cidades}}
+						        	</select>
+						        </div>
+						    </div>
+						</div>
+					</div>
+					{{/result.endereco}}
+
+				</div>	
+						
+			</div><!-- #endereco -->
+
+			<div id="veiculo" style="display: inline-block;">
+                <a href="#" class="btn btn-success btn-adicionar-veiculo"><i class="fa fa-plus"></i> Adicionar Veículo ({{hotkeys.addCode}})</a>
+
+				<datalist id="marcas">
+					{{#marca}}
+						<option value="{{nome}}">{{nome}}</option>
+					{{/marca}}
+				</datalist>
+				<datalist id="cores">
+					{{#cor}}
+						<option value="{{nome}}">{{nome}}</option>
+					{{/cor}}
+				</datalist>
+
+				<div class="veiculo container">
+					{{#result.carro}}
+						<div class="veiculo item container-marca-modelo">
+						    <div class="control-group">
+						        <label class="control-label">*Placa</label>
+						        <div class="controls">
+						        	<input type="text" name="carro[{{@index}}][placa]" value="{{placa}}" class="mascara-placa" required="required" maxlength="8">
+									
+									Marca <input type="text" name="carro[{{@index}}][marca]" value="{{marca}}" list="marcas" class="findModelo uppercase" placeholder="" />
+								
+									Modelo <input type="text" name="carro[{{@index}}][modelo]" value="{{modelo}}" list="modelos-{{@index}}" class="modelo uppercase" placeholder="" />
+
+									<datalist id="modelos-{{@index}}" class="datalista-modelo">
+										{{#../marca}}
+											{{#compare nome 'insensitive' ../marca}}
+												{{#modelos}}
+													<option value="{{.}}">{{.}}</option>
+												{{/modelos}}
+											{{/compare}}
+										{{/../marca}}
+									</datalist>
+
+							    	Cor <input type="text" name="carro[{{@index}}][cor]" value="{{cor}}" list="cores" class="uppercase" placeholder="" />
+
+						    		<a href="#" class="btn btn-danger btn-excluir-item" title="Excluir Placa"><i class="fa fa-trash-o no-padding"></i> </a>
+						        </div>
+						    </div>
+						</div>
+					{{/result.carro}}
+				</div>
+
+			</div> <!-- fim #veiculo -->
+
+
+			<div id="cartao" style="display: inline-block;">
+                <a href="#" class="btn btn-success btn-adicionar-cartao"><i class="fa fa-plus"></i> Adicionar Cartão ({{hotkeys.addCode}})</a>
+
+				<div class="cartao container">
+					{{#result.codigos}}
+						<div class="cartao item">
+
+							<div class="control-group">
+							    <label class="control-label">*Número</label>
+							    <div class="controls">
+							    	<input type="text" name="codigos[]" value="{{.}}" class="mascara-proximidade" required="required">
+									<a href="#" class="btn btn-danger btn-excluir-item" title="Excluir Cartão"><i class="fa fa-trash-o no-padding"></i> </a>
+							    </div>
+							</div>
+
+						</div>
+					{{/result.codigos}}
+				</div>
+			</div> <!-- fim #cartao -->
+
+			<div id="financeiro" style="display: inline-block;">
+				
+				
+				{{#if result.mensalidade.historico}}
+					<div class="table-responsive">
+   						 <table class="table table-striped table-bordered table-hover">
+							<thead>
+								<tr>
+									<th class="no-print options">Opções</th>
+									<th>Vencimento</th>
+									<th>Situação</th>
+									<th>Valor</th>
+								</tr>
+							</thead>
+							<tbody>
+								{{#each result.mensalidade.historico}}
+								  <tr>
+								  	<td align="center" class="no-print options">
+										{{#if this.isento}}  
+											<a href="/isencao/printIsencaoMensalista/{{this._isencao}}" class="btn btn-warning print" title="Imprimir Comprovante de Isenção de Pagamento"><i class="fa fa-print"></i></a>
+											{{else}}	
+												{{#if this.pago}}
+								  					<a href="/caixa/printPagamentoMensalista/{{this._pagamento}}" class="btn btn-warning print" title="Imprimir Comprovante de Pagamento"><i class="fa fa-print"></i></a>
+												{{/if}}
+										{{/if}}
+								  	</td>
+								  	<td>{{pad this.dia_vencimento}}/{{pad this.mes}}/{{this.ano}}</td>
+								  	<td>
+										{{#if this.isento}}
+											{{#if this.pago}}	
+												Isento - Sem Bloqueio
+												{{else}}
+												Isento - Com Bloqueio
+											{{/if}}
+											{{else}}
+								  				{{#if this.pago}}
+								  					Pago
+													{{else}}	
+														{{#if this.atrasado}}
+															<span style="color: red;">Atrasado</span>
+															{{else}}
+																Em aberto
+														{{/if}}	
+								  				{{/if}}
+								  		{{/if}}
+								  	</td>
+								  	<td>R$ {{this.valor}}</td>
+								  </tr>
+								{{/each}}
+							</tbody>
+						</table>
+					</div>
+				{{/if}}
+
+
+				{{#if pagamentos}}
+				<table class="table table-striped table-bordered table-hover">
+					<thead>
+						<tr>
+							<th class="no-print options">Opções</th>
+							
+							<th>Descrição</th>
+							<th>Data de Pagamento</th>
+							<th>Forma de Pagamento</th>
+							<th width="130">Total R$</th>
+						</tr>
+					</thead>
+					<tbody>
+						{{#pagamentos}}
+						<tr>
+							<td align="center" class="no-print options" width="150">
+								{{#hasPermission ../permission 'caixa' 'reprint'}}
+										<a href="/caixa/printPagamentoPrePago/{{_id}}" class="btn btn-warning print" title="Imprimir Comprovante de Pagamento">
+											<i class="fa fa-print"></i>
+										</a>
+								{{/hasPermission}} 
+							</td>
+							<td class="uppercase">{{nome}}</td>
+							<td>{{ddmmYYYY data_pagamento}}</td>
+							<td>{{forma_pagamento}}</td>
+							<td>
+								{{#valor}} {{.}} {{else}} 0,00 {{/valor}}
+							</td>
+						</tr>
+						{{/pagamentos}}
+						<tr class="empty">
+							<td colspan="5">Nenhum registro encontrado.</td>
+						</tr>
+					</tbody>
+				</table>
+				{{/if}}
+				
+			</div> <!-- fim #financeiro -->
+
+
+			<div id="historico" style="display: inline-block;">
+				<div class="table-responsive">
+			        <table class="table table-striped table-bordered table-hover">
+			            <thead>
+			                <tr>
+			                	<th>Tipo</th>
+			                    <th>Cartão</th>
+			                    <th>Data de Entrada</th>
+			                    <th>Data de Saída</th>
+			                    <th>Permanência</th>
+			                </tr>
+			            </thead>
+
+			            <tbody>
+			                {{#cartao}}
+			                    <tr data-id="{{id}}">
+			                    	<td>{{tipo}}</td>
+			                        <td>{{codigos}}</td>
+			                        <td>{{formataData data_inicio}}</td>
+			                        <td>{{formataData data_fim}}</td>
+			                        <td>{{permanencia}} {{#if pagamento.0.valor_recebido}} | R$ {{pagamento.0.valor_recebido}}{{/if}}</td>
+			                    </tr>
+			                {{/cartao}}
+							<tr class="empty">
+						 		<td colspan="5">Nenhum registro encontrado.</td>
+							</tr>
+			            </tbody>
+			        </table>
+			    </div>
+			</div> <!-- fim #historico -->
+
+			{{>form-footer}}
+
+	  		<input type="hidden" name="id" value="{{result.id}}"></td>
+	    
+	    </fieldset>
+	</form>
+
+</div>
+
+<div class="veiculo item clone container-marca-modelo">
+    <div class="control-group">
+        <label class="control-label">*Placa</label>
+        <div class="controls">
+        	<input type="text" name="carro[{index}][placa]" value="" class="mascara-placa" required maxlength="8">
+
+        	Marca <input type="text" name="carro[{index}][marca]" value="" list="marcas" class="findModelo uppercase" placeholder="" />
+								
+			Modelo <input type="text" name="carro[{index}][modelo]" value="" list="modelos-x{index}" class="modelo uppercase" placeholder="" />
+			<datalist id="modelos-x{index}" class="datalista-modelo">
+			</datalist>
+
+	    	Cor <input type="text" name="carro[{index}][cor]" value="" list="cores" class="uppercase" placeholder="" />
+
+    		<a href="#" class="btn btn-danger btn-excluir-item" title="Excluir Placa"><i class="fa fa-trash-o no-padding"></i> </a>
+        </div>
+    </div>
+</div>
+
+<div class="endereco item clone">
+    <div class="control-group">
+        <label class="control-label">*Nome do Endereço</label>
+        <div class="controls">
+        	<input type="text" name="endereco[{index}][nome]" value="" class="" required placeholder="Ex. Comercial">
+			&nbsp;<a href="#" class="btn btn-danger btn-excluir-item" title="Excluir Endereço"><i class="fa fa-trash-o no-padding"></i> </a>
+    	</div>
+    </div>
+
+    <div class="control-group">
+        <label class="control-label">*CEP</label>
+        <div class="controls"><input type="text" name="endereco[{index}][cep]" value="" class="mascara-cep"  required maxlength="9"></div>
+    </div>
+
+    <div class="control-group">
+        <label class="control-label">Número</label>
+        <div class="controls"><input type="text" name="endereco[{index}][numero]" value="" class="" ></div>
+    </div>
+
+    <div class="control-group">
+        <label class="control-label">*Endereço</label>
+        <div class="controls"><input type="text" name="endereco[{index}][endereco]" value="" class="uppercase" required></div>
+    </div>
+
+    <div class="control-group">
+        <label class="control-label">Complemento</label>
+        <div class="controls"><input type="text" name="endereco[{index}][complemento]" value="" class="uppercase" ></div>
+    </div>
+
+    <div class="control-group">
+        <label class="control-label">Bairro</label>
+        <div class="controls"><input type="text" name="endereco[{index}][bairro]" value="" class="uppercase" ></div>
+    </div>
+
+    <div class="estado-cidade">
+	    <div class="control-group">
+	        <label class="control-label">Estado</label>
+	        <div class="controls">
+		        <select name="endereco[{index}][estado]" class="estado uppercase">
+					<option value="">Selecione</option>
+					{{#estados}}
+						<option value="{{nome}}">{{nome}}</option>
+					{{/estados}}
+				</select>
+	        </div>
+	    </div>	
+
+		<div class="control-group">
+	        <label class="control-label">Cidade</label>
+	        <div class="controls">
+	        	<select name="endereco[{index}][cidade]" class="cidade uppercase">
+					{{#cidades '' ''}}{{/cidades}}
+	        	</select>
+	        </div>
+	    </div>
+	</div>
+
+</div>
+
+<div class="cartao item clone">
+	<div class="control-group">
+	    <label class="control-label">*Número</label>
+	    <div class="controls">
+	    	<input type="text" name="codigos[]" value="" class="mascara-proximidade" required>
+			<a href="#" class="btn btn-danger btn-excluir-item" title="Excluir Cartão"><i class="fa fa-trash-o no-padding"></i> </a>
+	    </div>
+	</div>
+</div>

@@ -1,0 +1,48 @@
+{{#hasPermission permission route 'new'}}
+	<div class="btn-group">
+	    <a href="/{{route}}/cadastrar" class="btn btn-success btn-cadastrar spa"><i class="fa fa-plus"></i> Cadastrar <span class="hotkeys">({{hotkeys.add}})</span></a>
+	</div>
+{{/hasPermission}}
+
+{{>pagination}}
+
+<div class="panel panel-default">
+    <div class="table-responsive">
+        <table class="table table-striped table-bordered table-hover">
+            <thead>
+                <tr>
+                    <th class="no-print options">Opções</th>
+                    <th>Nome</th>
+                    <th>Atualizado por</th>
+                    <th>Última atualização</th>
+                </tr>
+            </thead>
+
+            <tbody>
+                {{#result}}
+                    <tr>
+                        <td align="center" class="no-print options">
+                            {{#hasPermission ../permission ../route 'edit'}}
+                                <a href="/{{../../route}}/{{id}}" class="btn btn-info spa" title="Alterar"><i class="fa fa-edit"></i></a>
+                            {{/hasPermission}}
+
+                            {{#hasPermission ../permission ../route 'delete'}}
+                                <a href="/{{../../route}}/{{id}}" class="btn btn-danger btn-excluir" title="Excluir"><i class="fa fa-trash-o"></i></a>
+                            {{/hasPermission}}
+                        </td>
+                        <td class="uppercase">{{nome}}</td>
+                        <td class="uppercase">{{atualizado-por}}</td>
+                        <td class="uppercase">{{formataData cadastro}}</td>
+                       
+                    </tr>
+                {{/result}}
+				<tr class="empty">
+			 		<td colspan="5">Nenhum registro encontrado.</td>
+				</tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+{{>pagination}}
+

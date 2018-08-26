@@ -1,0 +1,11 @@
+<div class="breadcrumbs" id="breadcrumbs">
+	<ul class="breadcrumb">
+		{{#each breadCrumb}}
+			<li>
+				{{#if route}}<a href="{{route}}" class="spa">{{/if}}
+				{{pageName}}
+				{{#if route}}</a>{{/if}}
+			</li>
+		{{/each}}
+	</ul>
+</div>

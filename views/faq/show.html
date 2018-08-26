@@ -1,0 +1,41 @@
+<form action="/{{route}}" method="{{ternary isEdit 'put' 'post'}}" class="form-horizontal well">
+    <fieldset>
+        <legend>Dados gerais</legend>
+
+        <div class="control-group">
+            <label class="control-label">*Categoria</label>
+            <div class="controls">
+                <select name="categoria" required>
+                    <option value="">Selecione</option>
+                    {{#selected result.categoria}}
+                    <option value="Geral">Geral</option>
+                    {{/selected}}
+                </select>
+            </div>
+        </div>
+        
+        <div class="control-group">
+            <label class="control-label">Pergunta</label>
+            <div class="controls"><input type="text" name="pergunta" value="{{result.pergunta}}" class="uppercase input-grande" required></div>
+        </div>
+        
+        <div class="control-group">
+            <label class="control-label">Resposta</label>
+            <div class="controls"><textarea name="resposta" rows="10">{{result.resposta}}</textarea></div>
+        </div>
+
+        <script>
+            CKEDITOR.replace('resposta');
+        </script>
+
+
+        {{>form-footer}}
+        
+        <input type="hidden" name="id" value="{{result.id}}">
+
+    </fieldset>
+</form>
+
+
+
+9dwv61

@@ -1,0 +1,67 @@
+{{>doctype}}
+<head>
+	<link rel="icon" href="/icon/favicon.ico">
+	<title>Preparando para imprimir</title>
+	<style>
+		.print-body { display: none;}
+	</style>
+	<link type="text/css" href="/dist/print.min.css?v={{version}}" rel="stylesheet" media="print" />
+	<script type="text/javascript" src="/dist/library.min.js?v=1.3.8"></script>
+</head>
+<body class="uppercase {{getEnv}} " id="body">
+
+	{{#unless pdf}}
+	<div class="print-message"><h4 align="center"><img src="/images/loading.gif"><br />Imprimindo</h4></div>
+	{{/unless}}
+
+	<div class="print-body">
+		<div class="container">
+			<div class="espacamento">
+				<!-- <div class="data">{{dataHoje}}</div> -->
+				<!-- {{#if pdf}}
+				<div class="logo-impressao"><img src="{{exibeLogo configuracao.empresa.logo}}"></div>
+				{{else}}
+				<div class="logo-impressao" data-src="{{exibeLogo configuracao.empresa.logo}}"></div>
+				{{/if}} -->
+
+				<div class="logo-impressao"><img src="{{exibeLogo configuracao.empresa.logo}}"></div>
+
+				<div class="header">
+					{{config.empresa.razao_social}}<br />
+					{{config.empresa.endereco}} N.{{config.empresa.numero}}
+					{{config.empresa.bairro}} {{config.empresa.cidade}} {{config.empresa.estado}}<br />
+					CNPJ {{config.empresa.cnpj}} TEL. {{config.empresa.telefone1}} {{#if config.empresa.telefone2}} TEL. {{config.empresa.telefone2}}{{/if}}
+					<br /><br />
+				</div>
+				<div class="body-content">{{{body}}}</div>
+				
+				<div class="center assinatura">
+					{{#if login.nome}}
+						Impresso por 
+						<span>{{lowercase login.nome}}{{#if terminal.nome}} no {{terminal.nome}}{{/if}}</span>
+						em {{dataHoje}}
+					{{/if}}
+				</div>
+				
+				<div class="center print-footer">
+					{{customer}} 
+					<!-- <img src="/images/bra-icon.png" class="bra-icon"> -->
+					<span class="lowercase">{{site}}</span>
+				</div>
+			</div>
+		</div>
+	</div>
+	
+	{{#unless pdf}}
+	<script>
+		$(document).ready(function () {
+			window.print();
+			setTimeout(function() {
+				window.close();
+			}, 250); 
+		});
+	</script>
+	{{/unless}}
+
+</body>
+</html>

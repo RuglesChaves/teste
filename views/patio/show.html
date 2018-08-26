@@ -1,0 +1,68 @@
+<form action="/{{route}}" method="{{ternary isEdit 'put' 'post'}}" class="form-horizontal well">
+	
+    <fieldset>
+        <legend>Dados gerais</legend>
+      
+		<div class="control-group">
+            <label class="control-label">Nome</label>
+            <div class="controls"><input type="text" name="nome" value="{{result.nome}}" required></div><!-- .controls -->
+        </div><!-- .control-group -->
+
+        <div class="control-group">
+            <label class="control-label">Sempre liberado</label>
+            <div class="controls">
+                {{#checked result.sempre_liberado}}
+                     <label><input type="radio" name="sempre_liberado" value="true" required> Sim</label>
+                     <label><input type="radio" name="sempre_liberado" value="false" required> Não</label>
+                {{/checked}}
+            </div><!-- .controls -->
+        </div><!-- .control-group -->
+
+        <div class="control-group">
+            <label class="control-label">Liberado</label>
+            <div class="controls">
+                {{#checked result.liberado}}
+                     <label><input type="radio" name="liberado" value="true" required> Sim</label>
+                     <label><input type="radio" name="liberado" value="false" required> Não</label>
+                {{/checked}}
+            </div><!-- .controls -->
+        </div><!-- .control-group -->
+
+        <div class="control-group">
+      	   <label class="control-label">Códigos</label>
+            <div class="controls">                
+                <div class="btn-group"><a href="#" class="btn btn-success btn-adicionar-codigo"><i class="fa fa-plus"></i> Adicionar código ({{hotkeys.addCode}})</a></div>
+            </div>
+
+    		<div class="codigo container controls">
+	            {{#each result.codigos}}
+	                <div class="codigo item">
+	                    <input type="text" name="codigos[]" value="{{.}}" class="codigo">&nbsp;
+	                    <a href="#" class="btn btn-danger btn-excluir-item" title="Remover código"><i class="fa fa-trash-o"></i></a>
+	                </div>
+	            {{/each}}
+	        </div>
+        </div>
+
+        <div class="control-group">
+            <div class="controls">
+            	<br />
+                <button class="btn btn-danger" type="submit"><i class="fa fa-save"></i> {{action}} ({{hotkeys.sendForm}})</button>
+            </div>
+        </div>
+    </fieldset>
+
+    <input type="hidden" name="id" value="{{result.id}}"></td>
+</form>
+
+
+<div class="permanencia item clone">
+    até <input type="text" name="permanencias[{index}][hora]" value="" class="mascara-cobranca-hora" required>h&nbsp;
+    cobrar R$ <input type="text" name="permanencias[{index}][valor]" value="" class="mascara-dinheiro" required>&nbsp;
+    <a href="#" class="btn btn-danger btn-excluir-item"><i class="fa fa-trash-o"></i> </a>
+</div>
+
+<div class="codigo item clone">
+    <input type="text" name="codigos[]" value="" class="codigo">&nbsp;
+    <a href="#" class="btn btn-danger btn-excluir-item" title="Remover código"><i class="fa fa-trash-o"></i></a>
+</div>

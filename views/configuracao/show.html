@@ -1,0 +1,586 @@
+   
+<div id="tabs">
+	<!-- utiliza o default submit que é por ajax -->
+	<form action="/{{route}}" method="post" class="form-horizontal xdisable-default-submit" enctype="multipart/form-data">
+
+			<ul>
+				<!-- <li><a href="#dados">Dados gerais</a></li> -->
+				<li><a href="#company">Dados da Empresa</a></li>
+				<li><a href="#geral">Configurações</a></li>
+				<li><a href="#nota-fiscal">Nota Fiscal</a></li>
+				<li><a href="#email">E-mail</a></li>
+				<li><a href="#totem-pgto">Totem de Pgto.</a></li>
+				<li><a href="#ticket">Ticket</a></li>
+				<!-- <li><a href="#invoice">Recibo</a></li> -->
+				<li><a href="#mensagem">Mensagens</a></li>
+			</ul>
+
+			<div id="company">
+				<fieldset>
+					<div class="row">
+						<div class="col-md-9">
+					<!-- 	<div class="control-group">
+							    <label class="control-label">*Nome Fantasia</label>
+							    <div class="controls"><input type="text" name="empresa[nome_fantasia]" value="{{result.empresa.nome_fantasia}}" class="uppercase input-medio" required="required"></div>
+							</div>
+ -->
+							<div class="control-group">
+							    <label class="control-label">*Razão Social</label>
+							    <div class="controls"><input type="text" name="empresa[razao_social]" value="{{result.empresa.razao_social}}" class="uppercase input-medio" required="required"></div>
+							</div>
+
+
+							<div class="control-group">
+							    <label class="control-label">*CNPJ</label>
+							    <div class="controls"><input type="text" name="empresa[cnpj]" value="{{result.empresa.cnpj}}" class="mascara-cnpj input-medio" required="required"></div>
+							</div>
+
+							<div class="control-group">
+						        <label class="control-label">*CEP</label>
+						        <div class="controls"><input type="text" name="empresa[cep]" value="{{result.empresa.cep}}" class="mascara-cep" required="required" maxlength="9"></div>
+						    </div>
+
+						</div>
+
+						<div class="col-md-3">
+							*Logo<br />
+							<div class="configuracao-logo">
+								<label for="file"><img src="{{exibeLogo configuracao.empresa.logo}}"></label>
+								<input id="file" type="file" name="file" accept="image/*" style="display: none;">
+							</div>
+						</div>
+
+					</div>
+
+
+
+
+					
+
+					 
+
+
+				    <!-- <div class="control-group">
+				        <label class="control-label">Regime Especial de Tributação</label>
+				        <div class="controls">
+					        <select name="empresa[regime_especial_tributacao]" class="uppercase">
+								<option value="">Selecione</option>
+								{{#selected result.empresa.regime_tributario}}
+									<option value="Microempresa Municipal">Microempresa Municipal</option>
+									<option value="Estimativa">Estimativa</option>
+									<option value="Sociedade de Profissionais">Sociedade de Profissionais</option>
+									<option value="Cooperativa">Cooperativa</option>
+									<option value="Microempresário Individual (MEI)">Microempresário Individual (MEI)</option>
+									<option value="Microempresário e Empresa de Pequeno Porte (ME/EPP)">Microempresário e Empresa de Pequeno Porte (ME/EPP)</option>																		
+								{{/selected}}
+							</select>
+				        </div>
+				    </div> -->
+				
+					
+
+				    
+
+
+
+				    <div class="control-group">
+				        <label class="control-label">*Endereço</label>
+				        <div class="controls"><input type="text" name="empresa[endereco]" value="{{result.empresa.endereco}}" class="input-medio" required="required"></div>
+				    </div>
+
+				    <div class="control-group">
+				        <label class="control-label">*Número</label>
+				        <div class="controls"><input type="text" name="empresa[numero]" value="{{result.empresa.numero}}" class="" required="required"></div>
+				    </div>
+
+				    <!-- <div class="control-group">
+				        <label class="control-label">Complemento</label>
+				        <div class="controls"><input type="text" name="empresa[complemento]" value="{{result.empresa.complemento}}" class="input-medio"></div>
+				    </div> -->
+
+				    <div class="control-group">
+				        <label class="control-label">*Bairro</label>
+				        <div class="controls"><input type="text" name="empresa[bairro]" value="{{result.empresa.bairro}}" class="" required="required"></div>
+				    </div>
+
+				    <div class="estado-cidade">
+					    <div class="control-group">
+					        <label class="control-label">*Estado</label>
+					        <div class="controls">
+						        <select name="empresa[estado]" class="estado uppercase" required="required">
+									<option value="">Selecione</option>
+									{{#selected result.empresa.estado}}
+										{{#estados}}
+											<option value="{{nome}}">{{nome}}</option>
+										{{/estados}}
+									{{/selected}}
+								</select>
+					        </div>
+					    </div>	
+
+						<div class="control-group">
+					        <label class="control-label">*Cidade</label>
+					        <div class="controls">
+					        	<select name="empresa[cidade]" class="cidade uppercase" required="required">
+									{{#cidades result.empresa.estado result.empresa.cidade}}{{/cidades}}
+					        	</select>
+					        </div>
+					    </div>
+
+					    <div class="control-group">
+						    <label class="control-label">*Telefones</label>
+						    <div class="controls">
+						    	<input type="text" name="empresa[telefone1]" value="{{result.empresa.telefone1}}" class="mascara-telefone" required="required">
+						    	<input type="text" name="empresa[telefone2]" value="{{result.empresa.telefone2}}" class="mascara-telefone">
+						    	<input type="text" name="empresa[telefone3]" value="{{result.empresa.telefone3}}" class="mascara-telefone">
+						    </div>
+						</div>
+					</div>
+
+			    </fieldset>
+			</div>
+
+			<div id="ticket">
+				<fieldset>
+
+					<div class="container-ticket">
+						<div class="Xstretch">
+							<input type="text" name="ticket[linha1]" maxlength="20" class="uppercase" value="{{result.ticket.linha1}}" size="24"><br />
+							<input type="text" name="ticket[linha2]" maxlength="20" class="uppercase" value="{{result.ticket.linha2}}" size="24"><br />
+							<input type="text" name="ticket[linha3]" maxlength="20" class="uppercase" value="{{result.ticket.linha3}}" size="24"><br />
+							<input type="text" name="ticket[linha4]" maxlength="20" class="uppercase" value="{{result.ticket.linha4}}" size="24"><br /><br />
+							N DD/MM HH:MM:SS<br /><br />
+							<!-- <small style="font-size: 5px;">{{result._id}}</small> -->
+						</div>
+						<!-- <div class="barcode">123456789123</div> -->
+						<div><img src="/images/barcode.png" style="width: 143px;"></div>
+						<div class="Xstretch">
+							<!-- NAMMDDHHMMSS -->123456789123<br /><br />
+							<input type="text" name="ticket[linha5]" maxlength="20" class="uppercase" value="{{result.ticket.linha5}}" size="24"><br /><br />
+							<input type="text" name="ticket[linha6]" maxlength="20" class="uppercase no-input" value="BRA PARKING" style="border: 0" readOnly="true" size="24"><br />
+						</div>
+					</div>	
+						
+				</fieldset>
+			</div>
+
+			<div id="geral">
+				<fieldset>
+					<div class="control-group">
+					    <label class="control-label">*Habilitar entrada offline</label>
+					    <div class="controls">
+							{{#checked result.app.entrada_offline}} 
+								<label><input type="radio" name="app[entrada_offline]" value="true" required> Sim</label>&nbsp;
+								<label><input type="radio" name="app[entrada_offline]" value="false" required> Não</label>
+							{{/checked}}
+					    </div>
+					</div>
+
+					<div class="control-group">
+					    <label class="control-label">*Quantidade de vagas</label>
+					    <div class="controls">
+								<input type="number" name="patio[quantidade_vagas]" value="{{#if result.patio.quantidade_vagas}}{{result.patio.quantidade_vagas}}{{else}}1{{/if}}" min="1" required>
+					    </div>
+					</div>
+
+
+					<div class="control-group">
+						<label class="control-label">Em caso de lotação</label>
+						<div class="controls">
+							{{#checked result.patio.bloquear_excedente}} 
+								<label><input type="checkbox" name="patio[bloquear_excedente]" value="true"> Bloquear entrada</label>
+							{{/checked}}
+						</div>
+					</div>
+
+					<div class="control-group">
+					    <label class="control-label">*Aceitar apenas CPF e CNPJ válidos</label>
+					    <div class="controls">
+							{{#checked result.app.validar_cpf_cnpj}} 
+								<label><input type="radio" name="app[validar_cpf_cnpj]" value="true" required> Sim</label>&nbsp;
+								<label><input type="radio" name="app[validar_cpf_cnpj]" value="false" required> Não</label>
+							{{/checked}}
+					    </div>
+					</div>
+
+					<div class="control-group">
+					    <label class="control-label">*Aceitar CPF e CNPJ duplicados</label>
+					    <div class="controls">
+							{{#checked result.app.validar_cpf_cnpj_duplicados}} 
+								<label><input type="radio" name="app[validar_cpf_cnpj_duplicados]" value="false" required> Sim</label>&nbsp;
+								<label><input type="radio" name="app[validar_cpf_cnpj_duplicados]" value="true" required> Não</label>
+							{{/checked}}
+					    </div>
+					</div>
+
+					<!--<div class="control-group">
+					    <label class="control-label">Tamanho da impressão</label>
+					    <div class="controls">
+					    	<div style="padding-top: 15px;">
+					    		<div class="slider-print-size" style="width: 300px;"></div>
+					    	</div>
+					    	<input type="hidden" name="app[tamanho_impressao]" value="{{result.app.tamanho_impressao}}">
+					    </div>
+					</div> -->
+					
+				</fieldset>
+			</div>
+
+			<div id="mensagem">
+				<fieldset>
+					<div class="control-group">
+					    <label class="control-label">Saída autorizada</label>
+					    <div class="controls">
+					    	<input type="text" name="mensagem[acesso_liberado_linha1]" placeholder="Primeira linha" value="{{result.mensagem.acesso_liberado_linha1}}" maxlength="20" class="uppercase" size="24"><br />
+							<input type="text" name="mensagem[acesso_liberado_linha2]" placeholder="Segunda linha" value="{{result.mensagem.acesso_liberado_linha2}}" maxlength="20" class="uppercase" size="24">
+					    </div>
+					</div>
+					<hr />
+
+					<div class="control-group">
+					    <label class="control-label" style="font-size: 14px;">Saída não autorizada</label>
+					    <div class="controls">
+					    	<input type="text" name="mensagem[acesso_negado_linha1]" placeholder="Primeira linha" value="{{result.mensagem.acesso_negado_linha1}}" maxlength="20" class="uppercase" size="24"><br />
+							<input type="text" name="mensagem[acesso_negado_linha2]" placeholder="Segunda linha" value="{{result.mensagem.acesso_negado_linha2}}" maxlength="20" class="uppercase" size="24">
+					    </div>
+					</div>
+					<hr />
+
+					<div class="control-group">
+					    <label class="control-label" style="font-size: 14px;">Saída não autorizada<br />Saldo insuficiente</label>
+					    <div class="controls">
+							<input type="text" name="mensagem[saldo_insuficiente_linha2]" placeholder="Segunda linha" value="{{result.mensagem.saldo_insuficiente_linha2}}" maxlength="20" class="uppercase" size="24">
+							<br />
+					    </div>
+					</div>
+					<hr />
+
+					<div class="control-group">
+					    <label class="control-label">Entrada autorizada</label>
+					    <div class="controls">
+					    	<input type="text" name="mensagem[entrada_liberado_linha1]" placeholder="Primeira linha" value="{{result.mensagem.entrada_liberado_linha1}}" maxlength="20" class="uppercase" size="24"><br />
+							<input type="text" name="mensagem[entrada_liberado_linha2]" placeholder="Segunda linha" value="{{result.mensagem.entrada_liberado_linha2}}" maxlength="20" class="uppercase" size="24">
+					    </div>
+					</div>
+					<hr />
+
+					<div class="control-group">
+					    <label class="control-label" style="font-size: 14px;">Entrada não autorizada<br />Estacionamento lotado</label>
+					    <div class="controls">
+					    	<input type="text" name="mensagem[estacionamento_lotado_linha1]" placeholder="Primeira linha" value="{{result.mensagem.estacionamento_lotado_linha1}}" maxlength="20" class="uppercase" size="24"><br />
+							<input type="text" name="mensagem[estacionamento_lotado_linha2]" placeholder="Segunda linha" value="{{result.mensagem.estacionamento_lotado_linha2}}" maxlength="20" class="uppercase" size="24">
+					    </div>
+					</div>
+					<hr />
+
+					<div class="control-group">
+					    <label class="control-label" style="font-size: 14px;">Entrada não autorizada<br />Cliente sem vagas livres</label>
+					    <div class="controls">
+					    	<input type="text" name="mensagem[cliente_sem_vagas_linha1]" placeholder="Primeira linha" value="{{result.mensagem.cliente_sem_vagas_linha1}}" maxlength="20" class="uppercase" size="24"><br />
+							<input type="text" name="mensagem[cliente_sem_vagas_linha2]" placeholder="Segunda linha" value="{{result.mensagem.cliente_sem_vagas_linha2}}" maxlength="20" class="uppercase" size="24">
+					    </div>
+					</div>
+					<hr />
+
+					<div class="control-group">
+					    <label class="control-label" style="font-size: 14px;">Entrada não autorizada<br />Cliente já está dentro<br />do estacionamento</label>
+					    <div class="controls">
+					    	<input type="text" name="mensagem[entrada_duplicada_linha1]" placeholder="Primeira linha" value="{{result.mensagem.entrada_duplicada_linha1}}" maxlength="20" class="uppercase" size="24"><br />
+							<input type="text" name="mensagem[entrada_duplicada_linha2]" placeholder="Segunda linha" value="{{result.mensagem.entrada_duplicada_linha2}}" maxlength="20" class="uppercase" size="24">
+					    </div>
+					</div>
+					<hr />
+
+					<div class="control-group">
+					    <label class="control-label" style="font-size: 14px;">Entrada não autorizada<br />Cliente com mensalidade<br />atrasada</label>
+					    <div class="controls">
+					    	<input type="text" name="mensagem[entrada_bloqueada_inadimplencia_mensalista_linha1]" placeholder="Primeira linha" value="{{result.mensagem.entrada_bloqueada_inadimplencia_mensalista_linha1}}" maxlength="20" class="uppercase" size="24"><br />
+							<input type="text" name="mensagem[entrada_bloqueada_inadimplencia_mensalista_linha2]" placeholder="Segunda linha" value="{{result.mensagem.entrada_bloqueada_inadimplencia_mensalista_linha2}}" maxlength="20" class="uppercase" size="24">
+					    </div>
+					</div>
+					<hr />
+				</fieldset>
+			</div>
+
+
+
+
+
+
+
+			<div id="nota-fiscal">
+				<fieldset>
+
+					<div class="control-group">
+					    <label class="control-label">*Habilitar NFs-e</label>
+					    <div class="controls">
+							{{#checked result.app.nota_fiscal.ativo}} 
+								<label><input type="radio" name="app[nota_fiscal][ativo]" value="true" required> Sim</label>&nbsp;
+								<label><input type="radio" name="app[nota_fiscal][ativo]" value="false" required> Não</label>
+							{{/checked}}
+					    </div>
+					</div>
+
+					<div class="control-group">
+					    <label class="control-label">Tipo de Emissão</label>
+					    <div class="controls">
+							{{#checked result.app.nota_fiscal.emissao_automatica}} 
+								<label><input type="radio" name="app[nota_fiscal][emissao_automatica]" value="true"> Automática</label>&nbsp;
+								<label><input type="radio" name="app[nota_fiscal][emissao_automatica]" value="false"> Perguntar</label>
+							{{/checked}}
+					    </div>
+					</div>
+					
+					<!-- <div class="control-group">
+					    <label class="control-label">Modo de Contingência</label>
+					    <div class="controls">
+							{{#checked result.app.nota_fiscal.contingencia}} 
+								<label><input type="radio" name="app[nota_fiscal][contingencia]" value="true"> Sim</label>&nbsp;
+								<label><input type="radio" name="app[nota_fiscal][contingencia]" value="false"> Não</label>
+							{{/checked}}
+					    </div>
+					</div>
+					
+					-->
+
+					<div class="control-group">
+					    <label class="control-label">Ambiente</label>
+					    <div class="controls">
+							{{#checked result.app.nota_fiscal.ambiente}} 
+								<label><input type="radio" name="app[nota_fiscal][ambiente]" value="Homologação"> Homologação</label>&nbsp;
+								<label><input type="radio" name="app[nota_fiscal][ambiente]" value="Produção"> Produção</label>
+							{{/checked}}
+					    </div>
+					</div>
+
+					<div class="control-group">
+				        <label class="control-label">Usuário</label>
+				        <div class="controls"><input type="text" name="app[nota_fiscal][usuario]" value="{{result.app.nota_fiscal.usuario}}"></div>
+				    </div>
+
+				    <div class="control-group">
+				        <label class="control-label">Senha</label>
+				        <div class="controls"><input type="password" name="app[nota_fiscal][senha]" value="{{result.app.nota_fiscal.senha}}"></div>
+				    </div> 
+
+					<div class="control-group">
+				        <label class="control-label">CNAE</label>
+				        <div class="controls"><input type="text" name="app[nota_fiscal][cnae]" value="{{result.app.nota_fiscal.cnae}}"></div>
+				    </div>
+
+					<div class="control-group">
+				        <label class="control-label">Código da Cidade</label>
+				        <div class="controls"><input type="text" name="app[nota_fiscal][codigo_cidade]" value="{{result.app.nota_fiscal.codigo_cidade}}"></div>
+				    </div>
+
+					<div class="control-group">
+				        <label class="control-label">Código do Município</label>
+				        <div class="controls"><input type="text" name="app[nota_fiscal][codigo_municipio]" value="{{result.app.nota_fiscal.codigo_municipio}}"></div>
+				    </div>
+					
+					<!-- <div class="control-group">
+				        <label class="control-label">URL do Serviço</label>
+				        <div class="controls"><input type="text" name="app[nota_fiscal][url]" value="{{result.app.nota_fiscal.url}}"></div>
+				    </div> -->
+
+<!-- 					<div class="control-group">
+				        <label class="control-label">Código CSC</label>
+				        <div class="controls"><input type="text" name="app[nota_fiscal][csc]" value="{{result.app.nota_fiscal.csc}}"></div>
+				    </div>
+
+					<div class="control-group">
+				        <label class="control-label">Identificador do CSC</label>
+				        <div class="controls"><input type="text" name="app[nota_fiscal][identificador_csc]" value="{{result.app.nota_fiscal.identificador_csc}}"></div>
+				    </div> -->
+
+					<!-- <div class="control-group">
+				        <label class="control-label">Certificado Digital A1</label>
+				        <div class="controls">
+							<input type="file" name="certificado">
+				        </div>
+				    </div> -->
+
+					<div class="control-group">
+				        <label class="control-label">Série</label>
+				        <div class="controls"><input type="number" name="app[nota_fiscal][serie]" value="{{result.app.nota_fiscal.serie}}" min="1"></div>
+				    </div>
+
+				    <div class="control-group">
+				        <label class="control-label">Número Sequencial</label>
+				        <div class="controls"><input type="number" name="app[nota_fiscal][numero]" value="{{result.app.nota_fiscal.numero}}" min="0"></div>
+				    </div>
+
+				    <div class="control-group">
+				        <label class="control-label">Regime Tributário</label>
+				        <div class="controls">
+					        <select name="empresa[regime_tributario]" class="uppercase">
+								<option value="">Selecione</option>
+								{{#selected result.empresa.regime_tributario}}
+									<option value="Simples Nacional">Simples Nacional</option>
+									<option value="Simples Nacional - Excesso Sublimite de Receita Bruta">Simples Nacional - Excesso Sublimite de Receita Bruta</option>
+									<option value="Regime Normal">Regime Normal</option>
+								{{/selected}}
+							</select>
+				        </div>
+				    </div>	
+
+					<div class="control-group">
+				        <label class="control-label">Regime Espe. de Tri.</label>
+				        <div class="controls">
+					        <select name="empresa[regime_especial_tributacao]" class="uppercase">
+								<option value="">Selecione</option>
+								{{#selected result.empresa.regime_especial_tributacao}}
+									<option value="Microempresa Municipal">Microempresa Municipal</option>
+									<option value="Estimativa">Estimativa</option>
+									<option value="Sociedade de Profissionais">Sociedade de Profissionais</option>
+									<option value="Cooperativa">Cooperativa</option>
+									<option value="Microempresário Individual - MEI">Microempresário Individual - MEI</option>
+									<option value="Microempresário e Empresa de Pequeno Porte - ME/EPP">Microempresário e Empresa de Pequeno Porte - ME/EPP</option>
+									<option value="Lucro Real">Lucro Real</option>
+									<option value="Lucro Presumido">Lucro Presumido</option>
+								{{/selected}}
+							</select>
+				        </div>
+				    </div>	
+
+				    <div class="control-group">
+					    <label class="control-label">Inscrição Estadual</label>
+					    <div class="controls">
+					    	<input type="number" name="empresa[inscricao_estadual]" value="{{result.empresa.inscricao_estadual}}">
+					    </div>
+					</div>
+
+					<div class="control-group">
+					    <label class="control-label">Inscrição Municipal</label>
+					    <div class="controls">
+					    	<input type="number" name="empresa[inscricao_municipal]" value="{{result.empresa.inscricao_municipal}}">
+					    </div>
+					</div>
+
+					<div class="control-group">
+				        <label class="control-label">Cód. do Serviço</label>
+				        <div class="controls"><input type="number" name="app[nota_fiscal][codigo_item_lista_servico]" value="{{result.app.nota_fiscal.codigo_item_lista_servico}}" min="1"></div>
+					</div>
+					
+					<div class="control-group">
+				        <label class="control-label">Cód. de Tributação do Município</label>
+				        <div class="controls"><input type="number" name="app[nota_fiscal][codigo_tributacao_municipio]" value="{{result.app.nota_fiscal.codigo_tributacao_municipio}}" min="1"></div>
+					</div>
+					
+					<div class="control-group">
+				        <label class="control-label">Descrição do Serviço</label>
+				        <div class="controls"><input type="text" name="app[nota_fiscal][descricao_servico]" value="{{result.app.nota_fiscal.descricao_servico}}"></div>
+				    </div>
+
+		
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+				    <!-- <div class="control-group">
+				        <label class="control-label">Município</label>
+				        <div class="controls"><input type="text" name="empresa[municipio]" value="{{result.empresa.municipio}}"></div>
+				    </div> -->
+
+					<div class="control-group">
+				        <label class="control-label">PIS</label>
+				        <div class="controls">
+			        		<input type="text" name="app[nota_fiscal][pis]" value="{{result.app.nota_fiscal.pis}}" class="input-pequeno mascara-dinheiro" maxlength="5">%&nbsp;
+			        		COFINS <input type="text" name="app[nota_fiscal][cofins]" value="{{result.app.nota_fiscal.cofins}}" class="input-pequeno mascara-dinheiro" maxlength="5">%&nbsp;
+			        		ISS <input type="text" name="app[nota_fiscal][iss]" value="{{result.app.nota_fiscal.iss}}" class="input-pequeno mascara-dinheiro" maxlength="5">%&nbsp;
+				        </div>
+				    </div>
+
+
+
+
+<!-- 				<div class="control-group">
+				        <label class="control-label">URL</label>
+				        <div class="controls"><input type="text" name="app[nota_fiscal][url]" value="{{result.app.nota_fiscal.url}}"></div>
+				    </div>
+
+					<div class="control-group">
+				        <label class="control-label">URL</label>
+				        <div class="controls"><input type="text" name="app[nota_fiscal][url]" value="{{result.app.nota_fiscal.url}}"></div>
+				    </div>
+
+					<div class="control-group">
+				        <label class="control-label">URL</label>
+				        <div class="controls"><input type="text" name="app[nota_fiscal][url]" value="{{result.app.nota_fiscal.url}}"></div>
+				    </div>
+
+					<div class="control-group">
+				        <label class="control-label">URL</label>
+				        <div class="controls"><input type="text" name="app[nota_fiscal][url]" value="{{result.app.nota_fiscal.url}}"></div>
+				    </div>
+
+					<div class="control-group">
+				        <label class="control-label">URL</label>
+				        <div class="controls"><input type="text" name="app[nota_fiscal][url]" value="{{result.app.nota_fiscal.url}}"></div>
+				    </div> -->
+
+
+					
+				</fieldset>
+			</div>
+
+
+			<div id="email">
+				
+				<fieldset>
+
+					<div class="control-group">
+				        <label class="control-label">Servidor</label>
+				        <div class="controls"><input type="text" name="app[email][servidor]" value="{{result.app.email.servidor}}">
+				        </div>
+				    </div>
+
+				    <div class="control-group">
+				        <label class="control-label">Porta</label>
+				        <div class="controls"><input type="number" name="app[email][porta]" value="{{result.app.email.porta}}"></div>
+				    </div>	
+
+					<div class="control-group">
+				        <label class="control-label">E-mail</label>
+				        <div class="controls"><input type="text" class="input-medio" name="app[email][email]" value="{{result.app.email.email}}"></div>
+				    </div>
+
+					<div class="control-group">
+				        <label class="control-label">Senha</label>
+				        <div class="controls"><input type="password" name="app[email][senha]" value="{{result.app.email.senha}}"></div>
+				    </div>	
+
+				</fieldset>
+
+
+			</div>
+
+
+
+
+
+
+		{{>form-footer}}
+
+	      
+		</form>
+
+	</div>
+
+

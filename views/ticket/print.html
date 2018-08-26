@@ -1,0 +1,48 @@
+{{#if result.perdido}}
+<center>
+	<b>TICKET PERDIDO</b><br />
+	<span style="font-size: 9px;">{{result.observacao}}</span>
+</center>
+<br />
+{{/if}}
+
+
+<div class="uppercase center">
+
+	{{#if result.ticket.linha1}}{{result.ticket.linha1}}<br />{{/if}}
+	{{#if result.ticket.linha2}}{{result.ticket.linha2}}<br />{{/if}}
+	{{#if result.ticket.linha3}}{{result.ticket.linha3}}<br />{{/if}}
+	{{#if result.ticket.linha4}}{{result.ticket.linha4}}<br />{{/if}}
+
+	{{#result.equipamento}} 
+		{{nome}} {{numero}}
+	{{/result.equipamento}} 
+	
+	{{#result.terminal}}
+		{{nome}} {{numero}}
+	{{/result.terminal}} 
+
+	{{result.data}} {{result.hora}}
+	<br />
+	{{result.tipo_veiculo}}
+	{{#result.carro}}
+		{{marca}}
+		{{modelo}}
+		{{cor}}
+		{{#compare placa '!==' ''}}PLACA {{placa}}{{/compare}}
+	{{/result.carro}}
+	<br/>
+	<!-- <small>{{result._id}}</small> -->
+	<div class="barcode">{{result.codigos}}</div>
+	
+	<!-- {{result.codigos}}<br /> -->
+	<!-- <br /> -->
+	{{#if result.ticket.linha5}}{{result.ticket.linha5}}<br />{{/if}}
+</div>
+
+<script>
+    $(function() {
+    	// $('.barcode').barcode({code:'I25'});
+        $('.barcode').barcode({code: '{{result.codigos}}', crc: false}, 'int25', { barWidth: 2, barHeight: 70});
+    });
+</script>

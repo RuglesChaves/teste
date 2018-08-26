@@ -1,0 +1,282 @@
+<form class="form-filtro form-horizontal well no-print spa disable-default-submit" action="/{{route}}" method="get" role="form">
+    <fieldset>
+        <legend>Filtre sua consulta</legend>
+
+        <div class="control-group">
+            <label class="control-label">Operador de Caixa</label>
+            <div class="controls">
+                <select name="usuario" class="uppercase">
+                    <option value="">TODOS</option>
+                    {{#selected query.usuario}}
+                    <option value="nenhum">NENHUM</option>
+                    {{/selected}}
+                    {{#usuario}} {{#selected ../query.usuario}}
+                    <option value="{{_id}}">{{nome}}</option>
+                    {{/selected}} {{/usuario}}
+                </select>
+            </div>
+        </div>
+
+        <div class="control-group">
+            <label class="control-label">Totem de Pagamento</label>
+            <div class="controls">
+                <select name="equipamento" class="uppercase">
+                    <option value="">TODOS</option>
+                    
+                    {{#selected query.equipamento}}
+                        <option value="nenhum">NENHUM</option>
+                    {{/selected}}
+
+                    {{#equipamento}} {{#selected ../query.equipamento}}
+                        <option value="{{_id}}">{{nome}}</option>
+                    {{/selected}} {{/equipamento}}
+                </select>
+            </div>
+        </div>
+
+        <div class="control-group">
+            <label class="control-label">Tipo de Pagamento</label>
+            <div class="controls">
+                <select name="tipo">
+                    <option value="" class="uppercase">TODOS</option>
+                    {{#selected query.tipo}}
+                    <option value="Permanência">Permanência</option>
+                    <option value="Mensalidade">Mensalidade</option>
+                    <option value="Diária">Diária</option>
+                    <option value="Pré-Pago">Pré-Pago</option>
+                    {{/selected}}
+                </select>
+            </div>
+            <!-- .controls -->
+        </div>
+
+        <div class="control-group">
+            <label class="control-label">Forma de Pagamento</label>
+            <div class="controls">
+                <select name="forma_pagamento">
+                    <option value="" class="uppercase">TODOS</option>
+                    {{#selected query.forma_pagamento}}
+                    <option value="Dinheiro">Dinheiro</option>
+                    <option value="Cartão de Crédito">Cartão de Crédito</option>
+                    <option value="Cartão de Débito">Cartão de Débito</option>
+                    {{/selected}}
+                </select>
+            </div>
+            <!-- .controls -->
+        </div>
+        <!-- .control-group -->
+
+
+        <div class="control-group">
+            <label class="control-label">*Período</label>
+            <div class="controls">
+                <div class="input-prepend input-append inline">
+                    <span class="add-on">De</span>
+                    <input name="data_inicio" type="text" class="mascara-data" value="{{query.data_inicio}}" required> <input type="time" name="horario_inicio" value="{{query.horario_inicio}}" required style="margin-left: -5px; line-height: 27px;">
+                </div>
+                <div class="input-prepend input-append inline">
+                    <span class="add-on">até</span>
+                    <input name="data_fim" type="text" class="mascara-data" value="{{query.data_fim}}" required> <input type="time" name="horario_fim" value="{{query.horario_fim}}" required style="margin-left: -5px; line-height: 27px;">
+                </div>
+            </div>
+        </div>
+
+        <div class="control-group">
+            <div class="controls">
+                <button class="btn btn-danger" type="submit">
+                    <i class="fa fa-search"></i>Filtrar</button>
+            </div>
+        </div>
+    </fieldset>
+</form>
+
+<div class="btn-group">
+    <a class="btn btn-warning print-popup" href="{{printUrl}}" style="margin-right: 10px;">
+        <i class="fa fa-print"></i>Imprimir</a>
+    <!-- <a class="btn btn-default print-popup-pdf" href="{{printUrl}}"><i class="fa fa-download"></i>Baixar</a> -->
+</div>
+
+<br />
+
+<h4>Pagamentos</h4>
+{{>pagination}}
+<div class="panel panel-default">
+    <div class="table-responsive">
+        <table class="table table-striped table-bordered table-hover">
+            <thead>
+                <tr>
+                    <th class="no-print options">Opções</th>
+                    <th>Cliente</th>
+                    <th>Descrição</th>
+                    <th>Data de Pagamento</th>
+                    <th>Forma de Pagamento</th>
+                    <th width="130">Total R$</th>
+                </tr>
+            </thead>
+            <tbody>
+                {{#relatorioPagamento}}
+                <tr>
+                    <td align="center" class="no-print options" width="150">
+                        {{#compare tipo 'Diária'}} {{#hasPermission ../../permission 'caixa' 'reprint'}}
+                        <a href="/caixa/printPagamentoDiaria/{{_diaria}}" class="btn btn-warning print" title="Imprimir Comprovante de Pagamento">
+                            <i class="fa fa-print"></i>
+                        </a>
+                        {{/hasPermission}} {{/compare}} {{#compare tipo 'Permanência'}} {{#hasPermission ../../permission 'caixa' 'reprint'}}
+                        <a href="/ticket/pagamento/{{_cartao}}" class="btn btn-warning print" title="Imprimir Comprovante de Pagamento">
+                            <i class="fa fa-print"></i>
+                        </a>
+                        {{/hasPermission}} {{/compare}} {{#compare tipo 'Pré-Pago'}} {{#hasPermission ../../permission 'caixa' 'reprint'}}
+                        <a href="/caixa/printPagamentoPrePago/{{_id}}" class="btn btn-warning print" title="Imprimir Comprovante de Pagamento">
+                            <i class="fa fa-print"></i>
+                        </a>
+                        {{/hasPermission}} {{/compare}} {{#compare tipo 'Mensalidade'}} {{#hasPermission ../../permission 'caixa' 'reprint'}}
+                        <a href="/caixa/printPagamentoMensalista/{{_id}}" class="btn btn-warning print" title="Imprimir Comprovante de Pagamento">
+                            <i class="fa fa-print"></i>
+                        </a>
+                        {{/hasPermission}} {{/compare}} {{#if ../configuracao.app.nota_fiscal.ativo}} {{#if ../nota_fiscal.status}}
+                        <!-- <a href="{{../../../configuracao.app.nota_fiscal.url}}{{nota_fiscal.danfe}}" class="btn btn-default print" title="Imprimir Danfe"><i class="fa  fa-file-pdf-o"></i></a> -->
+                        {{#compare nota_fiscal.status '!==' 'ENVIADO'}}
+                        <!-- <a href="/caixa/enviarNotaFiscal/{{../../id}}" class="btn btn-success spa" title="Enviar Nota Fiscal"><i class="fa fa-share"></i></a> -->
+                        {{/compare}} {{else}}
+                        <a href="#" class="popupNotaFiscal btn btn-success" data-pagamento="{{../../id}}" title="Gerar Nota Fiscal">
+                            <i class="fa fa-share"></i>
+                        </a>
+                        {{/if}} {{/if}} 
+                        <!-- {{#hasPermission ../permission 'pagamento' 'delete'}}
+                        <a href="#" class="btn btn-danger excluir-pagamento" title="Excluir">
+                            <i class="fa fa-trash-o"></i>
+                        </a>
+                        <div class="display-none">
+                            <div class="excluir-pagamento">
+                                <form action="/{{../route}}/{{_id}}" data-id="{{_id}}" method="delete" class="form-horizontal form-excluir-pagamento disable-default-submit"
+                                    autocomplete="off">
+                                    <div class="control-group">
+                                        <h4>Excluir Ticket</h4>
+                                        *Motivo da exclusão
+                                        <br />
+                                        <textarea name="observacao" style="height: 100px; width: 100%;" required></textarea>
+
+                                        <div class="form-footer">
+                                            <button class="btn btn-danger" type="submit">
+                                                <i class="fa fa-trash-o"></i>Excluir</button>
+                                        </div>
+                                        <div class="clearfix"></div>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                        {{/hasPermission}} -->
+                    </td>
+                    <td class="uppercase">{{_cliente.nome}}</td>
+                    <td class="uppercase">{{nome}}</td>
+                    <td>{{ddmmYYYY data_pagamento}}</td>
+                    <td>{{forma_pagamento}}</td>
+                    <td>
+                        {{#valor}} {{.}} {{else}} 0,00 {{/valor}}
+                    </td>
+                </tr>
+                {{/relatorioPagamento}}
+                <tr class="empty">
+                    <td colspan="5">Nenhum registro encontrado.</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+{{>pagination}}
+
+<h4>Composição de Faturamento</h4>
+<div class="panel panel-default">
+    <div class="table-responsive">
+        <table class="table table-striped table-bordered table-hover">
+            <thead>
+                <tr>
+                    <th width="50%">Forma de Pagamento</th>
+                    <th width="25%">Quantidade</th>
+                    <th width="25%">Total R$</th>
+                </tr>
+            </thead>
+            <tbody>
+                {{#each forma_pagamento}}
+                <tr>
+                    <td class="uppercase">{{@key}}</td>
+                    <td>{{quantidade}}</td>
+                    <td>{{float2moeda total}}</td>
+                </tr>
+                {{/each}}
+                <tr class="empty">
+                    <td align="center" colspan="3">Nenhum registro encontrado.</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<div class="panel panel-default">
+    <div class="table-responsive">
+        <table class="table table-striped table-bordered table-hover">
+            <thead>
+                <tr>
+                    <th width="50%">Tipo de Cliente</th>
+                    <th width="25%">Quantidade</th>
+                    <th width="25%">Total R$</th>
+                </tr>
+            </thead>
+            <tbody>
+                {{#each tipo_cliente}}
+                <tr>
+                    <td class="uppercase">{{@key}}</td>
+                    <td>{{quantidade}}</td>
+                    <td>{{float2moeda total}}</td>
+                </tr>
+                {{/each}}
+                <tr class="empty">
+                    <td align="center" colspan="3">Nenhum registro encontrado.</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+
+<div class="panel panel-default">
+    <div class="table-responsive">
+        <table class="table table-striped table-bordered table-hover">
+            <thead>
+                <tr>
+                    <th width="50%">Tabela de Preço</th>
+                    <th width="25%">Quantidade</th>
+                    <th width="25%">Total R$</th>
+                </tr>
+            </thead>
+            <tbody>
+                {{#each tabela_de_preco}}
+                <tr>
+                    <td class="uppercase">{{nome}}</td>
+                    <td>{{quantidade}}</td>
+                    <td>{{float2moeda total}}</td>
+                </tr>
+                {{/each}}
+                <tr class="empty">
+                    <td align="center" colspan="3">Nenhum registro encontrado.</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<div class="display-none">
+    <form id="notaFiscal">
+        <center>
+            <br />CPF:
+            <input type="text" name="cpf" value="" class="mascara-cpf">
+            <br />
+            <!-- <br />E-mail: <input type="email" name="email" value=""><br /><br /> -->
+            <button class="btn btn-success" type="submit">
+                <i class="fa fa-share"></i> Emitir</button>
+            <br />
+            <br />
+            <input type="hidden" name="_pagamento" value="">
+        </center>
+    </form>
+</div>

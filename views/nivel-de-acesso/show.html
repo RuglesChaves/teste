@@ -1,0 +1,370 @@
+<style>
+	.row>label:hover { cursor: pointer; }
+	.control-group .controls { width: 50%; }
+</style>
+
+<form action="/{{route}}" method="{{ternary isEdit 'put' 'post'}}" class="form-horizontal well">
+    <fieldset>
+        <legend>Dados gerais</legend>
+
+        <div class="control-group">
+            <label class="control-label">*Nome</label>
+            <div class="controls"><input type="text" name="nome" class="col-lg-7 uppercase" value="{{result.nome}}" required></div><!-- .controls -->
+        </div><!-- .control-group -->
+
+        <div class="control-group">
+            <label class="control-label">Permissões</label>
+            <div class="controls">
+
+          		<h3>Pagamento</h3>
+            	<div class="row">
+            		{{#checkedMultiple result.permissao.pagamento}}
+	            		<!-- <div class="col-lg-4"><label><input type="checkbox" name="permissao[pagamento][]" value="delete"> Excluir</label></div> -->
+	            		<div class="col-lg-4"><label><input type="checkbox" name="permissao[pagamento][]" value="exemption"> Isenção</label></div>
+	            		<div class="col-lg-4"><label><input type="checkbox" name="permissao[pagamento][]" value="bulk-payment"> Pagamento em Massa</label></div>
+						<div class="col-lg-4"><label><input type="checkbox" name="permissao[pagamento][]" value="bulk-payment-reprint"> Reimpressão de Pagamento em Massa</label></div>
+					{{/checkedMultiple}}
+				</div>
+				<hr />
+            	
+            	<h3>Ticket</h3>
+            	<div class="row">
+            		{{#checkedMultiple result.permissao.ticket}}
+	            		<div class="col-lg-4"><label><input type="checkbox" name="permissao[ticket][]" value="read"> Visualizar</label></div>
+	            		<!-- <div class="col-lg-4"><label><input type="checkbox" name="permissao[ticket][]" value="edit"> Alterar</label></div> -->
+	            		<div class="col-lg-4"><label><input type="checkbox" name="permissao[ticket][]" value="new"> Cadastrar</label></div>
+	            		<div class="col-lg-4"><label><input type="checkbox" name="permissao[ticket][]" value="delete"> Excluir</label></div>
+	            		<div class="col-lg-4"><label><input type="checkbox" name="permissao[ticket][]" value="lost"> Ticket Perdido</label></div>
+	            		<div class="col-lg-4"><label><input type="checkbox" name="permissao[ticket][]" value="reprint"> Reimpressão de ticket</label></div>
+					{{/checkedMultiple}}
+				</div>
+				<hr />
+
+            	<h3>Caixa</h3>
+            	<div class="row">
+            		{{#checkedMultiple result.permissao.caixa}}
+	            		<div class="col-lg-4"><label><input type="checkbox" name="permissao[caixa][]" value="read"> Visualizar</label></div>
+	            		<div class="col-lg-4"><label><input type="checkbox" name="permissao[caixa][]" value="edit"> Alterar</label></div>
+	            		<div class="col-lg-4"><label><input type="checkbox" name="permissao[caixa][]" value="new"> Cadastrar</label></div>
+	            		<div class="col-lg-4"><label><input type="checkbox" name="permissao[caixa][]" value="show amount"> Exibir Saldo</label></div>
+	            		<div class="col-lg-4"><label><input type="checkbox" name="permissao[caixa][]" value="reprint"> Reimpressão de comprovante</label></div>
+	            		<div class="col-lg-4"><label><input type="checkbox" name="permissao[caixa][]" value="reprint-bulk-payment"> Reimpressão de comprovante de Pagamento em Massa</label></div>
+	            		<!-- <div class="col-lg-4"><label><input type="checkbox" name="permissao[caixa][]" value="delete"> Excluir</label></div> -->
+					{{/checkedMultiple}}
+				</div>
+				<hr />
+
+            	<h3>Pátio</h3>
+            	<div class="row">
+            		{{#checkedMultiple result.permissao.patio}}
+	            		<div class="col-lg-4"><label><input type="checkbox" name="permissao[patio][]" value="read"> Visualizar</label></div>
+	            		<div class="col-lg-4"><label><input type="checkbox" name="permissao[patio][]" value="entry"> Autorizar Entrada</label></div>
+	            		<div class="col-lg-4"><label><input type="checkbox" name="permissao[patio][]" value="exit"> Autorizar Saída</label></div>
+	            		<div class="col-lg-4"><label><input type="checkbox" name="permissao[patio][]" value="delete"> Excluir</label></div>
+					{{/checkedMultiple}}
+				</div>
+				<hr />
+
+            	<h3>Tabela de Preço</h3>
+            	<div class="row">
+            		{{#checkedMultiple result.permissao.tabela-de-preco}}
+	            		<div class="col-lg-4"><label><input type="checkbox" name="permissao[tabela-de-preco][]" value="read"> Visualizar</label></div>
+	            		<div class="col-lg-4"><label><input type="checkbox" name="permissao[tabela-de-preco][]" value="edit"> Alterar</label></div>
+	            		<div class="col-lg-4"><label><input type="checkbox" name="permissao[tabela-de-preco][]" value="new"> Cadastrar</label></div>
+	            		<div class="col-lg-4"><label><input type="checkbox" name="permissao[tabela-de-preco][]" value="delete"> Excluir</label></div>
+					{{/checkedMultiple}}
+				</div>
+
+				<hr />
+            	<h3>Gerenciador de Tabelas</h3>
+            	<div class="row">
+            		{{#checkedMultiple result.permissao.gerenciador-de-tabela}}
+	            		<div class="col-lg-4"><label><input type="checkbox" name="permissao[gerenciador-de-tabela][]" value="read"> Visualizar</label></div>
+	            		<div class="col-lg-4"><label><input type="checkbox" name="permissao[gerenciador-de-tabela][]" value="edit"> Alterar</label></div>
+	            		<div class="col-lg-4"><label><input type="checkbox" name="permissao[gerenciador-de-tabela][]" value="new"> Cadastrar</label></div>
+	            		<div class="col-lg-4"><label><input type="checkbox" name="permissao[gerenciador-de-tabela][]" value="delete"> Excluir</label></div>
+					{{/checkedMultiple}}
+				</div>
+
+				<hr />
+            	<h3>Feriados</h3>
+            	<div class="row">
+            		{{#checkedMultiple result.permissao.feriado}}
+	            		<div class="col-lg-4"><label><input type="checkbox" name="permissao[feriado][]" value="read"> Visualizar</label></div>
+	            		<div class="col-lg-4"><label><input type="checkbox" name="permissao[feriado][]" value="edit"> Alterar</label></div>
+	            		<div class="col-lg-4"><label><input type="checkbox" name="permissao[feriado][]" value="new"> Cadastrar</label></div>
+	            		<div class="col-lg-4"><label><input type="checkbox" name="permissao[feriado][]" value="delete"> Excluir</label></div>
+					{{/checkedMultiple}}
+				</div>
+				
+				<hr />
+            	<h3>Clientes</h3>
+            	<div class="row">
+            		{{#checkedMultiple result.permissao.cliente}}
+	            		<div class="col-lg-4"><label><input type="checkbox" name="permissao[cliente][]" value="read"> Visualizar</label></div>
+	            		<div class="col-lg-4"><label><input type="checkbox" name="permissao[cliente][]" value="edit"> Alterar</label></div>
+	            		<div class="col-lg-4"><label><input type="checkbox" name="permissao[cliente][]" value="new"> Cadastrar</label></div>
+	            		<div class="col-lg-4"><label><input type="checkbox" name="permissao[cliente][]" value="delete"> Excluir</label></div>
+					{{/checkedMultiple}}
+				</div>
+				<hr />
+
+            	<h3>Equipamentos</h3>
+            	<div class="row">
+            		{{#checkedMultiple result.permissao.equipamento}}
+	            		<div class="col-lg-4"><label><input type="checkbox" name="permissao[equipamento][]" value="read"> Visualizar</label></div>
+	            		<div class="col-lg-4"><label><input type="checkbox" name="permissao[equipamento][]" value="edit"> Alterar</label></div>
+	            		<div class="col-lg-4"><label><input type="checkbox" name="permissao[equipamento][]" value="new"> Cadastrar</label></div>
+	            		<div class="col-lg-4"><label><input type="checkbox" name="permissao[equipamento][]" value="delete"> Excluir</label></div>
+					{{/checkedMultiple}}
+				</div>
+				<hr />
+
+            	<h3>Terminais</h3>
+            	<div class="row">
+            		{{#checkedMultiple result.permissao.terminal}}
+	            		<div class="col-lg-4"><label><input type="checkbox" name="permissao[terminal][]" value="read"> Visualizar</label></div>
+	            		<div class="col-lg-4"><label><input type="checkbox" name="permissao[terminal][]" value="edit"> Alterar</label></div>
+	            		<div class="col-lg-4"><label><input type="checkbox" name="permissao[terminal][]" value="new"> Cadastrar</label></div>
+	            		<div class="col-lg-4"><label><input type="checkbox" name="permissao[terminal][]" value="delete"> Excluir</label></div>
+					{{/checkedMultiple}}
+				</div>
+				<hr />
+
+            	<h3>Usuários</h3>
+            	<div class="row">
+            		{{#checkedMultiple result.permissao.usuario}}
+	            		<div class="col-lg-4"><label><input type="checkbox" name="permissao[usuario][]" value="read"> Visualizar</label></div>
+	            		<div class="col-lg-4"><label><input type="checkbox" name="permissao[usuario][]" value="edit"> Alterar</label></div>
+	            		<div class="col-lg-4"><label><input type="checkbox" name="permissao[usuario][]" value="new"> Cadastrar</label></div>
+	            		<div class="col-lg-4"><label><input type="checkbox" name="permissao[usuario][]" value="delete"> Excluir</label></div>
+					{{/checkedMultiple}}
+				</div>
+				<hr />
+
+				<h3>Níveis de Bloqueios</h3>
+            	<div class="row">
+            		{{#checkedMultiple result.permissao.niveis-de-bloqueio}}
+	            		<div class="col-lg-4"><label><input type="checkbox" name="permissao[niveis-de-bloqueio][]" value="read"> Visualizar</label></div>
+	            		<div class="col-lg-4"><label><input type="checkbox" name="permissao[niveis-de-bloqueio][]" value="edit"> Alterar</label></div>
+	            		<div class="col-lg-4"><label><input type="checkbox" name="permissao[niveis-de-bloqueio][]" value="new"> Cadastrar</label></div>
+	            		<div class="col-lg-4"><label><input type="checkbox" name="permissao[niveis-de-bloqueio][]" value="delete"> Excluir</label></div>
+					{{/checkedMultiple}}
+				</div>
+				<hr />
+
+            	<h3>Níveis de Acesso</h3>
+            	<div class="row">
+            		{{#checkedMultiple result.permissao.nivel-de-acesso}}
+	            		<div class="col-lg-4"><label><input type="checkbox" name="permissao[nivel-de-acesso][]" value="read"> Visualizar</label></div>
+	            		<div class="col-lg-4"><label><input type="checkbox" name="permissao[nivel-de-acesso][]" value="edit"> Alterar</label></div>
+	            		<div class="col-lg-4"><label><input type="checkbox" name="permissao[nivel-de-acesso][]" value="new"> Cadastrar</label></div>
+	            		<div class="col-lg-4"><label><input type="checkbox" name="permissao[nivel-de-acesso][]" value="delete"> Excluir</label></div>
+					{{/checkedMultiple}}
+				</div>
+				<hr />
+
+				<h3>Marcas & Modelos</h3>
+            	<div class="row">
+            		{{#checkedMultiple result.permissao.marca}}
+	            		<div class="col-lg-4"><label><input type="checkbox" name="permissao[marca][]" value="read"> Visualizar</label></div>
+	            		<div class="col-lg-4"><label><input type="checkbox" name="permissao[marca][]" value="edit"> Alterar</label></div>
+	            		<div class="col-lg-4"><label><input type="checkbox" name="permissao[marca][]" value="new"> Cadastrar</label></div>
+	            		<div class="col-lg-4"><label><input type="checkbox" name="permissao[marca][]" value="delete"> Excluir</label></div>
+					{{/checkedMultiple}}
+				</div>
+				<hr />
+
+            	<h3>Cores de Veículos</h3>
+            	<div class="row">
+            		{{#checkedMultiple result.permissao.cor}}
+	            		<div class="col-lg-4"><label><input type="checkbox" name="permissao[cor][]" value="read"> Visualizar</label></div>
+	            		<div class="col-lg-4"><label><input type="checkbox" name="permissao[cor][]" value="edit"> Alterar</label></div>
+	            		<div class="col-lg-4"><label><input type="checkbox" name="permissao[cor][]" value="new"> Cadastrar</label></div>
+	            		<div class="col-lg-4"><label><input type="checkbox" name="permissao[cor][]" value="delete"> Excluir</label></div>
+					{{/checkedMultiple}}
+				</div>
+				<hr />
+
+		       	<h3>Tipos de Veículos</h3>
+            	<div class="row">
+            		{{#checkedMultiple result.permissao.tipo-veiculo}}
+	            		<div class="col-lg-4"><label><input type="checkbox" name="permissao[tipo-veiculo][]" value="read"> Visualizar</label></div>
+	            		<div class="col-lg-4"><label><input type="checkbox" name="permissao[tipo-veiculo][]" value="edit"> Alterar</label></div>
+	            		<div class="col-lg-4"><label><input type="checkbox" name="permissao[tipo-veiculo][]" value="new"> Cadastrar</label></div>
+	            		<div class="col-lg-4"><label><input type="checkbox" name="permissao[tipo-veiculo][]" value="delete"> Excluir</label></div>
+					{{/checkedMultiple}}
+				</div>
+				<hr />
+
+
+            	<h3>Configuração</h3>
+	        	<div class="row">
+            		{{#checkedMultiple result.permissao.configuracao}}
+	            		<div class="col-lg-4"><label><input type="checkbox" name="permissao[configuracao][]" value="read"> Visualizar</label></div>
+	            		<div class="col-lg-4"><label><input type="checkbox" name="permissao[configuracao][]" value="edit"> Alterar</label></div>
+	            		<div class="col-lg-4"><label><input type="checkbox" name="permissao[configuracao][]" value="new"> Cadastrar</label></div>
+					{{/checkedMultiple}}
+				</div>
+
+            	<!-- <h3>Relatório de Caixa</h3>
+	        	<div class="row">
+            		{{#checkedMultiple result.permissao.relatorio-caixa}}
+            			<div class="col-lg-4"><label><input type="checkbox" name="permissao[relatorio-caixa][]" value="read"> Visualizar</label></div>
+					{{/checkedMultiple}}
+				</div> -->
+
+				<h3>Relatórios</h3>
+				<div class="row">
+            		{{#checkedMultiple result.permissao.relatorio-financeiro}}
+            			<div class="col-lg-4"><label><input type="checkbox" name="permissao[relatorio-financeiro][]" value="read"> Relatório de Caixa</label></div>
+            		{{/checkedMultiple}}
+            		
+					{{#checkedMultiple result.permissao.relatorio-pagamento}}            		
+            			<div class="col-lg-4"><label><input type="checkbox" name="permissao[relatorio-pagamento][]" value="read"> Relatório de Pagamento</label></div>
+            		{{/checkedMultiple}}
+            		
+					{{#checkedMultiple result.permissao.relatorio-faturamento}}            			
+            			<div class="col-lg-4"><label><input type="checkbox" name="permissao[relatorio-faturamento][]" value="read"> Relatório de Faturamento</label></div>
+            		{{/checkedMultiple}}
+            		
+					{{#checkedMultiple result.permissao.relatorio-acesso}}            			
+            			<div class="col-lg-4"><label><input type="checkbox" name="permissao[relatorio-acesso][]" value="read"> Relatório de Acesso</label></div>
+            		{{/checkedMultiple}}
+
+            		{{#checkedMultiple result.permissao.relatorio-patio}}
+            			<div class="col-lg-4"><label><input type="checkbox" name="permissao[relatorio-patio][]" value="read"> Relatório de Pátio</label></div>
+            		{{/checkedMultiple}}
+
+            		{{#checkedMultiple result.permissao.relatorio-mensalista}}
+            			<div class="col-lg-4"><label><input type="checkbox" name="permissao[relatorio-mensalista][]" value="read"> Relatório de Mensalistas</label></div>
+            		{{/checkedMultiple}}            		
+
+            		{{#checkedMultiple result.permissao.relatorio-permanencia}}
+            			<div class="col-lg-4"><label><input type="checkbox" name="permissao[relatorio-permanencia][]" value="read"> Relatório de Permanência</label></div>
+            		{{/checkedMultiple}}            		
+					
+					{{#checkedMultiple result.permissao.relatorio-isencao}}
+            			<div class="col-lg-4"><label><input type="checkbox" name="permissao[relatorio-isencao][]" value="read"> Relatório de Isenção</label></div>
+					{{/checkedMultiple}}
+					            		
+					{{#checkedMultiple result.permissao.relatorio-convenio}}
+            			<div class="col-lg-4"><label><input type="checkbox" name="permissao[relatorio-convenio][]" value="read"> Relatório de Convênio</label></div>
+					{{/checkedMultiple}}            		
+					
+					{{#checkedMultiple result.permissao.nota-fiscal}}
+            			<div class="col-lg-4"><label><input type="checkbox" name="permissao[nota-fiscal][]" value="read"> Relatório de Nota Fiscal</label></div>
+					{{/checkedMultiple}}
+					
+					{{#checkedMultiple result.permissao.relatorio-pagamento-em-massa}}
+            			<div class="col-lg-4"><label><input type="checkbox" name="permissao[relatorio-pagamento-em-massa][]" value="read"> Relatório de Pagamento em Massa</label></div>
+            		{{/checkedMultiple}}            		
+				</div>
+	
+				<h3>Banco de Dados</h3>
+				<div class="row">
+					{{#checkedMultiple result.permissao.database}}            			
+						<div class="col-lg-4"><label><input type="checkbox" name="permissao[database][]" value="new"> Cadastrar</label></div>
+						<div class="col-lg-4"><label><input type="checkbox" name="permissao[database][]" value="edit"> Configurações</label></div>
+						<div class="col-lg-4"><label><input type="checkbox" name="permissao[database][]" value="restore"> Restaurar</label></div>
+						<div class="col-lg-4"><label><input type="checkbox" name="permissao[database][]" value="import"> Enviar</label></div>
+						<div class="col-lg-4"><label><input type="checkbox" name="permissao[database][]" value="download"> Baixar</label></div>
+						<div class="col-lg-4"><label><input type="checkbox" name="permissao[database][]" value="delete"> Excluir</label></div>
+						<div class="col-lg-4"><label><input type="checkbox" name="permissao[database][]" value="read"> Visualizar</label></div>
+					{{/checkedMultiple}}
+				</div>
+
+				<h3>Nota Fiscal</h3>
+	        	<div class="row">
+            		{{#checkedMultiple result.permissao.nota-fiscal}}
+	            		<div class="col-lg-4"><label><input type="checkbox" name="permissao[nota-fiscal][]" value="read"> Visualizar</label></div>
+					{{/checkedMultiple}}
+				</div>
+
+				<h3>Perfil</h3>
+	        	<div class="row">
+            		{{#checkedMultiple result.permissao.perfil}}
+	            		<div class="col-lg-4"><label><input type="checkbox" name="permissao[perfil][]" value="edit"> Alterar</label></div>
+					{{/checkedMultiple}}
+				</div>
+
+<!-- 			<h3>Liberação</h3>
+	        	<div class="row">
+            		{{#checkedMultiple result.permissao.liberacao}}
+	            		<div class="col-lg-4"><label><input type="checkbox" name="permissao[liberacao][]" value="entry"> Entrada de Veículo</label></div>
+	            		<div class="col-lg-4"><label><input type="checkbox" name="permissao[liberacao][]" value="exit"> Saída de Veículo</label></div>
+					{{/checkedMultiple}}
+				</div> -->
+
+				<h3>Perguntas Frequentes</h3>
+	        	<div class="row">
+            		{{#checkedMultiple result.permissao.faq}}
+	            		<div class="col-lg-4"><label><input type="checkbox" name="permissao[faq][]" value="read"> Visualizar</label></div>
+	            		<div class="col-lg-4"><label><input type="checkbox" name="permissao[faq][]" value="edit"> Alterar</label></div>
+	            		<div class="col-lg-4"><label><input type="checkbox" name="permissao[faq][]" value="new"> Cadastrar</label></div>
+	            		<div class="col-lg-4"><label><input type="checkbox" name="permissao[faq][]" value="delete"> Excluir</label></div>
+					{{/checkedMultiple}}
+				</div>
+
+				<h3>Tutoriais em Vídeo</h3>
+	        	<div class="row">
+            		{{#checkedMultiple result.permissao.video}}
+	            		<div class="col-lg-4"><label><input type="checkbox" name="permissao[video][]" value="read"> Visualizar</label></div>
+	            		<div class="col-lg-4"><label><input type="checkbox" name="permissao[video][]" value="edit"> Alterar</label></div>
+	            		<div class="col-lg-4"><label><input type="checkbox" name="permissao[video][]" value="new"> Cadastrar</label></div>
+	            		<div class="col-lg-4"><label><input type="checkbox" name="permissao[video][]" value="delete"> Excluir</label></div>
+					{{/checkedMultiple}}
+				</div>
+
+				<h3>Convênio</h3>
+	        	<div class="row">
+            		{{#checkedMultiple result.permissao.convenio}}
+	            		<div class="col-lg-4"><label><input type="checkbox" name="permissao[convenio][]" value="read"> Visualizar</label></div>
+	            		<div class="col-lg-4"><label><input type="checkbox" name="permissao[convenio][]" value="edit"> Alterar</label></div>
+	            		<div class="col-lg-4"><label><input type="checkbox" name="permissao[convenio][]" value="new"> Cadastrar</label></div>
+	            		<div class="col-lg-4"><label><input type="checkbox" name="permissao[convenio][]" value="delete"> Excluir</label></div>
+					{{/checkedMultiple}}
+				</div>
+
+				<h3>Ínicio</h3>
+	        	<div class="row">
+            		{{#checkedMultiple result.permissao.inicio}}
+	            		<div class="col-lg-4"><label><input type="checkbox" name="permissao[inicio][]" value="dashboard-vaga"> Painel de Vagas</label></div>
+	            		<div class="col-lg-4"><label><input type="checkbox" name="permissao[inicio][]" value="dashboard-cliente"> Painel de Clientes</label></div>
+	            		<div class="col-lg-4"><label><input type="checkbox" name="permissao[inicio][]" value="dashboard-faturamento"> Painel de Faturamento</label></div>
+	            		<div class="col-lg-4"><label><input type="checkbox" name="permissao[inicio][]" value="dashboard-pagamento"> Painel de Pagamentos</label></div>
+	            		<div class="col-lg-4"><label><input type="checkbox" name="permissao[inicio][]" value="dashboard-equipamento"> Equipamentos</label></div>
+	            		<div class="col-lg-4"><label><input type="checkbox" name="permissao[inicio][]" value="dashboard-terminal"> Terminais</label></div>
+	            		<div class="col-lg-4"><label><input type="checkbox" name="permissao[inicio][]" value="dashboard-caixa"> Caixas Abertos</label></div>
+					{{/checkedMultiple}}
+				</div>
+
+				<h3>Log de Usuários</h3>
+	        	<div class="row">
+            		{{#checkedMultiple result.permissao.log-usuario}}
+	            		<div class="col-lg-4"><label><input type="checkbox" name="permissao[log-usuario][]" value="read"> Visualizar</label></div>
+	            		<div class="col-lg-4"><label><input type="checkbox" name="permissao[log-usuario][]" value="restore"> Restaurar</label></div>
+					{{/checkedMultiple}}
+				</div>
+
+
+<!-- 			<h3>Chamados</h3>
+	        	<div class="row">
+            		{{#checkedMultiple result.permissao.chamado}}
+	            		<div class="col-lg-4"><label><input type="checkbox" name="permissao[chamado][]" value="read"> Visualizar</label></div>
+	            		<div class="col-lg-4"><label><input type="checkbox" name="permissao[chamado][]" value="edit"> Alterar</label></div>
+	            		<div class="col-lg-4"><label><input type="checkbox" name="permissao[chamado][]" value="new"> Cadastrar</label></div>
+					{{/checkedMultiple}}
+				</div> -->
+            </div><!-- .controls -->
+        </div><!-- .control-group -->
+
+        {{>form-footer}}
+        
+
+    </fieldset>
+
+
+
+    <input type="hidden" name="id" value="{{result.id}}"></td>
+</form>

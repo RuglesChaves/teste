@@ -1,0 +1,57 @@
+<form action="/{{route}}" method="{{ternary isEdit 'put' 'post'}}" class="form-horizontal well equipamento">
+
+    <fieldset>
+        <div class="control-group">
+            <label class="control-label">*Nome</label>
+            <div class="controls">
+                <input type="text" name="nome" maxlength="16" class="uppercase" value="{{result.nome}}" required>
+            </div>
+        </div>
+
+        <div class="control-group">
+            <label class="control-label">Usuarios</label>
+            <div class="controls">
+                {{#checkedMultiple result._usuario}} {{#usuarios}}
+
+                <label class="uppercase">
+                    <input type="checkbox" name="_usuario" value="{{_id}}"> {{nome}} </label>
+                <br> {{/usuarios}} {{/checkedMultiple}}
+            </div>
+        </div>
+
+        <br>
+        
+        <div class="control-group">
+            <label class="control-label">Tabela de preços</label>
+            <div class="controls">
+                {{#checkedMultiple result._tabelapreco}} 
+                    {{#precos}}
+                        {{#compare tipo '===' 'Permanência'}}
+                        <label class="uppercase">
+                            <input type="checkbox" name="_tabelapreco" value="{{_id}}"> {{nome}} ({{tipo}}) </label>
+                        <br> 
+                        {{/compare}}
+                    {{/precos}} 
+                {{/checkedMultiple}}
+            </div>
+        </div>
+        <br>
+        
+        <div class="control-group">
+            <label class="control-label">Gerenciador de tabelas</label>
+            <div class="controls">
+                {{#checkedMultiple result._gerenciador}} {{#gerenciadores}}
+                <label class="uppercase">
+                    <input type="checkbox" name="_gerenciador" value="{{_id}}" > {{nome}} ({{validar-por}}) </label>
+                <br> {{/gerenciadores}} {{/checkedMultiple}}
+            </div>
+        </div>
+        
+
+        {{>form-footer}}
+
+    </fieldset>
+
+    <input type="hidden" name="id" value="{{result.id}}">
+    </td>
+</form>

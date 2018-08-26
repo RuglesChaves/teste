@@ -1,0 +1,92 @@
+<form class="form-filtro form-horizontal well no-print spa disable-default-submit" action="/{{route}}" method="get" role="form">
+    <fieldset>
+       <legend>Filtre sua consulta</legend>
+
+       <div class="control-group">
+           <label class="control-label">Situação</label>
+           <div class="controls">
+               <select name="situacao" class="uppercase">
+                   <option value="">TODAS</option>
+                   {{#selected query.situacao}}
+                        <option value="Atrasado">Atrasado</option>
+                        <option value="Pago">Pago</option>
+                        <option value="Em aberto">Em aberto</option>
+                        <option value="Isento - Sem Bloqueio">Isento - Sem Bloqueio</option>
+                        <option value="Isento - Com Bloqueio">Isento - Com Bloqueio</option>
+                   {{/selected}}
+               </select>
+           </div>
+       </div>
+       
+       <div class="control-group dia-de-vencimento">
+            <label class="control-label">Dia de Vencimento</label>
+            <div class="controls">
+                 <input type="number" name="dia_vencimento" value="{{query.dia_vencimento}}" size="2" maxlength="2" min="1" max="31">
+            </div>
+        </div>
+
+       <div class="control-group">
+            <div class="controls">
+                <button class="btn btn-danger" type="submit"><i class="fa fa-search"></i>Filtrar</button>
+            </div>
+        </div>
+    </fieldset>
+
+    <input type="hidden" name="p" value="1">
+</form>
+
+{{#hasPermission permission route 'new'}} 
+    <div class="btn-group">
+        <a href="/{{route}}/cadastrar" class="btn btn-success btn-cadastrar spa"><i class="fa fa-plus"></i> Cadastrar <span class="hotkeys">({{hotkeys.add}})</span></a>
+    </div>
+{{/hasPermission}}
+
+{{>pagination}}
+
+<div class="panel panel-default">
+    <div class="table-responsive">
+        <table class="table table-striped table-bordered table-hover">
+            <thead>
+                <tr>
+                    <th class="no-print options">Opções</th>
+                    <th>Nome</th>
+                    <th>Tipo de Cadastro</th>
+                    <th>Tabela de Preço</th>
+                    <th width="70">Vencimento</th>
+                    <th width="120">Último Venc.<br/>Pago</th>
+                    <th width="100">Situação Atual</th>
+                    <th width="90">Total em Atraso R$</th>
+                </tr>
+            </thead>
+            <tbody>
+                {{#result}}
+                    <tr>
+                        <td align="center" class="no-print options">
+                            {{#hasPermission ../permission 'cliente' 'edit'}}
+                                <a href="/cliente/{{_id}}" class="btn btn-info spa" title="Alterar"><i class="fa fa-edit"></i></a>
+                            {{/hasPermission}}
+                        </td>
+                        <td class="uppercase">{{nome}}</td>
+                        <td class="uppercase">{{categoria}}</td>
+                        <td class="uppercase">
+                            {{#if tabela._id}}
+                                {{tabela._id.nome}}
+                            {{else}}
+                                TABELA PADRÃO
+                            {{/if}}
+                        </td>
+                        <td>{{mensalidade.dia_vencimento}}</td>
+                        <td>{{mensalidade.ultimo_vencimento_pago}}</td>
+                        <td class="uppercase">{{mensalidade.situacao}}</td>
+                        <td>{{float2moeda mensalidade.total_atrasado}}</td>
+                    </tr>
+                {{/result}}
+				<tr class="empty">
+			 		<td colspan="7">Nenhum registro encontrado.</td>
+				</tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+{{>pagination}}

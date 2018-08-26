@@ -1,0 +1,25 @@
+<center><b>COMPROVANTE DE COMPRA DE CRÉDITO</b></center>
+<br />
+<div  class="uppercase">
+{{#pagamento}}
+	HORÁRIO DE PAGAMENTO: {{formataData data_pagamento}}<br />
+	CRÉDITO COMPRADO: R$ {{valor}}<br />
+	RECEBIDO ({{forma_pagamento}}): R$ {{valor_recebido}}<br />
+	{{#troco}}
+		TROCO: R$ {{.}}<br />
+	{{/troco}}
+	CLIENTE: {{_cliente.nome}}<br />
+	OPERADOR: {{_caixa.usuario}}<br /><br />
+	{{#if nota_fiscal.rps}}
+		{{#nota_fiscal}}
+			NÚMERO DO RPS: {{rps}}<br />
+			PIS: R$ {{total_pis}}<br />
+			ISS: R$ {{total_iss}}<br />
+			COFINS: R$ {{total_cofins}}<br />
+			TOTAL DE IMPOSTO: R$ {{total_impostos}}<br />
+		{{/nota_fiscal}}
+	{{/if}}
+{{/pagamento}}
+
+</div>
+<br /><br />

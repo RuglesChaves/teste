@@ -1,0 +1,74 @@
+<div class="btn-group">
+	{{#hasPermission permission route 'new'}}
+		    <a href="/{{route}}/cadastrar" class="btn btn-success btn-cadastrar spa"><i class="fa fa-plus"></i> Cadastrar <span class="hotkeys">({{hotkeys.add}})</span></a>
+    {{/hasPermission}}
+    {{#hasPermission permission route 'lost'}}
+    	    <a href="/{{route}}/perdido/cadastrar" class="btn btn-success btn-cadastrar spa" style="margin-left: 10px;"><i class="fa fa-plus"></i> Ticket Perdido</a>
+	{{/hasPermission}}
+</div>
+
+
+
+<div class="panel panel-default">
+    <div class="table-responsive">
+        <table class="table table-striped table-bordered table-hover">
+
+            <thead>
+                <tr>
+                    <th class="no-print options">Opções</th>
+                    <th>Cliente</th>
+                	<th>Veículo</th>
+                    <th>Código de Barras</th>
+                    <th>Horário de Entrada</th>
+                    <th>Horário de Saída</th>
+                    <th>Permanência</th>
+                </tr>
+            </thead>
+
+            <tbody>
+                {{#result}}
+                    <tr data-id="{{id}}">
+                        <td align="center" class="no-print options">
+                            {{#compare tipo 'Permanência'}}
+                                <a href="/{{../../route}}/print/{{id}}" class="btn btn-warning print" title="Imprimir Ticket"><i class="fa fa-print"></i></a>
+                            {{/compare}}
+
+                            {{#hasPermission ../permission ../route 'edit'}}
+                                <!-- <a href="/{{../../route}}/{{id}}/?perdido=1" class="btn btn-info spa" title="Alterar"><i class="fa fa-edit"></i></a> -->
+                            {{/hasPermission}}
+
+                            {{#hasPermission ../permission ../route 'delete'}}
+                                <a href="#" class="btn btn-danger excluir-ticket" title="Excluir"><i class="fa fa-trash-o"></i></a>
+                            {{/hasPermission}}
+                            <div class="display-none">
+                                <div class="excluir-ticket">
+                                    <form action="/{{../route}}/{{id}}" data-id="{{id}}" method="delete" class="form-horizontal form-excluir-ticket disable-default-submit" autocomplete="off">
+                                        <div class="control-group">
+                                            <!-- <h4>Excluir Ticket</h4> -->
+                                            *Motivo da exclusão<br />
+                                            <textarea name="observacao" style="height: 100px; width: 100%;" required></textarea>
+                                            
+                                            <div class="form-footer">
+                                                <button class="btn btn-danger" type="submit"><i class="fa fa-trash-o"></i>Excluir</button>  
+                                            </div>
+                                            <div class="clearfix"></div>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </td>
+                        <td>{{nome}}</td>
+						<td>{{tipo_veiculo}} {{carro.marca}} {{carro.modelo}} {{carro.cor}} {{#carro.placa}} PLACA {{.}}{{/carro.placa}}</td>
+                        <td>{{codigos}}</td>
+                        <td>{{formataData data_inicio}}</td>
+                        <td>{{formataData data_fim}}</td>
+                        <td>{{formataHora permanencia}}</td>
+                    </tr>
+                {{/result}}
+				<tr class="empty">
+			 		<td colspan="7">Nenhum registro encontrado.</td>
+				</tr>
+            </tbody>
+        </table>
+    </div>
+</div>

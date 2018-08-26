@@ -1,0 +1,11 @@
+{{>doctype}}
+	{{>head}}
+	<body class='{{route}} {{getEnv}} login-bg' id="body">
+		<div id="login-wrapper">
+			<div class="senna-loading-bar"></div>
+			{{>alert}}
+			{{{body}}}
+		</div>
+		<div style="padding-top: 1px;">{{>footer}}</div>
+	</body>
+</html>

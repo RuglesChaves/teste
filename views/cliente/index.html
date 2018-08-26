@@ -1,0 +1,155 @@
+<form class="form-filtro form-horizontal well no-print disable-default-submit" action="{{route}}" method="GET">
+    <fieldset>
+        <legend>Filtre sua consulta</legend>
+
+        <div class="control-group">
+            <label class="control-label">Nome</label>
+            <div class="controls">
+                <input type="text" value="{{query.nome}}" name="nome" class="input-grande">
+            </div>
+        </div>
+
+        <div class="control-group">
+            <label class="control-label">CPF</label>
+            <div class="controls">
+                <input type="text" value="{{query.cpf}}" name="cpf" class="input-medio mascara-cpf">
+            </div>
+        </div>
+
+        <div class="control-group">
+            <label class="control-label">CNPJ</label>
+            <div class="controls">
+                <input type="text" value="{{query.cnpj}}" name="cnpj" class="input-medio mascara-cnpj">
+            </div>
+        </div>
+
+        <div class="control-group">
+            <label class="control-label">Placa</label>
+            <div class="controls">
+                <input type="text" value="{{query.placa}}" name="placa" class="input-medio mascara-placa">
+            </div>
+        </div>
+
+        <div class="control-group">
+            <label class="control-label">Cartão</label>
+            <div class="controls">
+                <input type="text" value="{{query.codigos}}" name="codigos" class="input-medio mascara-proximidade">
+                {{#checked query.com_cartao}}<label><input type="checkbox" name="com_cartao" value="true" id="com-cartao" onClick="$('#sem-cartao').removeAttr('checked');"> Somente clientes com cartão</label>{{/checked}}&nbsp;
+                {{#checked query.sem_cartao}}<label><input type="checkbox" name="sem_cartao" value="true" id="sem-cartao" onClick="$('#com-cartao').removeAttr('checked');"> Somente clientes sem cartão</label>{{/checked}}
+            </div>
+        </div>
+
+        <div class="control-group">
+            <label class="control-label">Tipo de Cliente</label>
+            <div class="controls">
+                {{#checked query.tipo}} 
+                    <label><input type="radio" name="tipo" value="Todos"> Todos</label>&nbsp;
+                    <label><input type="radio" name="tipo" value="Pré-Pago"> Pré-Pago</label>&nbsp;
+                    <label><input type="radio" name="tipo" value="Mensalista"> Mensalista</label>&nbsp;
+                    <label><input type="radio" name="tipo" value="Credenciado"> Credenciado</label>
+                {{/checked}}
+            </div>
+        </div>        
+
+        <div class="control-group">
+            <label class="control-label">Tipo de cadastro</label>
+            <div class="controls">
+            	{{#checked query.categoria}} 
+					<label class="pull-left"><input type="radio" name="categoria" value="Todos"> Todos</label>
+					<label class="pull-left" style="padding-left: 13px;"><input type="radio" name="categoria" value="Pessoa Física"> Pessoa Física</label>
+					<label class="pull-left" style="padding-left: 13px;"><input type="radio" name="categoria" value="Pessoa Jurídica"> Pessoa Jurídica</label>
+            	{{/checked}}
+            </div> 
+        </div>
+
+        <div class="control-group">
+            <label class="control-label">Ativo</label>
+            <div class="controls">
+            	{{#checked query.ativo}} 
+					<label class="pull-left"><input type="radio" name="ativo" value="Todos"> Todos</label>
+					<label class="pull-left" style="padding-left: 13px;"><input type="radio" name="ativo" value="true"> Sim</label>
+					<label class="pull-left" style="padding-left: 13px;"><input type="radio" name="ativo" value="false"> Não</label>
+            	{{/checked}}
+            </div>
+        </div>
+
+
+
+       <div class="control-group">
+            <div class="controls"><button class="btn btn-danger" type="submit"><i class="fa fa-search"></i> Pesquisar</button></div> 
+        </div>
+    </fieldset>
+
+    <input type="hidden" name="p" value="1">
+</form>
+
+{{#hasPermission permission route 'new'}} 
+    <div class="btn-group">
+        <a href="/{{route}}/cadastrar" class="btn btn-success btn-cadastrar spa"><i class="fa fa-plus"></i> Cadastrar <span class="hotkeys">({{hotkeys.add}})</span></a>
+    </div>
+{{/hasPermission}}
+
+{{>pagination}}
+
+<div class="panel panel-default">
+    <div class="table-responsive">
+    <table class="table table-striped table-bordered table-hover">
+            <thead>
+                <tr>
+                    <th class="no-print options">Opções</th>
+                    <th>Nome</th>
+                    <th width="120px">Tipo Cadastro</th>
+                    <th width="120px">Tipo Cliente</th>
+                    <th>Tabela de Preço</th>
+                    <th>NIveis de Bloqueio</th>
+                    <th width="90">Cartões</th>
+                    <th>Vagas</th>
+                    <th width="70px">Ativo</th>
+                </tr>
+            </thead>
+            <tbody>
+                {{#result}}
+                    <tr>
+                        <td align="center" class="no-print options">
+                            {{#hasPermission ../permission ../route 'edit'}}
+                                <a href="/{{../../route}}/{{id}}" class="btn btn-info spa" title="Alterar"><i class="fa fa-edit"></i></a>
+                            {{/hasPermission}}
+
+                            {{#hasPermission ../permission ../route 'delete'}}
+                                <a href="/{{../../route}}/{{id}}" class="btn btn-danger btn-excluir" title="Excluir"><i class="fa fa-trash-o"></i></a>
+                            {{/hasPermission}}
+                        </td>
+                        <td class="uppercase">{{nome}}</td>
+                        <td class="uppercase">{{categoria}}</td>
+                        <td class="uppercase">{{tipo}}</td>
+                        <td class="uppercase">
+                            {{#compare tipo 'Mensalista'}}
+                                {{#if tabela._id}}
+                                    {{tabela._id.nome}}
+                                {{else}}
+                                    TABELA PADRÃO
+                                {{/if}}
+                            {{/compare}}
+                            {{#compare tipo 'Pré-Pago'}}
+                                {{#if tabela._id}}
+                                    {{tabela._id.nome}}
+                                {{else}}
+                                    TABELA PADRÃO
+                                {{/if}}
+                            {{/compare}}
+                        </td>
+                        <td>{{nivel}}</td>
+                        <td width="90">{{codigos}}</td>
+                        <td align="center">{{quantidade_vagas}}</td>
+                        <td align="center" class="{{#compare ativo '===' true}}green{{else}}red{{/compare}}">{{#compare ativo '===' true}}Sim{{else}}Não{{/compare}}</td>
+                    </tr>
+                {{/result}}
+				<tr class="empty">
+			 		<td colspan="8">Nenhum registro encontrado.</td>
+				</tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+{{>pagination}}

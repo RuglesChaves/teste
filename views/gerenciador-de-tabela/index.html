@@ -1,0 +1,56 @@
+{{#hasPermission permission route 'new'}}
+	<div class="btn-group">
+	    <a href="/{{route}}/cadastrar" class="btn btn-success btn-cadastrar spa"><i class="fa fa-plus"></i> Cadastrar <span class="hotkeys">({{hotkeys.add}})</span></a>
+	</div>
+{{/hasPermission}}
+
+{{>pagination}}
+
+<div class="panel panel-default">
+    <div class="table-responsive">
+        <table class="table table-striped table-bordered table-hover">
+            <thead>
+                <tr>
+                    <th class="no-print options">Opções</th>
+                    <th>Nome</th>
+                    <th>Atualizado por</th>
+                    <th>Última atualização</th>
+                    <th width="70px">Padrão</th>
+					<th width="70px">Ativo</th>
+                </tr>
+            </thead>
+
+            <tbody>
+                {{#result}}
+                    <tr>
+                        <td align="center" class="no-print options">
+                            <div class="options">
+                                {{#hasPermission ../permission ../route 'edit'}}
+                                	<a href="/{{../../route}}/{{id}}" class="btn btn-info spa" title="Alterar"><i class="fa fa-edit"></i></a>
+                                {{/hasPermission}}
+
+								{{#hasPermission ../permission ../route 'delete'}}
+                                	<a href="/{{../../route}}/{{id}}" class="btn btn-danger btn-excluir" title="Excluir"><i class="fa fa-trash-o"></i></a>
+                                {{/hasPermission}}
+                            </div>
+                        </td>
+                        <td class="uppercase">{{nome}}</td>
+                        <td class="uppercase">{{_usuario.nome}}</td>
+                        <td class="uppercase">{{formataData ultima-atualizacao}}</td>
+                        {{#compare padrao '===' true}}
+							<td align="center" class="green">Sim</td>
+						{{else}}
+							<td align="center" class="red">Não</td>	
+						{{/compare}}
+                        <td align="center" class="{{#compare ativo '===' true}}green{{else}}red{{/compare}}">{{#compare ativo '===' true}}Sim{{else}}Não{{/compare}}</td>
+                    </tr>
+                {{/result}}
+				<tr class="empty">
+			 		<td colspan="2">Nenhum registro encontrado.</td>
+				</tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+{{>pagination}}

@@ -1,0 +1,67 @@
+<center><b>COMPROVANTE DE PAGAMENTO DE TICKET</b></center>
+<br />
+VÁLIDO APARTIR DE: {{separaData result.data_validade_inicio}}<br />
+<b>LIMITE PARA SAÍDA: {{separaData result.data_validade_fim}}</b><br /><br />
+
+
+<!--
+{{#result.data_cadastro}}
+	CADASTRADO EM {{separaData ../result.data_cadastro}}
+	
+	{{#../result.terminal}} 
+		NO TERMINAL: {{nome}} {{numero}}
+	{{/../result.terminal}} 
+
+	<br />
+{{/result.data_cadastro}}
+-->
+
+{{#result.carro}}
+	VEÍCULO:
+	{{marca}}
+	{{modelo}}
+	{{cor}}<br />
+{{/result.carro}}
+
+{{#result.carro.placa}}
+	PLACA {{.}}<br />
+{{/result.carro.placa}}
+
+CÓDIGO: {{result.codigos}}<br />
+
+<br />
+{{#result.pagamento}} 
+	HORÁRIO DE PAGAMENTO: {{formataData data_pagamento}}<br />
+	{{quantidade_dia}} DIA(S) {{tabela.nome}}: R$ {{valor}}<br />
+	RECEBIDO ({{forma_pagamento}}): R$ {{valor_recebido}}<br />
+	{{#troco}}
+		TROCO: R$ {{.}}<br />
+	{{/troco}}
+	OPERADOR: {{operador}}<br /><br />
+
+	{{#if nota_fiscal.rps}}
+		{{#nota_fiscal}}
+			NÚMERO DO RPS: {{rps}}<br />
+			PIS: R$ {{total_pis}}<br />
+			ISS: R$ {{total_iss}}<br />
+			COFINS: R$ {{total_cofins}}<br />
+			TOTAL DE IMPOSTO: R$ {{total_impostos}}<br />
+		{{/nota_fiscal}}
+	{{/if}}
+	<br />
+{{/result.pagamento}}
+
+{{#result.imprimir_barras}}
+	<center>
+		<!-- <small>{{result._id}}</small> -->
+		<div class="barcode">{{result.codigos}}</div>
+		<!-- {{result.codigos}} -->
+	</center>
+{{/result.imprimir_barras}}
+
+<script>
+    $(function() {
+        // $('.barcode').barcode({code:'I25'});
+        $('.barcode').barcode({code: '{{result.codigos}}', crc: false}, 'int25', { barWidth: 2, barHeight: 70});
+    });
+</script>

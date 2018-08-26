@@ -1,0 +1,37 @@
+<form action="/{{route}}" method="{{ternary isEdit 'put' 'post'}}" class="form-horizontal well equipamento">
+	
+ 	<fieldset>
+
+        <div class="control-group">
+            <label class="control-label">*Marca</label>
+            <div class="controls"><input type="text" name="nome" maxlength="16" class="uppercase" value="{{result.nome}}" required></div><!-- .controls -->
+        </div><!-- .control-group -->
+		<div class="control-group">
+            <label class="control-label">Modelos</label>
+            <div class="controls">
+
+            	<a href="#" class="btn btn-success btn-adicionar-modelo" data-original-title="" title=""><i class="fa fa-plus"></i> Adicionar modelo (F4)</a>
+            	
+            	<div class="container modelo">
+				{{#result.modelos}}
+					<div class="item modelo">
+						<input type="text" name="modelos" class="uppercase" value="{{.}}" required>&nbsp;
+						<a href="#" class="btn btn-danger btn-excluir-item"><i class="fa fa-trash-o no-padding"></i> </a>
+					</div>
+				{{/result.modelos}}
+				</div>
+
+            </div><!-- .controls -->
+        </div><!-- .control-group -->
+
+        {{>form-footer}}
+
+    </fieldset>
+
+    <input type="hidden" name="id" value="{{result.id}}"></td>
+</form>
+
+<div class="modelo item clone">
+	<input type="text" name="modelos" value="" required>&nbsp;
+	<a href="#" class="btn btn-danger btn-excluir-item"><i class="fa fa-trash-o no-padding"></i> </a>
+</div>

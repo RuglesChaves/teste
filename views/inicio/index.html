@@ -1,0 +1,224 @@
+<div class="row">
+    {{#hasPermission permission 'inicio' 'dashboard-vaga'}}
+    <div class="col-lg-3 col-md-6">
+        <div class="panel panel-primary">
+            <a href="/patio" class="spa">
+                <div class="panel-footer">
+                    <span class="pull-left">Vagas</span>
+                    <span class="pull-right">{{vaga.quantidade}}<!--<i class="fa fa-arrow-circle-right"></i>--></span>
+                    <div class="clearfix"></div>
+                </div>
+            </a>       
+            <div class="panel-heading" style="height: 90px;">
+                <div class="row">
+                    <div class="col-xs-2">
+                        <i class="fa fa-car fa-5x" style="font-size: 4.7em"></i>
+                    </div>
+                    <!-- <div class="">
+                        <div class="easy-pie-chart percentage" data-percent="{{vaga.porcentagem}}"><span class="percent" style="color: {{vaga.cor}}; font-weight: bold;">{{vaga.porcentagem}}%</span></div>
+                    </div> -->
+                    <div class="col-xs-10 text-right">
+                        <!-- Vagas  <br /> -->
+                        Ocupadas {{vaga.ocupada}} <br />
+                        Disponíveis {{vaga.disponivel}} <br />
+                        Ocupação {{vaga.porcentagem}}%
+                    </div>
+                </div>     
+            </div>
+        </div>
+    </div>
+    {{/hasPermission}}
+
+    {{#hasPermission permission 'inicio' 'dashboard-cliente'}}
+    <div class="col-lg-3 col-md-6">
+        <div class="panel panel-green">
+            <a href="/cliente" class="spa">
+                <div class="panel-footer">
+                    <span class="pull-left">Clientes </span>
+                    <span class="pull-right">{{tipo_cliente_total}}<!--<i class="fa fa-arrow-circle-right"></i>--></span>
+                    <div class="clearfix"></div>
+                </div>
+            </a>
+            <div class="panel-heading" style="height: 90px;">
+                <div class="row">
+                    <div class="col-xs-2">
+                        <i class="fa fa-user fa-5x"></i>
+                    </div>
+                    <div class="col-xs-10 text-right">
+                        {{#each tipo_cliente}}
+                            {{@key}} {{this}}<br />
+                        {{/each}}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    {{/hasPermission}}
+
+
+    {{#hasPermission permission 'inicio' 'dashboard-faturamento'}}
+    <div class="col-lg-3 col-md-6">
+        <div class="panel panel-yellow">
+            <a href="/relatorio-pagamento" class="spa">
+                <div class="panel-footer">
+                    <span class="pull-left">Faturamento <span style="font-size: 12px; opacity: 0.7;">(Hoje)</span><!--<span style="font-size: 12px;">em {{separaData dataHoje}}</span>--></span>
+                    <span class="pull-right">R$ {{float2moeda forma_pagamento_total}}<!--<i class="fa fa-arrow-circle-right"></i>--></span>
+                    <div class="clearfix"></div>
+                </div>
+            </a>
+            <div class="panel-heading" style="height: 90px;">
+                <div class="row">
+                    <div class="col-xs-2">
+                        <i class="fa fa-dollar fa-5x"></i>
+                    </div>
+                    <div class="col-xs-10 text-right">
+                        {{#each forma_pagamento}}
+                            {{@key}} R$ {{this}}<br />
+                        {{/each}}                    
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    {{/hasPermission}}
+
+
+    {{#hasPermission permission 'inicio' 'dashboard-pagamento'}}
+    <div class="col-lg-3 col-md-6">
+        <div class="panel panel-red">
+            <a href="#" class="spa">
+                <div class="panel-footer">
+                    <span class="pull-left">Pagamentos <span style="font-size: 12px; opacity: 0.7;">(Hoje)</span></span>
+                    <span class="pull-right">{{tipo_pagamento_total}}<!--<i class="fa fa-arrow-circle-right">--></i></span>
+                    <div class="clearfix"></div>
+                </div>
+            </a>
+            <div class="panel-heading" style="height: 90px;">
+                <div class="row">
+                    <div class="col-xs-3">
+                        <i class="fa fa-bar-chart fa-5x"></i>
+                    </div>
+                    <div class="col-xs-9 text-right" style="margin-top: -4px">
+                        {{#each tipo_pagamento}}
+                            {{@key}} {{this}}<br />
+                        {{/each}}  
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div> 
+    {{/hasPermission}}
+
+</div>
+
+
+<div class="row">
+
+    {{#hasPermission permission 'inicio' 'dashboard-equipamento'}}
+        <div class="col-lg-4">
+            <div class="panel panel-default">
+                <div class="panel-heading"><a href="/equipamento" class="spa">Equipamentos</a></div>
+                <div class="panel-body">
+                    <div class="table-responsive">
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th>Nome</th>
+                                    <th width="122">IP</th>
+                                    <th width="59">Status</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {{#equipamentos}}
+                                    <tr>
+                                        <td class="uppercase">{{nome}} {{numero}}</td>
+                                        <td>{{ip}}</td>
+                                        <td><span class="status {{status}}" rel="tooltip" title="Status do equipamento"></span></td>
+                                    </tr>
+                                {{/equipamentos}}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    {{/hasPermission}}
+        
+    {{#hasPermission permission 'inicio' 'dashboard-terminal'}}
+        <div class="col-lg-4">
+            <div class="panel panel-default">
+                <div class="panel-heading"><a href="/terminal" class="spa">Terminais</a></div>
+                <div class="panel-body">
+                    <div class="table-responsive">
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th>Nome</th>
+                                    <th width="122">IP</th>
+                                    <th width="59">Status</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                               {{#terminais}}
+                                    <tr>
+                                        <td class="uppercase">{{nome}} {{numero}}</td>
+                                        <td>{{ip}}</td>
+                                        <td><span class="status {{status}}" rel="tooltip" title="Status do terminal"></span></td>
+                                    </tr>
+                                {{/terminais}}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    {{/hasPermission}}
+
+    {{#hasPermission permission 'inicio' 'dashboard-caixa'}}
+        <div class="col-lg-4">
+            <div class="panel panel-default">
+                <div class="panel-heading"><a href="/relatorio-financeiro" class="spa">Caixas Abertos</a></div>
+                <div class="panel-body">
+                    <div class="table-responsive">
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th>Operador</th>
+                                    <th width="131">Data de Abertura</th>
+                                    <th width="102">Faturamento</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {{#relatorio_caixa}}
+                                    <tr>
+                                        <td class="uppercase">{{usuario}}</td>
+                                        <td>{{ddmmYYYY data_inicio}}</td>
+                                        <td>
+                                            {{#hasPermission ../permission 'caixa' 'show amount'}}
+                                                R$ {{saldo}}
+                                            {{/hasPermission}}
+                                        </td>
+                                    </tr>
+                                {{/relatorio_caixa}}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    {{/hasPermission}}
+
+</div>
+
+
+
+<script>
+    $(function() {
+        setTimeout(function() {
+            if(localStorage.getItem('Popup liberado') !== null)
+                if(verificaPopup())
+                    localStorage.setItem('Popup liberado', true);
+        },1000);
+    });
+</script>
+

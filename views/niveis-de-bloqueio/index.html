@@ -1,0 +1,70 @@
+<!-- <form class="form-filtro form-horizontal well no-print" action="{{route}}" method="GET">
+    <fieldset>
+        <legend>Filtre sua consulta</legend>
+
+        <div class="control-group">
+            <label class="control-label">Marca</label>
+            <div class="controls">
+                <input type="text" value="{{query.nome}}" name="nome" class="col-lg-6">
+            </div>
+        </div>
+
+        <div class="control-group">
+            <label class="control-label">Modelo</label>
+            <div class="controls">
+                <input type="text" value="{{query.modelos}}" name="modelos" class="col-lg-6">
+            </div>
+        </div>
+
+       <div class="control-group">
+            <div class="controls"><button class="btn btn-danger" type="submit"><i class="fa fa-search"></i> Pesquisar</button></div> 
+        </div>
+    </fieldset>
+
+    <input type="hidden" name="p" value="1">
+</form> -->
+
+{{#hasPermission permission route 'new'}}
+	<div class="btn-group">
+	    <a href="/{{route}}/cadastrar" class="btn btn-success btn-cadastrar spa"><i class="fa fa-plus"></i> Cadastrar <span class="hotkeys">({{hotkeys.add}})</span></a>
+	</div>
+{{/hasPermission}}
+
+{{>pagination}}
+
+<div class="panel panel-default">
+    <div class="table-responsive">
+        <table class="table table-striped table-bordered table-hover">
+            <thead>
+                <tr>
+                    <th class="no-print options">Opções</th>
+                    <th>Niveis de Bloqeuio</th>
+                </tr>
+            </thead>
+
+            <tbody>
+                {{#result}}
+                    <tr>
+                        <td align="center" class="no-print options">
+                            <div class="options">
+                                {{#hasPermission ../permission ../route 'edit'}}
+                                	<a href="/{{../../route}}/{{id}}" class="btn btn-info spa" title="Alterar"><i class="fa fa-edit"></i></a>
+                                {{/hasPermission}}
+
+								{{#hasPermission ../permission ../route 'delete'}}
+                                	<a href="/{{../../route}}/{{id}}" class="btn btn-danger btn-excluir" title="Excluir"><i class="fa fa-trash-o"></i></a>
+                                {{/hasPermission}}
+                            </div>
+                        </td>
+                        <td class="uppercase">{{nome}}</td>
+                    </tr>
+                {{/result}}
+				<tr class="empty">
+			 		<td colspan="2">Nenhum registro encontrado.</td>
+				</tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+{{>pagination}}

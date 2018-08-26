@@ -1,0 +1,65 @@
+{{>pagination}}
+
+<div class="panel panel-default">
+    <div class="table-responsive">
+        <table class="table table-striped table-bordered table-hover">
+            <thead>
+                <tr>
+                    <th class="no-print options">Opções</th>
+                    <th>Descrição</th>
+                    <th width="130">Data e Hora</th>
+                </tr>
+            </thead>
+            <div class="classe1">
+                <div class="classe2"></div>
+            </div>
+
+            <tbody>
+                {{#result}}
+                    <tr>
+                        <td align="center" class="no-print options">
+                        	<a href="" class="btn btn-info show-descricao-detalhada" title="Visualizar"><i class="fa fa-search"></i></a>
+                            
+                            {{#hasPermission ../permission ../route 'restore'}}
+                                {{#unless restaurado}}
+                                    {{#compare function 'delete'}}
+                                        <a href="/{{../../../../route}}/restore/{{id}}" class="btn btn-warning confirm spa" title="Restaurar" confirmation-text="Deseja realmente restaurar o registro excluído?"><i class="fa fa-undo"></i></a>    
+                                    {{/compare}}  
+
+                                    {{#compare function 'update'}}
+                                        <a href="/{{../../../../route}}/restore/{{id}}" class="btn btn-warning confirm spa" title="Restaurar" confirmation-text="Deseja realmente restaurar esse registro?<br />"><i class="fa fa-undo"></i></a>    
+                                    {{/compare}}  
+                                {{/unless}}   
+                            {{/hasPermission}}
+                        </td>
+                        <td class="uppercase">
+                            {{descricao}}
+                            <div class="descricao-detalhada display-none">
+                                <hr style="margin-bottom: -5px;" />
+                                {{{descricao_detalhada}}}
+                            </div>
+                        </td>
+                        <td>{{formataData data_hora}}</td>
+                    </tr>
+                {{/result}}
+				<tr class="empty">
+			 		<td align="center" colspan="3">Nenhum registro encontrado.</td>
+				</tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+{{>pagination}}
+
+<script>
+    $(function() {
+        $('.show-descricao-detalhada').click(function() {
+            $(this).parents('tr:eq(0)').find('.descricao-detalhada').toggle();
+            return false;
+        });
+    });
+</script>
+<style>
+    .log-margin-left { margin-left: 40px; width: 100%; }
+</style>

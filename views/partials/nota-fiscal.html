@@ -1,0 +1,53 @@
+{{#if configuracao.app.nota_fiscal.ativo}}
+    <div class="nota-fiscal clearfix">
+        <label>Emitir NFS-e</label>
+        <div>
+            {{#compare configuracao.app.nota_fiscal.emissao_automatica true}}
+                <input type="hidden" name="nota_fiscal" value="true">
+                <style>.opcoes-nota-fiscal { display: block; }</style>
+            {{else}}
+                <label style="display: inline;"><input type="radio" name="nota_fiscal" value="true" required="required"> Sim</label> &nbsp;<label style="display: inline;"><input type="radio" name="nota_fiscal" value="false" required="required" checked="checked"> Não</span>
+                <style>.opcoes-nota-fiscal { display: none; }</style>
+            {{/compare}}
+            <br>
+            <label><input type="radio" name="pessoa" value="Pessoa Física" checked="checked"> Pessoa Física</label>&nbsp;<label><input type="radio" name="pessoa" value="Pessoa Jurídica" > Pessoa Jurídica</label>
+            <div class="opcoes-nota-fiscal">
+                <div class="cadastro" style="float: left">CPF </div>
+                <input type="text" name="pagamento[nota_fiscal][cpf_cnpj]" value="" class="mascara-cpf" style="margin-left: 16px;">
+                <br />
+                E-mail <input type="email" name="pagamento[nota_fiscal][email]" value="">
+            </div>	
+        </div>
+    </div>
+    <script>
+        $(function() {
+            $('.nota-fiscal [name="nota_fiscal"]:radio').click(function() {	
+                var opcoesNotaFiscal = $(this).parents(".nota-fiscal").find(".opcoes-nota-fiscal");
+                if( $(this).val() === "true" ) {
+                    opcoesNotaFiscal.show();
+                    opcoesNotaFiscal.find("[name='pagamento[nota_fiscal][cpf_cnpj]']").focus();											
+                } else {
+                    opcoesNotaFiscal.hide();
+                    opcoesNotaFiscal.find("[name='pagamento[nota_fiscal][cpf_cnpj]']").val('');
+                    opcoesNotaFiscal.find("[name='pagamento[nota_fiscal][email]']").val('');
+                }
+            });
+
+            $('[name="pessoa"]').click(function() {	
+                if($(this).val() === 'Pessoa Física'){
+                    $('.cadastro').html('CPF ');
+                    $('[name="pagamento[nota_fiscal][cpf_cnpj]"]').removeClass('mascara-cnpj');
+                    $('[name="pagamento[nota_fiscal][cpf_cnpj]"]').addClass('mascara-cpf');
+                }
+                else{
+                    $('.cadastro').html('CNPJ ');
+                    $('[name="pagamento[nota_fiscal][cpf_cnpj]"]').removeClass('mascara-cpf');
+                    $('[name="pagamento[nota_fiscal][cpf_cnpj]"]').addClass('mascara-cnpj');
+                }
+
+            });
+        });
+    </script>
+{{else}}
+    <input type="hidden" name="nota_fiscal" value="false">
+{{/if}}

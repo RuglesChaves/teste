@@ -1,0 +1,53 @@
+	    <script>verificaPopupDesbloquado();</script>
+
+		<div><img src="/images/logo-bra.png" class="logo-login img-responsive center-block"></div>
+		
+
+	    <div class="col-md-4 col-md-offset-4"> 
+	        <div class="panel panel-default">
+
+	        	<div class="container-login">
+		            <div class="panel-heading">
+		                <h3 class="panel-title text-center">Digite seu usuário e senha para entrar</h3>
+		            </div>
+		            <div class="panel-body">
+		                <form class="form-login" method="post" action="/" role="form" autocomplete="false" data-senna-off="true"> 
+		                    <fieldset>
+								<div class="form-group input-group">
+									<span class="input-group-addon"><i class="glyphicon glyphicon-user"></i></span>
+									<input class="form-control" type="text" name='login' placeholder="Usuário" autocomplete="off" autocorrect="off" autocapitalize="off" onpaste="return false" required autofocus/>          
+								</div>
+								<div class="form-group input-group">
+									<span class="input-group-addon"><i class="glyphicon glyphicon-lock"></i></span>
+									<input class="form-control" type="password" name='senha' placeholder="Senha" autocomplete="off" autocorrect="off" autocapitalize="off" onpaste="return false" required />     
+								</div>
+								<div class="form-group input-group">
+									<label><input type="checkbox" name="permanecer_conectado" value="true"> Permanecer conectado</label>
+								</div>
+		                        <button type="submit" class="btn btn-primary pull-left"><i class="fa fa-sign-in fa-lg"></i></i> ENTRAR</button>
+		                        <a href="#" class="pull-right show-password-recovery" style="padding-top: 6px;">ESQUECI MINHA SENHA</a>
+		                    </fieldset>
+		                </form>
+		            </div>
+				</div>
+
+				<div class="container-password-recovery display-none">
+					<div class="panel-heading">
+                        <h3 class="panel-title text-center">Digite seu e-mail para recuperar a senha</h3>
+                    </div>
+                    <div class="panel-body">
+                        <form method="post" action="/password-recovery" role="form" autocomplete="false" data-senna-off="true"> 
+                            <fieldset>
+                                <div class="form-group input-group">
+                                    <span class="input-group-addon"><i class="glyphicon glyphicon-envelope"></i></span>
+                                    <input class="form-control" type="email" name='email' placeholder="E-mail" autocomplete="off" autocorrect="off" autocapitalize="off" onpaste="return false" required />     
+                                </div>
+                                <button type="submit" class="btn btn-primary pull-left"><i class="fa fa-paper-plane fa-lg"></i></i> RECUPERAR</button>
+                                <a href="#" class="pull-right show-login" style="padding-top: 6px;">VOLTAR AO LOGIN</a>
+                            </fieldset>
+                        </form>
+                    </div>
+				</div>
+
+	        </div>
+	    </div>

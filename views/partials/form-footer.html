@@ -1,0 +1,30 @@
+<div class="form-footer">
+
+	{{#compare action 'Cadastrar'}}
+		
+		{{#hasPermission ../permission route 'new'}}
+	    	<button id="submit-button" class="btn btn-success" type="submit"><i class="fa fa-plus"></i> Salvar<!-- {{action}} --> <span class="hotkeys">({{hotkeys.sendForm}})</span></button>
+		{{/hasPermission}}
+
+		{{#unless iframe}}
+			<a href="javascript:history.go(-1);" class="btn btn-default btn-voltar"><i class="fa fa-reply"></i> Voltar <span class="hotkeys">({{hotkeys.goBack}})</span></a>
+		{{/unless}}
+		
+	{{else}}
+
+		{{#hasPermission ../permission route 'edit'}}
+			<button id="submit-button" class="btn btn-success" type="submit"><i class="fa fa-edit"></i> Salvar<!-- {{action}} --> <span class="hotkeys">({{hotkeys.sendForm}})</span></button>	
+		{{/hasPermission}}
+
+		{{#unless iframe}}
+		 	{{#hasPermission ../permission route 'delete'}}
+		    	<a href="/{{route}}/{{result.id}}" class="btn btn-danger btn-excluir" data-redirect="true"><i class="fa fa-trash-o"></i> Excluir</a>
+		    {{/hasPermission}}
+
+			<a href="javascript:history.go(-1);" class="btn btn-default btn-voltar"><i class="fa fa-reply"></i> Voltar <span class="hotkeys">({{hotkeys.goBack}})</span></a>
+		{{/unless}}
+		
+	{{/compare}}
+
+</div>
+<div class="clearfix"></div>

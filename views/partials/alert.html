@@ -1,0 +1,11 @@
+<div class="alert {{#flash.success}}alert-success{{/flash.success}} {{#flash.error}}alert-danger{{/flash.error}}">
+	<button type="button" class="close alert-close" aria-hidden="true">×</button>
+	<div class="alert-message">
+		{{#if flash.success}}
+			{{{flash.success}}}
+		{{/if}}
+		{{#if flash.error}}
+			{{{flash.error}}}
+		{{/if}}
+	</div>
+</div>

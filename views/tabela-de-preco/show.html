@@ -1,0 +1,303 @@
+<form action="" class="form-horizontal well escolha-de-tipo form-sem-bottom">
+	<fieldset>
+		<div class="control-group">
+		    <label class="control-label">*Cobrança Por</label>
+		    <div class="controls">
+		    	{{#checked result.tipo}}
+					<label><input type="radio" name="tipo" value="Permanência" required> Permanência</label>&nbsp;
+					<label><input type="radio" name="tipo" value="Diária" required> Diária</label>&nbsp;
+					<label><input type="radio" name="tipo" value="Mensalidade" required> Mensalidade</label>&nbsp;
+				{{/checked}}
+		    </div>
+		</div>
+	</fieldset>	
+</form>
+
+<form action="/{{route}}" method="{{ternary isEdit 'put' 'post'}}" class="form-permanencia form-horizontal well form-sem-top {{#compare result.tipo '!==' 'Permanência'}}display-none{{/compare}}">
+    <input type="hidden" name="id" value="{{result.id}}">
+    <input type="hidden" name="tipo" value="Permanência">
+	
+    <fieldset>
+
+        <div class="control-group">
+            <label class="control-label">*Nome da Tabela</label>
+            <div class="controls"><input type="text" name="nome" value="{{result.nome}}" class="uppercase uppercase" required></div>
+        </div>
+
+		<div class="control-group">
+            <label class="control-label">*Tabela Padrão</label>
+            <div class="controls">                
+            	{{#checked result.padrao}}
+					<label><input type="radio" name="padrao" value="true" required> Sim</label>&nbsp;
+					<label><input type="radio" name="padrao" value="false" required> Não</label>
+				{{/checked}}
+			</div>
+        </div>
+
+		<div class="control-group">
+            <label class="control-label">Tolerâncias</label>
+            <div class="controls">                
+		    	<input type="text" name="tolerancia_entrada" value="{{result.tolerancia_entrada}}" class="mascara-cobranca-hora" rel="tooltip">h para Entrada&nbsp;e&nbsp; 
+		    	<input type="text" name="tolerancia_saida" value="{{result.tolerancia_saida}}" class="mascara-cobranca-hora">h para Saída&nbsp; 
+			</div>
+        </div>
+
+		<div class="control-group">
+            <label class="control-label">*Preços</label>
+            <div class="controls" style="width: 350px;">                
+                <div class="btn-group"><a href="#" class="btn btn-success btn-adicionar-permanencia"><i class="fa fa-plus"></i> Adicionar <!--({{hotkeys.addCode}})--></a></div>
+            
+				<div class="permanencia container controls">
+	                {{#result.permanencias}}
+						<div class="permanencia item">
+						    até <input type="text" name="permanencias[{{@index}}][hora]" value="{{hora}}" class="mascara-cobranca-hora" required>h&nbsp;
+						    cobrar R$ <input type="text" name="permanencias[{{@index}}][valor]" value="{{valor}}" class="mascara-dinheiro" required>&nbsp;
+						    <a href="#" class="btn btn-danger btn-excluir-item"><i class="fa fa-trash-o no-padding"></i> </a>
+						</div>
+	                {{/result.permanencias}}
+                </div>
+            </div>
+        </div>
+
+
+		<div class="control-group">
+            <label class="control-label">Opções</label>
+            <div class="controls">
+            	<i>Caso o periodo de permanência do cliente seja superior ao cadastrado na tabela oque deseja que o sistema faça?</i><br />                
+		    	{{#checked result.xxx}}
+		    		<label><input type="radio" name="xxx" value="reiniciar tabela" required> Utilizar novamente a tabela de preços</label>&nbsp;
+
+		    		<label><input type="radio" name="xxx" value="preço fixo" required> Utilizar um preço fixo</label>
+
+					{{#compare result.xxx '!==' 'preço fixo'}}
+			    		<div style="margin-left: 17px;" class="preco-fixo display-none">
+			    	{{else}}
+			    		<div style="margin-left: 17px;" class="preco-fixo">
+			    	{{/compare}}
+						    
+							{{#compare result.xxx 'preço fixo'}}
+						    	*A cada <input type="text" name="preco_fixo[hora]" value="{{result.preco_fixo.hora}}" class="mascara-cobranca-hora" required>h&nbsp;
+						    {{else}}
+						    	*A cada <input type="text" name="preco_fixo[hora]" value="{{result.preco_fixo.hora}}" class="mascara-cobranca-hora">h&nbsp;
+						    {{/compare}}
+						    
+							{{#compare result.xxx 'preço fixo'}}
+						    	*cobrar R$ <input type="text" name="preco_fixo[valor]" value="{{result.preco_fixo.valor}}" class="mascara-dinheiro" required>&nbsp;
+						    {{else}}
+						    	*cobrar R$ <input type="text" name="preco_fixo[valor]" value="{{result.preco_fixo.valor}}" class="mascara-dinheiro">&nbsp;
+						    {{/compare}}
+
+			    		</div>
+		    	{{/checked}}
+			</div>
+        </div>
+
+		<!-- <div class="control-group" title="">
+            <label class="control-label">*Vários Acessos</label>
+            <div class="controls">                
+            	{{#checked result.acesso_unico}}
+					<label><input type="checkbox" name="acesso_unico" value="true" required></label>&nbsp;
+				{{/checked}}
+			</div>
+        </div> -->
+
+        <div class="control-group">
+            <label class="control-label">*Ativo</label>
+            <div class="controls">                
+            	{{#checked result.ativo}}
+					<label><input type="radio" name="ativo" value="true" required> Sim</label>&nbsp;
+					<label><input type="radio" name="ativo" value="false" required> Não</label>
+				{{/checked}}
+			</div>
+        </div>
+
+		{{>form-footer}}
+		
+    </fieldset>
+</form>
+
+
+
+
+
+<form action="/{{route}}" method="{{ternary isEdit 'put' 'post'}}" class="form-diaria form-horizontal well form-sem-top {{#compare result.tipo '!==' 'Diária'}}display-none{{/compare}}">
+    <input type="hidden" name="id" value="{{result.id}}">
+    <input type="hidden" name="tipo" value="Diária">
+	
+    <fieldset>
+
+        <div class="control-group">
+            <label class="control-label">*Nome da Tabela</label>
+            <div class="controls"><input type="text" name="nome" value="{{result.nome}}" class="uppercase" required></div>
+        </div>
+
+		<div class="control-group">
+            <label class="control-label">*Tabela Padrão</label>
+            <div class="controls">                
+            	{{#checked result.padrao}}
+					<label><input type="radio" name="padrao" value="true" required> Sim</label>&nbsp;
+					<label><input type="radio" name="padrao" value="false" required> Não</label>
+				{{/checked}}
+			</div>
+        </div>
+
+		<div class="control-group">
+            <label class="control-label">Tolerâncias</label>
+            <div class="controls">                
+		    	<input type="text" name="tolerancia_entrada" value="{{result.tolerancia_entrada}}" class="mascara-cobranca-hora" rel="tooltip">h para Entrada&nbsp;e&nbsp; 
+		    	<input type="text" name="tolerancia_saida" value="{{result.tolerancia_saida}}" class="mascara-cobranca-hora">h para Saída&nbsp; 
+			</div>
+        </div>
+
+		<div class="control-group">
+            <label class="control-label">*Preços</label>
+            <div class="controls" style="width: 350px;">
+                <div class="btn-group"><a href="#" class="btn btn-success btn-adicionar-dia"><i class="fa fa-plus"></i> Adicionar <!--({{hotkeys.addCode}})--></a></div>
+            
+				<div class="dia container controls">
+	                {{#result.dias}}
+						<div class="dia item">
+						    até <input type="text" name="dias[{{@index}}][quantidade]" value="{{quantidade}}" size="3" class="mascara-cobranca-dia" required>dia(s) &nbsp;
+						    cobrar R$ <input type="text" name="dias[{{@index}}][valor]" value="{{valor}}" class="mascara-dinheiro" required>&nbsp;
+						    <a href="#" class="btn btn-danger btn-excluir-item"><i class="fa fa-trash-o no-padding"></i> </a>
+						</div>
+	                {{/result.dias}}
+                </div>
+            </div>
+        </div>
+
+		<div class="control-group">
+            <label class="control-label">Opções</label>
+            <div class="controls">
+            	<i>Caso o periodo de permanência do cliente seja superior ao cadastrado na tabela oque deseja que o sistema faça?</i><br />                
+		    	{{#checked result.xxx}}
+		    		<label><input type="radio" name="xxx" value="reiniciar tabela" required> Utilizar novamente a tabela de preços</label>&nbsp;
+
+		    		<label><input type="radio" name="xxx" value="preço fixo" required> Utilizar um preço fixo</label>
+
+					{{#compare result.xxx '!==' 'preço fixo'}}
+			    		<div style="margin-left: 17px;" class="preco-fixo display-none">
+			    	{{else}}
+			    		<div style="margin-left: 17px;" class="preco-fixo">
+			    	{{/compare}}
+						    
+							{{#compare result.xxx 'preço fixo'}}
+						    	*A cada <input type="text" name="preco_fixo[dia]" value="{{result.preco_fixo.dia}}" class="mascara-cobranca-dia" size="3" required>dia(s)&nbsp;
+						    {{else}}
+						    	*A cada <input type="text" name="preco_fixo[dia]" value="{{result.preco_fixo.dia}}" class="mascara-cobranca-dia" size="3">dia(s)&nbsp;
+						    {{/compare}}
+						    
+							{{#compare result.xxx 'preço fixo'}}
+						    	*cobrar R$ <input type="text" name="preco_fixo[valor]" value="{{result.preco_fixo.valor}}" class="mascara-dinheiro" required>&nbsp;
+						    {{else}}
+						    	*cobrar R$ <input type="text" name="preco_fixo[valor]" value="{{result.preco_fixo.valor}}" class="mascara-dinheiro">&nbsp;
+						    {{/compare}}
+
+			    		</div>
+		    	{{/checked}}
+			</div>
+        </div>
+
+        <div class="control-group">
+            <label class="control-label">*Ativo</label>
+            <div class="controls">                
+            	{{#checked result.ativo}}
+					<label><input type="radio" name="ativo" value="true" required> Sim</label>&nbsp;
+					<label><input type="radio" name="ativo" value="false" required> Não</label>
+				{{/checked}}
+			</div>
+        </div>
+
+		{{>form-footer}}
+		
+    </fieldset>
+</form>
+
+
+
+
+
+
+
+
+
+<form action="/{{route}}" method="{{ternary isEdit 'put' 'post'}}" class="form-mensalidade form-horizontal well form-sem-top {{#compare result.tipo '!==' 'Mensalidade'}}display-none{{/compare}}">
+    <input type="hidden" name="id" value="{{result.id}}">
+    <input type="hidden" name="tipo" value="Mensalidade">
+
+    <fieldset>
+      
+        <div class="control-group">
+            <label class="control-label">*Nome da Tabela</label>
+            <div class="controls"><input type="text" name="nome" value="{{result.nome}}" class="uppercase" required></div>
+        </div>
+
+		<div class="control-group">
+            <label class="control-label">*Tabela Padrão</label>
+            <div class="controls">                
+            	{{#checked result.padrao}}
+					<label><input type="radio" name="padrao" value="true" required> Sim</label>&nbsp;
+					<label><input type="radio" name="padrao" value="false" required> Não</label>
+				{{/checked}}
+			</div>
+        </div>
+
+        <div class="control-group">
+            <label class="control-label">*Preço R$</label>
+            <div class="controls">
+            	<input type="text" name="mensalidade[valor]" value="{{result.mensalidade.valor}}" class="mascara-dinheiro" required>&nbsp;
+            </div>
+        </div>
+
+        <div class="control-group">
+            <label class="control-label">Em Atraso de Pgto.</label>
+            <div class="controls">
+            	{{#checked result.mensalidade.bloquear_inadimplente}}
+            		<label><input type="checkbox" name="mensalidade[bloquear_inadimplente]" value="true"> Bloquear acesso</label><br />
+				{{/checked}}
+            </div>
+        </div>
+        <div class="control-group">
+            <label class="control-label">Tolerância para Bloqueio</label>
+            <div class="controls"><input type="number" size="2" min="0" name="mensalidade[tolerancia]" value="{{result.mensalidade.tolerancia}}" placeholder="0" style="width: 40px;">dia(s)</div>
+        </div>
+
+
+        <div class="control-group">
+            <label class="control-label">*Ativo</label>
+            <div class="controls">                
+            	{{#checked result.ativo}}
+					<label><input type="radio" name="ativo" value="true" required> Sim</label>&nbsp;
+					<label><input type="radio" name="ativo" value="false" required> Não</label>
+				{{/checked}}
+			</div>
+        </div>
+
+		{{>form-footer}}
+		
+    </fieldset>
+</form>
+
+
+
+
+
+
+
+
+
+
+
+<div class="dia item clone">
+    até <input type="text" name="dias[{index}][quantidade]" value="" size="3" class="mascara-cobranca-dia" required>dia(s) &nbsp;
+    cobrar R$ <input type="text" name="dias[{index}][valor]" value="" class="mascara-dinheiro" required>&nbsp;
+    <a href="#" class="btn btn-danger btn-excluir-item"><i class="fa fa-trash-o no-padding"></i> </a>
+</div>
+
+
+<div class="permanencia item clone">
+    até <input type="text" name="permanencias[{index}][hora]" value="" class="mascara-cobranca-hora" required>h&nbsp;
+    cobrar R$ <input type="text" name="permanencias[{index}][valor]" value="" class="mascara-dinheiro" required>&nbsp;
+    <a href="#" class="btn btn-danger btn-excluir-item"><i class="fa fa-trash-o no-padding"></i> </a>
+</div>
+
